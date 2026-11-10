@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+schema_json/
+.venv/
+.env
+line.log

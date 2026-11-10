@@ -1,0 +1,2434 @@
+<title>Tomato & Products · ONA Healthy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Trirong:ital,wght@0,200;0,300;0,400;0,500;1,300&family=IBM+Plex+Sans+Thai:wght@200;300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  /* Deliberately single-theme. The brand's retail space is white end to end, so a dark
+     palette would misrepresent it — every colour below is painted explicitly and the page
+     holds its own ground regardless of the viewer's system theme. */
+  color-scheme: light;
+
+  /* ground is a warm off-white; pure white is reserved for cards that sit on it,
+     mirroring white product boxes on the shop's white shelving */
+  --cream:    #FAF8F4;
+  --cream-2:  #F2EEE8;
+  --surface:  #FFFFFF;
+  --tint:     #F7F4EF;   /* product-tile fill — one shade for every tile */
+  --ink:      #2E2B28;
+  --ink-2:    #67635C;
+  --ink-3:    #6F6960;
+  --tomato:   #B53426;   /* UI red — small marks only, never a large fill */
+  --tomato-l: #D8402F;   /* the fruit itself, inside illustrations */
+  --tomato-d: #8E2A1F;
+  --tomato-wash: #F7E7E3; /* soft red for badges */
+  --vine:     #3F7A4E;
+  --vine-d:   #2F5C3B;
+  --oak:      #8C6C47;   /* pale-wood neutral from the shop floor */
+  --noir:     #2E2B28;
+  --on-noir:  #FAF8F4;
+  --line:     #EAE5DD;
+  --gut: clamp(20px, 5vw, 64px);
+  /* the widest the reading column is allowed to get; beyond this the page
+     centres and the surplus becomes margin */
+  --shell-max: 1580px;
+  /* the same alignment expressed as padding, for full-bleed rows (the card rail)
+     that must start flush with the column but still scroll past the edge */
+  --shell-pad: max(var(--gut), calc((100% - var(--shell-max)) / 2 + var(--gut)));
+  /* tinted blocks sit inside the page ground rather than spanning it, so the
+     ground stays visible down both edges and reads as a frame */
+  --frame: clamp(12px, 1.8vw, 24px);
+  --panel-radius: 12px;
+  --hdr-h: 78px;      /* header alone — fixed, so the hero never reflows */
+  --topbar-h: 78px;   /* header + announcement strip — JS keeps this current */
+  --shadow-sm: 0 2px 6px -2px rgba(46,43,40,.08);
+  --shadow-md: 0 14px 34px -18px rgba(46,43,40,.28), 0 3px 8px -4px rgba(46,43,40,.08);
+  --shadow-lg: 0 40px 90px -44px rgba(46,43,40,.34);
+  --arch: 999px 999px 14px 14px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+
+  /* Playfair Display and Poppins carry no Thai, so the Thai page keeps Thai-native
+     faces and only the English page switches to the Latin pair. */
+  --font-display: "Trirong", Georgia, serif;
+  --font-body:    "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, monospace;
+  /* used in both languages: the wordmark and the wide-tracked uppercase labels are
+     Latin either way, and this is the pairing the brand board specifies */
+  --font-brand:   "Playfair Display", "Trirong", Georgia, serif;
+  --font-label:   "Poppins", "IBM Plex Sans Thai", system-ui, sans-serif;
+}
+:root[data-lang="en"]{
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body:    "Poppins", system-ui, sans-serif;
+}
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+/* every in-page target clears the sticky header, and on the knowledge page the
+   contents bar underneath it as well */
+:target, [id]{ scroll-margin-top:calc(var(--topbar-h) + 84px); }
+body{
+  margin:0; background:var(--cream); color:var(--ink);
+  font-family:var(--font-body);
+  font-weight:400; line-height:1.6; -webkit-font-smoothing:antialiased;
+  /* clip, not hidden: `overflow-x:hidden` forces overflow-y to auto, which turns
+     body into the scroll container and stops window scroll events from firing —
+     that silently kills the scroll-driven journey section */
+  overflow-x:clip;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; }
+h1,h2,h3,h4{ margin:0; font-weight:400; }
+p{ margin:0; }
+ul{ margin:0; padding:0; list-style:none; }
+
+/* ---- 22-column shell, mirroring the reference grid ---- */
+.g{
+  display:grid;
+  grid-template-columns:
+    [full-start] var(--gut)
+    [main-start] repeat(22, minmax(0,1fr))
+    [main-end] var(--gut) [full-end];
+  /* Past the cap the grid stops growing and centres instead. On a wide monitor a
+     gutter that stays at 64px lets lines run the full width of the glass, which
+     is tiring to read; holding the measure turns the extra space into margin and
+     the page reads as an indented column rather than an edge-to-edge sheet. */
+  max-width:var(--shell-max);
+  margin-inline:auto;
+}
+.main{ grid-column: main-start / main-end; }
+.full{ grid-column: full-start / full-end; }
+
+/* ---- type roles ---- */
+.display{
+  font-family:var(--font-display); font-weight:200;
+  line-height:1.18; letter-spacing:-.012em; text-wrap:balance;
+}
+.serif{ font-family:var(--font-display); font-weight:300; }
+/* the wide-tracked uppercase label from the brand board */
+.eyebrow{
+  font-size:12px; font-weight:500; letter-spacing:.24em; text-transform:uppercase;
+  font-family:var(--font-label);
+}
+.mono{ font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+.lede{ color:var(--ink-2); font-size:clamp(15px,1.15vw,17px); line-height:1.75; }
+
+/* ---- buttons ---- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  font-size:14px; font-weight:600; letter-spacing:.01em;
+  padding:15px 30px; border:1px solid transparent; border-radius:999px;
+  cursor:pointer; white-space:nowrap; position:relative; overflow:hidden;
+  transition:background .35s var(--ease), color .35s var(--ease),
+             border-color .35s var(--ease), transform .35s var(--ease);
+}
+.btn:focus-visible{ outline:2px solid var(--tomato); outline-offset:3px; }
+.btn:active{ transform:scale(.975); }
+.btn--fill{ background:var(--ink); color:var(--cream); }
+.btn--fill:hover{ background:var(--tomato); color:#fff; }
+.btn--out{ border-color:currentColor; color:var(--ink); }
+.btn--out:hover{ background:var(--ink); color:var(--cream); border-color:var(--ink); }
+.btn--light{ background:var(--cream); color:var(--ink); }
+.btn--light:hover{ background:var(--tomato); color:#fff; }
+.btn--ghost-l{ border-color:rgba(247,241,232,.45); color:var(--on-noir); }
+.btn--ghost-l:hover{ background:rgba(247,241,232,.14); border-color:rgba(247,241,232,.8); }
+.btn--sm{ padding:11px 22px; font-size:13px; }
+
+/* link with animated underline */
+.ulink{ position:relative; display:inline-block; padding-bottom:2px; }
+.ulink::after{
+  content:""; position:absolute; left:0; bottom:0; height:1px; width:100%;
+  background:currentColor; transform:scaleX(0); transform-origin:right;
+  transition:transform .45s var(--ease);
+}
+.ulink:hover::after{ transform:scaleX(1); transform-origin:left; }
+
+/* ============================================================
+   ANNOUNCEMENT + HEADER + MEGA MENU
+   ============================================================ */
+/* header and announcement travel together as one sticky stack */
+.topbar{ position:sticky; top:0; z-index:50; }
+
+/* the strip is collapsed at the top of the page and rolls open once you scroll,
+   so the first thing seen is the brand, not an offer */
+.announce-wrap{
+  display:grid; grid-template-rows:0fr;
+  transition:grid-template-rows .5s var(--ease);
+}
+.topbar.has-announce .announce-wrap{ grid-template-rows:1fr; }
+.announce{
+  overflow:hidden; min-height:0;
+  background:var(--noir); color:var(--on-noir);
+  font-size:12.5px; letter-spacing:.02em; text-align:center;
+}
+.announce > span{ display:block; padding:10px 16px; }
+.announce b{ font-weight:600; color:var(--on-noir); }
+/* the strip must stay one line — a three-line bar swallows a phone screen */
+@media (max-width:680px){
+  .ann-more{ display:none; }
+  .announce{ font-size:11.5px; }
+  .announce > span{ padding:9px 12px; }
+}
+
+.hdr{
+  height:var(--hdr-h);
+  background:color-mix(in srgb, var(--cream) 86%, transparent);
+  backdrop-filter:saturate(1.6) blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .4s var(--ease), background .4s var(--ease);
+}
+.hdr.is-stuck{ border-bottom-color:var(--line); }
+.hdr__in{
+  height:var(--hdr-h); display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--gut); gap:24px;
+  max-width:var(--shell-max); margin-inline:auto;
+}
+.brand{ display:flex; align-items:center; gap:11px; flex-shrink:0; }
+.brand__mark{ width:26px; height:26px; }
+.brand__wd{
+  font-family:var(--font-brand); font-weight:400; font-size:19px; letter-spacing:.06em;
+}
+.nav{ display:flex; align-items:center; gap:6px; }
+.nav__item{ position:relative; }
+.nav__btn{
+  background:none; border:0; cursor:pointer; padding:10px 15px;
+  font-size:14.5px; display:inline-flex; align-items:center; gap:6px;
+  border-radius:999px; transition:background .3s var(--ease);
+}
+.nav__btn:hover, .nav__item.open .nav__btn{ background:color-mix(in srgb, var(--ink) 7%, transparent); }
+.nav__btn svg{ width:11px; height:11px; transition:transform .35s var(--ease); }
+.nav__item.open .nav__btn svg{ transform:rotate(180deg); }
+.hdr__right{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.icon-btn{
+  background:none; border:0; cursor:pointer; width:40px; height:40px;
+  display:grid; place-items:center; border-radius:50%;
+  transition:background .3s var(--ease);
+}
+.icon-btn:hover{ background:color-mix(in srgb, var(--ink) 8%, transparent); }
+.icon-btn svg{ width:19px; height:19px; }
+
+/* language switch */
+.langbtn{
+  display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+  background:none; border:1px solid var(--line); border-radius:999px;
+  padding:8px 14px 8px 11px; color:var(--ink);
+  font-family:var(--font-label); font-size:12px; font-weight:500; letter-spacing:.1em;
+  transition:border-color .3s var(--ease), background .3s var(--ease);
+}
+.langbtn:hover{ border-color:var(--ink); background:color-mix(in srgb, var(--ink) 5%, transparent); }
+.langbtn:focus-visible{ outline:2px solid var(--tomato); outline-offset:2px; }
+.langbtn svg{ width:16px; height:16px; flex-shrink:0; }
+.langbtn__code{ font-variant-numeric:tabular-nums; }
+@media (max-width:560px){
+  .langbtn{ padding:8px 11px; }
+  .langbtn__code{ display:none; }
+  /* the header runs out of room on a phone: search is decorative and the order
+     CTA is already the full-width button inside the mobile menu */
+  .hdr__right .icon-btn:not(.menu-toggle){ display:none; }
+  .hdr__right .btn--fill{ display:none; }
+}
+
+/* mega panel */
+.mega{
+  position:fixed; left:0; right:0; top:var(--mega-top, 116px);
+  background:var(--surface); border-bottom:1px solid var(--line);
+  z-index:45; overflow:hidden;
+  max-height:0; opacity:0; pointer-events:none;
+  transition:max-height .5s var(--ease), opacity .3s var(--ease);
+}
+.mega.open{ max-height:520px; opacity:1; pointer-events:auto; }
+.mega__in{ padding:44px 0 52px; }
+.mega__grid{ grid-column:main-start/main-end; display:grid; grid-template-columns:1fr 1fr 1.15fr; gap:48px; }
+@media (max-width:1040px){ .mega{ display:none; } }
+.mega__col h4{
+  font-size:11.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-3); margin-bottom:18px; font-family:var(--font-label);
+}
+.mega__list{ display:flex; flex-direction:column; gap:2px; }
+.mega__link{
+  display:flex; align-items:center; gap:14px; padding:11px 12px; margin-left:-12px;
+  border-radius:10px; transition:background .3s var(--ease);
+}
+.mega__link:hover{ background:color-mix(in srgb, var(--ink) 5%, transparent); }
+.mega__link .dot{ width:30px; height:30px; border-radius:50%; flex-shrink:0; }
+.mega__link .t{ font-size:15px; }
+.mega__link .s{ font-size:12.5px; color:var(--ink-2); }
+.mega__feature{
+  background:var(--cream-2); border-radius:14px; padding:26px; display:flex;
+  flex-direction:column; justify-content:space-between; gap:18px; min-height:210px;
+}
+.mega__feature .fig{ height:104px; }
+
+/* mobile nav */
+.menu-toggle{ display:none; }
+.mnav{
+  position:fixed; inset:0; z-index:55; background:var(--cream);
+  padding:24px var(--gut) 40px; overflow-y:auto;
+  transform:translateY(-100%); transition:transform .5s var(--ease);
+}
+.mnav.open{ transform:translateY(0); }
+.mnav__top{ display:flex; justify-content:space-between; align-items:center; height:54px; margin-bottom:22px; }
+.mnav__list{ display:flex; flex-direction:column; }
+.mnav__list a{
+  font-family:var(--font-display); font-weight:300; font-size:30px; line-height:1.5;
+  padding:12px 0; border-bottom:1px solid var(--line);
+}
+@media (max-width:1040px){
+  .nav{ display:none; }
+  .menu-toggle{ display:grid; }
+}
+
+/* ============================================================
+   HERO — full-bleed film, copy straight on it
+   ============================================================ */
+/* The film fills the opening screen at every size and is simply cropped to fit;
+   nothing is laid over it and nothing fades into it.
+
+   The copy is held in the top fifth of the frame because that is where the
+   footage is quietest — measured over the eight seconds, dark ink there averages
+   7.4:1 against 4.4:1 in the middle of the frame. Averages are not the whole
+   story: the darkest pixels in that band still bring single letters down to
+   1.7:1, so a headline can fall into the foliage as the clip moves. The fix for
+   that is upstream, in a paler grade on the clip itself — not another veil here,
+   which is what the last three passes kept reaching for. */
+.hero{
+  position:relative;
+  background:var(--cream);
+  padding:0 var(--frame) var(--frame);
+  /* pull the gutter in by the frame so the copy still lands on the page's line */
+  --gut: max(0px, calc(clamp(20px,5vw,64px) - var(--frame)));
+  min-height:calc(100svh - var(--hdr-h));
+  display:flex; flex-direction:column;
+}
+.hero__panel{
+  position:absolute; z-index:0;
+  top:0; left:var(--frame); right:var(--frame); bottom:var(--frame);
+  /* Square at the top, round at the bottom. The top edge tucks under the sticky
+     header, so rounding it would cut a notch out of nothing and make the film read
+     as a card sitting on the page; left square, it reads as the picture coming
+     down from the top of the window. The bottom keeps the radius because that is
+     where the film actually ends, and round is the shape the rest of the UI uses. */
+  border-radius:0 0 var(--panel-radius) var(--panel-radius);
+  overflow:hidden;
+}
+.hero__film{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover; object-position:50% 50%;
+  pointer-events:none; user-select:none;
+  /* keeps the panel from flickering when the compositor promotes the video */
+  backface-visibility:hidden;
+}
+/* `width:100%` is not decoration. `.g` carries `margin-inline:auto`, and an auto
+   cross-axis margin switches off stretch for a flex item, so without this the grid
+   shrinks to its content, the 22 `1fr` columns collapse, and the copy ends up a
+   few pixels wide against the left edge. */
+.hero__in{ position:relative; z-index:2; width:100%; padding-top:clamp(26px,5vh,60px); row-gap:0; }
+.hero__copy{ grid-column:main-start / main-end; text-align:center; }
+.hero h1{
+  font-size:clamp(2.35rem, 6.2vw, 6rem);
+  margin:0 auto; max-width:17ch;
+}
+.hero h1 .tint{ color:var(--tomato); font-style:italic; font-weight:300; }
+/* Latin runs narrower per character than Thai, so the measure widens in English */
+:root[data-lang="en"] .hero h1{ max-width:23ch; }
+/* Thai breaks at syllable boundaries, which splits compounds mid-word at display sizes */
+.nb{ white-space:nowrap; }
+.hero__sub{
+  /* full ink, not the softer secondary grey: over footage that grey measured 3.4:1
+     where ink measures 8:1, and the hierarchy still reads from size and weight.
+
+     Weight 400, not the 300 this line used to carry. A contrast ratio does not
+     move with weight, but 27% of the area behind this line sits under 4.5:1 at any
+     moment and the thin strokes were the part that vanished into it. */
+  font-size:clamp(15.5px,1.35vw,20px); line-height:1.7; color:var(--ink);
+  max-width:46ch; margin:18px auto 0; font-weight:400;
+}
+/* Thai goes one step heavier again. Tone marks sit above the vowels, which sit
+   above the letter — three stacked layers of thin stroke, and they are the first
+   thing moving footage swallows. Latin has nothing above the cap line to lose. */
+:root[data-lang="th"] .hero__sub{ font-weight:500; }
+/* The button sits at the foot of the panel rather than under the standfirst.
+   Spacing it away from the copy only moved it onto the middle of the frame, which
+   is where the jar is — the product ends up with a control parked across it. Down
+   here it clears the picture entirely and reads as the one thing to press.
+
+   `margin-top:auto` is what pushes it: `.hero` is a column flex container, so the
+   auto margin absorbs all the leftover height between the copy and the foot. The
+   hero's own bottom padding is the frame, so this padding is measured from the
+   panel's bottom edge. `width:100%` is the usual `.g` guard — see `.hero__in`. */
+.hero__foot{
+  position:relative; z-index:2; width:100%;
+  margin-top:auto;
+  padding-bottom:clamp(32px, 5vh, 64px);
+}
+.hero__cta{ grid-column:main-start / main-end; display:flex; justify-content:center; }
+
+/* trust strip directly under the hero */
+.trust{ border-bottom:1px solid var(--line); }
+.trust__in{
+  grid-column:main-start/main-end; display:flex; gap:clamp(24px,5vw,72px);
+  flex-wrap:wrap; padding:26px 0;
+}
+.trust__in div b{
+  display:block; font-family:var(--font-display); font-weight:300; font-size:clamp(22px,2.4vw,30px);
+  line-height:1.3; color:var(--tomato);
+}
+.trust__in div span{ font-size:12px; color:var(--ink-2); letter-spacing:.02em; }
+
+/* ============================================================
+   PRODUCT STRIP — two full-bleed cards
+   ============================================================ */
+.strip{
+  display:grid; grid-template-columns:1fr 1fr; gap:var(--frame);
+  padding:0 var(--frame);
+}
+.pcard{
+  position:relative; min-height:clamp(430px, 46vw, 580px); overflow:hidden;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:clamp(26px,3vw,44px); background:var(--tint);
+  border-radius:var(--panel-radius);
+}
+.pcard--alt{ background:var(--cream-2); }
+.pcard__fig{
+  position:absolute; left:0; right:0; top:clamp(40px,6vw,72px); bottom:44%;
+  display:grid; place-items:center;
+}
+.pcard__fig svg{ width:min(58%, 240px); transition:transform 1.1s var(--ease); }
+.pcard:hover .pcard__fig svg{ transform:translateY(-8px); }
+.badge{
+  position:absolute; top:clamp(22px,2.4vw,32px); left:clamp(26px,3vw,44px);
+  font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+  font-family:var(--font-mono);
+  background:var(--tomato-wash); color:var(--tomato); padding:6px 12px; border-radius:999px;
+}
+.pcard__body{ position:relative; color:var(--ink); }
+.pcard__name{ font-family:var(--font-display); font-weight:200; font-size:clamp(26px,2.8vw,38px); line-height:1.32; }
+.pcard__price{ font-size:14.5px; font-weight:600; margin-top:10px; color:var(--ink-2); }
+.pcard__price s{ color:var(--ink-3); font-weight:400; margin-right:8px; }
+.pcard__act{ display:flex; gap:10px; margin-top:24px; flex-wrap:wrap; }
+@media (max-width:760px){ .strip{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   PINNED JOURNEY — the signature scroll-driven sequence
+   ============================================================ */
+/* inset panel — no overflow:hidden here, it would break the sticky stage inside */
+.journey{
+  position:relative; background:var(--cream-2);
+  margin:0 var(--frame); border-radius:var(--panel-radius);
+}
+.journey__track{ height:520vh; }
+.journey__stage{
+  position:sticky; top:var(--topbar-h); height:calc(100svh - var(--topbar-h)); overflow:hidden;
+  display:grid; align-content:center;
+}
+.journey__grid{ position:relative; z-index:2; align-items:center; row-gap:36px; }
+.journey__left{ grid-column:main-start / span 11; position:relative; min-height:300px; }
+.journey__right{ grid-column:span 10 / main-end; display:grid; place-items:center; position:relative; min-height:min(52svh,440px); }
+
+.jslide{
+  position:absolute; inset:0; opacity:0; transform:translateY(26px);
+  transition:opacity .7s var(--ease), transform .7s var(--ease);
+  pointer-events:none;
+}
+.jslide.on{ opacity:1; transform:none; pointer-events:auto; }
+.jslide__n{ font-size:12px; letter-spacing:.2em; color:var(--tomato); font-family:var(--font-mono); }
+.jslide h3{ font-family:var(--font-display); font-weight:200; font-size:clamp(28px,3.3vw,44px); line-height:1.28; margin:14px 0 18px; text-wrap:balance; }
+.jslide p{ color:var(--ink-2); font-size:clamp(14.5px,1.1vw,16.5px); line-height:1.8; max-width:40ch; }
+
+.jfig{
+  position:absolute; inset:0; display:grid; place-items:center;
+  opacity:0; transform:scale(.92); transition:opacity .8s var(--ease), transform .8s var(--ease);
+}
+.jfig.on{ opacity:1; transform:none; }
+.jfig svg{ width:min(100%, 400px); }
+
+.jrail{
+  grid-column:main-start / main-end; display:flex; gap:0; margin-top:8px;
+  border-top:1px solid var(--line);
+}
+.jrail__i{
+  flex:1; padding:16px 14px 0; border-top:2px solid transparent; margin-top:-1px;
+  font-size:12px; color:var(--ink-3); text-align:left;
+  background:none; border-left:0; border-right:0; border-bottom:0; cursor:pointer;
+  transition:color .4s var(--ease), border-color .4s var(--ease);
+}
+.jrail__i.on{ color:var(--ink); border-top-color:var(--tomato); }
+.jrail__i:hover{ color:var(--ink); }
+.jrail__i span{ display:block; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; color:var(--ink-3); margin-bottom:4px; }
+@media (max-width:900px){
+  .journey__track{ height:460vh; }
+  .journey__left{ grid-column:main-start/main-end; min-height:230px; }
+  .journey__right{ grid-column:main-start/main-end; min-height:34svh; order:-1; }
+  .jrail__i{ font-size:0; padding-top:12px; }
+  .jrail__i span{ font-size:10px; margin:0; }
+}
+
+/* ============================================================
+   SECTION SCAFFOLD
+   ============================================================ */
+.sec{ padding:clamp(72px,8vw,132px) 0; }
+.sec--tight{ padding:clamp(60px,6vw,104px) 0; }
+/* framed panels pull their gutter in by the frame so text still lines up
+   with the sections above and below */
+.journey{ --gut: max(0px, calc(clamp(20px,5vw,64px) - var(--frame))); }
+/* The pinned sequence opts out of the reading cap. It is a staged scene held at
+   one screen height, not a column of running text — narrowing it pushes the copy
+   and the illustration into each other instead of giving the stage room. */
+.journey .g{ max-width:none; margin-inline:0; }
+.sechead{ grid-column:main-start / span 15; margin-bottom:clamp(44px,5vw,84px); }
+.sechead h2{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(30px,5vw,68px); line-height:1.16; margin:18px 0 0; text-wrap:balance;
+}
+.sechead .lede{ margin-top:18px; max-width:52ch; }
+.sechead .eyebrow{ color:var(--tomato); }
+
+/* ============================================================
+   WHY — split intro, then an underlined tab strip over a tall panel
+   ============================================================ */
+.tabsec{ row-gap:0; align-items:start; }
+.tabsec__head{ grid-column:main-start / span 13; }
+.tabsec__head h2{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(32px,5.6vw,78px); line-height:1.14; margin:20px 0 0; text-wrap:balance;
+}
+.tabsec__aside{ grid-column:span 7 / main-end; align-self:end; padding-bottom:6px; }
+.tabsec__aside p{ color:var(--ink-2); font-size:15px; line-height:1.85; }
+.tabsec__aside a{ display:inline-block; margin-top:20px; font-size:14.5px; font-weight:600; }
+
+.tabsec__tabs{
+  /* one column narrower than the text on each side, so the strip reads as a
+     separate control rather than another line of the heading block */
+  grid-column:3 / 23;
+  display:flex; margin-top:clamp(60px,9vw,140px);
+  border-bottom:1px solid var(--line);
+  overflow-x:auto; scrollbar-width:none;
+}
+.tabsec__tabs::-webkit-scrollbar{ display:none; }
+.tabsec__tab{
+  position:relative;
+  flex:1 1 0; min-width:118px; padding:34px 14px;
+  background:none; border:0; border-bottom:3px solid transparent; margin-bottom:-1px;
+  cursor:pointer; white-space:nowrap; font-size:14.5px; color:var(--ink-2);
+  transition:color .3s var(--ease), border-color .3s var(--ease);
+}
+.tabsec__tab:hover{ color:var(--ink); }
+.tabsec__tab[aria-selected="true"]{ color:var(--ink); }
+.tabsec__tab:focus-visible{ outline:2px solid var(--tomato); outline-offset:-4px; }
+
+/* The underline on the active tab doubles as the timer for the auto-advance:
+   it fills across while the panel is showing, so the movement reads as deliberate
+   rather than the page twitching on its own. With autoplay off it is simply a
+   full-width rule. */
+.tabsec__tab[aria-selected="true"]::after{
+  content:""; position:absolute; left:0; bottom:-3px; height:3px; width:100%;
+  background:var(--tomato); transform-origin:left; transform:scaleX(1);
+}
+.tabsec.is-playing .tabsec__tab[aria-selected="true"]::after{
+  animation:tabfill var(--tab-dur, 3s) linear forwards;
+}
+@keyframes tabfill{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+@media (prefers-reduced-motion: reduce){
+  .tabsec.is-playing .tabsec__tab[aria-selected="true"]::after{ animation:none; transform:scaleX(1); }
+}
+/* optional clock line above the label, for tabs that mark points in a day */
+.tabsec__tab time{
+  display:block; font-family:var(--font-mono);
+  font-size:10.5px; letter-spacing:.12em; color:var(--ink-3); margin-bottom:6px;
+  transition:color .3s var(--ease);
+}
+.tabsec__tab[aria-selected="true"] time{ color:var(--tomato); }
+.tabsec__tab:has(time){ padding-top:22px; padding-bottom:22px; }
+
+.tabsec__panel{ grid-column:main-start / main-end; margin-top:clamp(44px,5.5vw,84px); }
+.tabpane[hidden]{ display:none; }
+.tabpane{
+  display:grid; grid-template-columns:.78fr 1fr; gap:clamp(28px,5vw,76px); align-items:center;
+  animation:paneIn .6s var(--ease) both;
+}
+@keyframes paneIn{ from{ opacity:0; transform:translateY(18px);} to{ opacity:1; transform:none; } }
+.tabpane__fig{
+  aspect-ratio:4/5; border-radius:var(--arch); background:var(--tint);
+  display:grid; place-items:center; box-shadow:var(--shadow-md);
+}
+.tabpane__fig svg{ width:56%; }
+.tabpane__n{ font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; color:var(--tomato); }
+.tabpane h3{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(24px,3.1vw,42px); line-height:1.3; margin:14px 0 18px; text-wrap:balance;
+}
+.tabpane p{ color:var(--ink-2); font-size:15px; line-height:1.85; max-width:46ch; }
+.tabpane .btn{ margin-top:28px; }
+@media (max-width:900px){
+  .tabsec__head, .tabsec__aside{ grid-column:main-start / main-end; }
+  .tabsec__aside{ margin-top:24px; align-self:auto; }
+  .tabpane{ grid-template-columns:1fr; }
+  .tabpane__fig{ aspect-ratio:4/3; }
+}
+
+/* ============================================================
+   SCENARIO RAIL — horizontal, oversized headings
+   ============================================================ */
+.rail{ position:relative; }
+/* Same split as the tabbed section: a tall headline block on the left half and a
+   short paragraph on the right. A headline that runs the full width on one line
+   has no vertical presence, which is what made this section feel cramped. */
+.rail__head{ grid-column:main-start / span 13; }
+.rail__head h2{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(32px,5.6vw,78px); line-height:1.14; margin:20px 0 0; text-wrap:balance;
+}
+.rail__aside{ grid-column:span 7 / main-end; align-self:end; padding-bottom:6px; }
+.rail__aside p{ color:var(--ink-2); font-size:15px; line-height:1.85; }
+.rail__count{ display:block; margin-top:22px; font-family:var(--font-mono); font-size:12.5px; color:var(--ink-3); }
+@media (max-width:900px){
+  .rail__head, .rail__aside{ grid-column:main-start / main-end; }
+  .rail__aside{ margin-top:24px; align-self:auto; }
+}
+.rnav{
+  width:46px; height:46px; border-radius:50%; border:1px solid var(--line);
+  background:none; cursor:pointer; display:grid; place-items:center;
+  transition:all .35s var(--ease);
+}
+.rnav:hover:not(:disabled){ background:var(--ink); color:var(--cream); border-color:var(--ink); }
+.rnav:disabled{ opacity:.3; cursor:default; }
+.rnav svg{ width:16px; height:16px; }
+
+/* Arrows sit on the left and right edges of the rail itself rather than in the
+   heading — a 56px target at the point you are already looking is far easier to
+   hit than a small pair of buttons parked above the content. */
+/* The rail is now framed rather than full-bleed: the scroller is exactly the
+   reading column, so cards are cut off at the same right edge the text stops at
+   instead of running away to the edge of the glass. */
+.rail__wrap{
+  position:relative;
+  max-width:var(--shell-max); margin-inline:auto;
+  padding-inline:var(--gut);
+}
+.rnav--side{
+  position:absolute; top:34%; z-index:4;
+  width:54px; height:54px;
+  /* translucent over a blur so it reads as glass sitting above the cards rather
+     than a solid disc punched into them */
+  background:color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter:saturate(1.4) blur(10px);
+  border:1px solid color-mix(in srgb, var(--ink) 9%, transparent);
+  box-shadow:var(--shadow-md);
+  color:var(--ink);
+  /* the vertical centring lives in the transform, so every hover state has to
+     carry it too */
+  transform:translateY(-50%);
+  transition:background .4s var(--ease), color .4s var(--ease),
+             border-color .4s var(--ease), box-shadow .4s var(--ease),
+             transform .4s var(--ease), opacity .35s var(--ease);
+}
+.rnav--side svg{ width:20px; height:20px; transition:transform .4s var(--ease); }
+.rnav--side:hover:not(:disabled){
+  background:var(--ink); color:var(--cream); border-color:var(--ink);
+  box-shadow:var(--shadow-lg);
+  transform:translateY(-50%) scale(1.07);
+}
+/* the arrow leans the way it travels on hover */
+.rnav--prev:hover:not(:disabled) svg{ transform:translateX(-2px); }
+.rnav--next:hover:not(:disabled) svg{ transform:translateX(2px); }
+.rnav--side:active:not(:disabled){ transform:translateY(-50%) scale(.98); }
+.rnav--side:focus-visible{ outline:2px solid var(--tomato); outline-offset:3px; }
+.rnav--side:disabled{ opacity:0; pointer-events:none; transform:translateY(-50%) scale(.9); }
+.rnav--prev{ left:clamp(4px, 0.8vw, 10px); }
+.rnav--next{ right:clamp(4px, 0.8vw, 10px); }
+@media (max-width:640px){
+  .rnav--side{ width:46px; height:46px; }
+  .rnav--side svg{ width:17px; height:17px; }
+}
+.rail__scroll{
+  display:flex; gap:20px; overflow-x:auto;
+  /* the frame lives on .rail__wrap, so the scroller itself needs no inset and
+     clips its cards at the column edges. Clipping applies to both axes, so it
+     also needs a little vertical room or the hover shadow gets sheared off; the
+     margin gives that height back so nothing shifts. */
+  margin-top:calc(clamp(56px,8vw,120px) - 12px);
+  padding:12px 0 20px;
+  /* proximity, not mandatory: mandatory snap overrides programmatic scrollTo and
+     the arrow buttons end up bouncing back. */
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;
+}
+.rail__scroll::-webkit-scrollbar{ display:none; }
+.scard{
+  flex:0 0 auto; width:min(80vw, 400px); scroll-snap-align:start;
+  border-radius:18px; overflow:hidden; background:var(--surface);
+  box-shadow:var(--shadow-sm); transition:box-shadow .5s var(--ease);
+  display:flex; flex-direction:column;
+}
+.scard:hover{ box-shadow:var(--shadow-md); }
+.scard__fig{ aspect-ratio:4/3; display:grid; place-items:center; position:relative; overflow:hidden; background:var(--tint); }
+.scard__fig svg{ width:52%; transition:transform 1s var(--ease); }
+.scard:hover .scard__fig svg{ transform:scale(1.07); }
+.scard__b{ padding:26px 28px 32px; }
+.scard__t{ font-family:var(--font-label); font-size:11px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--tomato); }
+.scard__b h4{ font-family:var(--font-display); font-weight:200; font-size:clamp(22px,2.4vw,30px); line-height:1.35; margin:12px 0 10px; }
+.scard__b p{ font-size:14px; color:var(--ink-2); line-height:1.7; }
+
+/* ============================================================
+   WHAT THE FRUIT IS FOR
+   ============================================================ */
+/* Lives on the knowledge page. It was on the home page for one revision, between
+   the farm-day tabs and the awards row; the owner took it off once the knowledge
+   page existed to hold the same material at length. */
+.benelist{
+  grid-column:main-start / main-end;
+  display:grid; grid-template-columns:repeat(5,1fr);
+  margin:0; padding:0; list-style:none;
+}
+/* the hairline-and-numeral treatment the journey rail uses, so a row of short
+   claims reads as part of the same family rather than a new device */
+/* A short red tick on the rule instead of a numeral. Skin, lines, eyes, bones,
+   hair is not a sequence — numbering it made a list of five unrelated things look
+   like five ranked steps, which is the listicle tic the owner called out. The
+   journey rail on the home page keeps its numbers, because seed → nursery →
+   growing → pressing → bottling genuinely is an order. */
+.bene__i{ position:relative; border-top:1px solid var(--line); padding:26px 20px 0 0; }
+.bene__i::before{
+  content:""; position:absolute; top:-1px; left:0;
+  width:26px; height:2px; background:var(--tomato);
+}
+.bene__i p{
+  font-family:var(--font-display); font-weight:300;
+  font-size:clamp(17px,1.5vw,22px); line-height:1.45; text-wrap:balance;
+}
+@media (max-width:900px){ .benelist{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:520px){ .benelist{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   AWARDS — dark section w/ carousel
+   ============================================================ */
+/* structure comes from the hairline rules in the cert row, not a background fill */
+.awards{ background:none; }
+.certrow{
+  grid-column:main-start/main-end; display:grid; grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  margin-bottom:clamp(44px,5vw,72px);
+}
+.cert{
+  padding:32px 14px; text-align:center; border-right:1px solid var(--line);
+  display:flex; flex-direction:column; align-items:center; gap:9px;
+  transition:background .4s var(--ease);
+}
+.cert:last-child{ border-right:0; }
+.cert:hover{ background:var(--surface); }
+.cert__logo{ height:72px; width:auto; max-width:100%; margin-bottom:6px; }
+/* cells without a logo keep an empty slot of the same height, so every name sits on one line */
+.cert:not(:has(.cert__logo))::before{ content:""; height:78px; }
+.cert__m{ font-family:var(--font-display); font-weight:300; font-size:20px; }
+.cert__s{ font-size:10.5px; letter-spacing:.05em; color:var(--ink-2); }
+.cert__n{ font-size:11px; letter-spacing:.04em; color:var(--ink-3); }
+@media (max-width:760px){ .certrow{ grid-template-columns:repeat(2,1fr); } .cert{ border-bottom:1px solid var(--line); } }
+
+.awrap{ grid-column:main-start/main-end; }
+.aviewport{ overflow:hidden; }
+.atrack{ display:flex; transition:transform .7s var(--ease); }
+.aslide{ flex:0 0 100%; display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(28px,4vw,64px); align-items:center; }
+.aslide__y{ font-family:var(--font-display); font-weight:200; font-size:clamp(52px,8vw,110px); line-height:1; color:var(--oak); }
+.aslide h3{ font-family:var(--font-display); font-weight:200; font-size:clamp(23px,2.6vw,34px); line-height:1.35; margin-bottom:16px; }
+.aslide p{ font-size:14.5px; line-height:1.8; color:var(--ink-2); }
+.actl{ display:flex; align-items:center; gap:10px; margin-top:clamp(30px,4vw,50px); }
+@media (max-width:760px){ .aslide{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   SHOP GRID
+   ============================================================ */
+.filters{ grid-column:main-start/main-end; display:flex; gap:8px; flex-wrap:wrap; margin-bottom:38px; }
+.filt{
+  padding:10px 21px; border-radius:999px; border:1px solid var(--line); background:none;
+  font-size:13.5px; cursor:pointer; color:var(--ink-2);
+  transition:all .35s var(--ease);
+}
+.filt:hover{ border-color:var(--ink); color:var(--ink); }
+.filt.on{ background:var(--ink); color:var(--cream); border-color:var(--ink); }
+.shop{ grid-column:main-start/main-end; display:grid; grid-template-columns:repeat(4,1fr); gap:26px 22px; }
+.item{ display:flex; flex-direction:column; transition:opacity .45s var(--ease), transform .45s var(--ease); }
+.item[hidden]{ display:none; }
+/* arch-topped tiles echo the shop's arched shelving */
+.item__fig{
+  aspect-ratio:4/5; border-radius:var(--arch); overflow:hidden; display:grid; place-items:center;
+  position:relative; margin-bottom:18px; background:var(--tint);
+  box-shadow:var(--shadow-sm); transition:box-shadow .5s var(--ease);
+}
+.item:hover .item__fig{ box-shadow:var(--shadow-md); }
+.item__fig svg{ width:54%; transition:transform .9s var(--ease); }
+.item:hover .item__fig svg{ transform:scale(1.08) translateY(-4px); }
+.item__quick{
+  position:absolute; left:14px; right:14px; bottom:14px;
+  background:color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter:blur(8px);
+  border-radius:999px; padding:11px; text-align:center; font-size:13px; font-weight:600;
+  opacity:0; transform:translateY(10px); transition:all .45s var(--ease);
+}
+.item:hover .item__quick, .item:focus-within .item__quick{ opacity:1; transform:none; }
+.item__k{ font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); font-family:var(--font-label); }
+.item h4{ font-family:var(--font-display); font-weight:300; font-size:17.5px; line-height:1.45; margin:7px 0 6px; }
+.item p{ font-size:12.5px; color:var(--ink-2); line-height:1.65; flex:1; }
+.item__p{ margin-top:12px; font-size:14.5px; font-weight:600; }
+.item__p s{ color:var(--ink-3); font-weight:400; margin-right:7px; font-size:12.5px; }
+.item__p.ask{ font-weight:400; font-size:13px; color:var(--ink-2); }
+@media (max-width:1000px){ .shop{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width:760px){ .shop{ grid-template-columns:repeat(2,1fr); gap:22px 14px; } }
+
+/* A footnote under a grid or a fact row — the caveats that have to travel with
+   prices and nutrition claims, set quietly enough not to compete with either. */
+.shopnote{
+  grid-column:main-start / main-end;
+  margin-top:clamp(30px,3.6vw,52px); padding-top:20px;
+  border-top:1px solid var(--line);
+  font-size:12.5px; line-height:1.75; color:var(--ink-3); letter-spacing:.02em;
+}
+
+/* ============================================================
+   KNOWLEDGE PAGE — the long-form entries
+   ============================================================ */
+/* A reference page, so it is set to be read rather than scanned: one entry per
+   row, the illustration held small and left of the text instead of on top of it,
+   and the measure capped well short of the column. */
+
+/* The page opens on its own title rather than dropping straight into a section
+   heading. A reference page still has to earn the first thirty seconds, and the
+   fruit standing beside the headline is the only picture the page gets. */
+.wopen{ padding:clamp(40px,6vh,86px) 0 clamp(30px,4vw,54px); align-items:center; }
+.wopen__copy{ grid-column:main-start / span 12; }
+.wopen h1{
+  font-size:clamp(2.1rem,4.6vw,4.2rem); margin:16px 0 0; max-width:18ch;
+}
+.wopen .lede{ margin-top:20px; max-width:46ch; }
+/* the count and the reading time — a long page is easier to start when the reader
+   can see how long it is instead of guessing from the scrollbar */
+.wopen__meta{
+  margin-top:26px; font-size:12px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.wopen__art{ grid-column:span 9 / main-end; display:grid; place-items:center; }
+.wopen__art svg{ width:min(100%, 300px); animation:float 9s ease-in-out infinite; }
+@media (max-width:860px){
+  .wopen__copy, .wopen__art{ grid-column:main-start / main-end; }
+  .wopen__art{ order:-1; margin-bottom:12px; }
+  .wopen__art svg{ width:min(58%, 190px); }
+  .wopen h1{ max-width:none; }
+}
+
+/* The contents bar follows the reader down. It sits outside every section on
+   purpose — sticky only holds while its own containing block is on screen, so
+   inside the intro section it would have vanished after the first scroll, which
+   is exactly where a thirty-thousand-pixel page starts needing it. `--topbar-h`
+   rather than a number, because the announcement strip opens on scroll and
+   changes the height of the sticky stack above it. */
+.wtoc{
+  position:sticky; top:var(--topbar-h); z-index:20;
+  padding:12px 0;
+  background:color-mix(in srgb, var(--cream) 90%, transparent);
+  backdrop-filter:saturate(1.5) blur(12px);
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.wtoc__list{
+  grid-column:main-start / main-end;
+  display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;
+  scroll-padding-left:var(--gut);
+}
+.wtoc__list::-webkit-scrollbar{ display:none; }
+.wtoc__list a{
+  flex:0 0 auto;
+  padding:9px 20px; border-radius:999px; border:1px solid var(--line);
+  font-size:13.5px; color:var(--ink-2); white-space:nowrap;
+  transition:border-color .35s var(--ease), color .35s var(--ease), background .35s var(--ease);
+}
+.wtoc__list a:hover{ border-color:var(--ink); color:var(--ink); }
+
+/* Fourteen identical rows read as a spreadsheet, so each group is built as one
+   feature and then a grid. The lead is the product the group is actually known
+   for — the juice, and the soap the reviews keep coming back to — and it gets a
+   panel, a bigger illustration and room for a real paragraph. The rest sit two
+   across in a lighter shape. Two rhythms instead of one, and the hierarchy says
+   something true rather than just breaking the monotony.
+
+   Nothing here carries a price or a buy button. This is the page someone reads to
+   understand what a thing is; the catalogue is one quiet link away at the foot of
+   each group, and that is where the selling belongs. */
+.wlead{
+  grid-column:main-start / main-end;
+  display:grid; grid-template-columns:.85fr 1.15fr;
+  gap:clamp(26px,4.5vw,68px); align-items:center;
+  background:var(--cream-2); border-radius:var(--panel-radius);
+  padding:clamp(26px,3.4vw,52px);
+}
+.wlead__fig{
+  aspect-ratio:4/5; border-radius:var(--arch); background:var(--surface);
+  display:grid; place-items:center; box-shadow:var(--shadow-md);
+}
+.wlead__fig svg{ width:58%; }
+.wlead h3{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(24px,3vw,40px); line-height:1.28; margin:14px 0 18px;
+  text-wrap:balance;
+}
+.wlead__b > p{ color:var(--ink-2); font-size:15.5px; line-height:1.9; max-width:52ch; }
+
+/* A customer saying what a thing did for them, rather than us saying it. Set as a
+   quiet aside, not a testimonial slab — the moment it is decorated it stops
+   sounding like a person and starts sounding like marketing. */
+.wsay{
+  margin:26px 0 0; padding-left:20px;
+  border-left:2px solid color-mix(in srgb, var(--tomato) 45%, transparent);
+}
+.wsay blockquote{
+  margin:0; font-family:var(--font-display); font-weight:300; font-style:italic;
+  font-size:clamp(16px,1.5vw,19px); line-height:1.6; color:var(--ink);
+  max-width:44ch;
+}
+.wsay figcaption{ margin-top:10px; font-size:12.5px; color:var(--ink-3); }
+
+.wgrid{
+  grid-column:main-start / main-end;
+  display:grid; grid-template-columns:repeat(2,1fr);
+  gap:clamp(24px,3vw,48px) clamp(28px,4vw,72px);
+  margin-top:clamp(34px,4.5vw,72px);
+}
+.wcard{
+  display:grid; grid-template-columns:clamp(76px,8vw,110px) 1fr;
+  gap:clamp(16px,2vw,28px); align-items:start;
+  padding-top:26px; border-top:1px solid var(--line);
+}
+.wcard__fig{
+  aspect-ratio:1/1; border-radius:var(--arch); background:var(--tint);
+  display:grid; place-items:center;
+}
+.wcard__fig svg{ width:66%; }
+.wcard h3{
+  font-family:var(--font-display); font-weight:300;
+  font-size:clamp(18px,1.8vw,24px); line-height:1.35; margin-bottom:10px;
+}
+.wcard__b > p{ color:var(--ink-2); font-size:14px; line-height:1.8; }
+
+/* the one commercial line in each group, kept deliberately quiet */
+.wmore{
+  grid-column:main-start / main-end;
+  margin-top:clamp(30px,3.6vw,52px); font-size:14.5px; color:var(--ink-2);
+}
+
+@media (max-width:900px){
+  .wlead{ grid-template-columns:1fr; }
+  .wlead__fig{ aspect-ratio:4/3; max-width:320px; }
+  .wgrid{ grid-template-columns:1fr; }
+}
+@media (max-width:520px){
+  .wcard{ grid-template-columns:1fr; gap:16px; }
+  .wcard__fig{ max-width:110px; }
+}
+
+/* a block of prose that is not a product — the nutrient table and the notice */
+.wnote{ grid-column:main-start / span 17; }
+.wspec--wide{ grid-template-columns:clamp(96px,11vw,150px) 1fr; gap:20px 32px; }
+.wspec--wide dt{ color:var(--ink); white-space:normal; }
+.wspec--wide dd{ color:var(--ink-2); line-height:1.85; max-width:58ch; }
+/* the legal notice sits in a tinted panel so it reads as a caveat, not as copy */
+.wnote--flag{
+  background:var(--cream-2); border-radius:var(--panel-radius);
+  padding:clamp(24px,3vw,40px); margin-top:clamp(36px,4.5vw,64px);
+}
+.wnote--flag h3{
+  font-family:var(--font-display); font-weight:300; font-size:clamp(19px,1.9vw,25px);
+  line-height:1.4; margin-bottom:14px;
+}
+.wnote--flag p{ color:var(--ink-2); font-size:14.5px; line-height:1.85; max-width:64ch; }
+.wnote--flag p + p{ margin-top:14px; }
+
+@media (max-width:760px){
+  .wspec{ grid-template-columns:1fr; gap:4px 0; }
+  .wspec dt{ margin-top:12px; }
+  .wspec--wide{ grid-template-columns:1fr; }
+  .wnote{ grid-column:main-start / main-end; }
+}
+
+/* ============================================================
+   VISIT
+   ============================================================ */
+/* The closing stretch of the page runs full width. It is the foot of the site
+   rather than something read at length, and letting it span the glass gives the
+   page a base to sit on instead of trailing off in a narrow column. */
+.visit{
+  background:var(--cream-2); border-radius:var(--panel-radius);
+  margin:0 var(--frame);
+  max-width:none;
+  /* pull the gutter in by the frame so the text still lands on the page's line */
+  --gut: max(0px, calc(clamp(20px,5vw,64px) - var(--frame)));
+}
+.visit__in{ grid-column:main-start/main-end; display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(34px,5vw,80px); align-items:center; }
+.visit__card{ background:var(--surface); border-radius:18px; padding:clamp(26px,3vw,40px); box-shadow:var(--shadow-md); }
+.visit__card dl{ display:grid; grid-template-columns:auto 1fr; gap:15px 26px; margin:0; font-size:14px; }
+.visit__card dt{ color:var(--ink-2); white-space:nowrap; }
+.visit__card dd{ margin:0; }
+.visit__map{
+  margin-top:26px; border-radius:12px; overflow:hidden; border:1px solid var(--line);
+  aspect-ratio:16/7; position:relative;
+}
+@media (max-width:860px){ .visit__in{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.ft{
+  background:var(--noir); color:var(--on-noir); padding-top:clamp(60px,7vw,100px);
+  max-width:none; margin-inline:0;   /* full width, like the visit block above it */
+}
+.ft__news{ grid-column:main-start/main-end; padding-bottom:clamp(44px,5vw,70px); border-bottom:1px solid rgba(247,241,232,.16); }
+.ft__news h3{ font-family:var(--font-display); font-weight:200; font-size:clamp(26px,3.4vw,42px); line-height:1.3; max-width:20ch; }
+.nform{ display:flex; gap:10px; margin-top:26px; max-width:440px; flex-wrap:wrap; }
+.nform input{
+  flex:1 1 220px; background:none; border:0; border-bottom:1px solid rgba(247,241,232,.35);
+  padding:13px 2px; color:var(--on-noir); font:inherit; font-size:15px;
+  transition:border-color .35s var(--ease);
+}
+.nform input::placeholder{ color:color-mix(in srgb, var(--on-noir) 45%, transparent); }
+.nform input:focus{ outline:none; border-bottom-color:var(--on-noir); }
+.ft__note{ font-size:11.5px; color:color-mix(in srgb, var(--on-noir) 45%, transparent); margin-top:16px; }
+.ft__cols{ grid-column:main-start/main-end; display:grid; grid-template-columns:1.4fr repeat(3,1fr); gap:38px; padding:clamp(44px,5vw,70px) 0; }
+.ft__cols h4{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:color-mix(in srgb, var(--on-noir) 62%, transparent); font-family:var(--font-label); margin-bottom:18px; }
+.ft__cols li{ margin-bottom:11px; }
+.ft__cols a{ font-size:14px; color:color-mix(in srgb, var(--on-noir) 82%, transparent); transition:color .3s var(--ease); }
+.ft__cols a:hover{ color:var(--on-noir); }
+.ft__about p{ font-size:13.5px; color:color-mix(in srgb, var(--on-noir) 60%, transparent); max-width:34ch; margin-top:16px; line-height:1.75; }
+.ft__bot{
+  grid-column:main-start/main-end; border-top:1px solid rgba(247,241,232,.16);
+  padding:22px 0 34px; display:flex; justify-content:space-between; gap:14px 30px; flex-wrap:wrap;
+  /* was 45%, which measured 3.95:1 — the quietest line on the site still has to
+     clear AA, and this one carries the data-provenance note */
+  font-size:11.5px; color:color-mix(in srgb, var(--on-noir) 58%, transparent);
+}
+@media (max-width:860px){ .ft__cols{ grid-template-columns:1fr 1fr; } }
+
+/* ============================================================
+   READING IN THAI
+   ============================================================ */
+/* Thai is set at the same sizes as English everywhere above, which quietly
+   penalises it. A Thai syllable stacks up to four levels — a vowel below the
+   letter, a vowel above it, and a tone mark above that — where Latin puts nothing
+   above the cap line or below the baseline except descenders. At 10px the upper
+   two layers merge into a single smudge and สกัดเย็น stops being readable as
+   words; the same string in Latin at 10px is merely small.
+
+   So the floor is raised for Thai only, and only on the labels that measured
+   under 12px. Nothing here changes the English page, and none of these sit in a
+   fixed-height box, so raising them cannot reflow a layout.
+
+   Every selector below was measured at under 12px with Thai in it. Three others
+   were in this list on the first pass — .item__k, .scard__t and the tab clock —
+   put there by reading the stylesheet rather than by measuring the page. They were
+   already at or above 12px, and the .scard__t rule made Thai *smaller* than
+   English. Add to this list from a measurement, never from a font-size in the
+   source; the computed value is not always the one written down.
+
+   Measured, in Thai: .jrail__i span 10px, .badge and .cert__s 10.5px,
+   .ft__cols h4 11px, .ft__bot 11.5px. */
+:root[data-lang="th"] .jrail__i span{ font-size:12px; }
+:root[data-lang="th"] .badge{ font-size:12px; }
+:root[data-lang="th"] .cert__s{ font-size:12px; }
+:root[data-lang="th"] .cert__n{ font-size:12px; }
+:root[data-lang="th"] .ft__cols h4{ font-size:12px; }
+:root[data-lang="th"] .ft__bot{ font-size:12.5px; }
+
+/* Wide tracking is a Latin device. The brand board asks for .24em on the label
+   style and it does exactly what it should to ONA HEALTHY — but Thai letters are
+   not standalone units. A consonant carries its vowel and tone mark as one visual
+   cluster, and letter-spacing prises that cluster apart, so the reader has to
+   reassemble each syllable. Tracked-out Thai reads noticeably slower than the same
+   words set solid. The tracking stays wherever the text is Latin, and comes almost
+   all the way off wherever it is Thai. */
+:root[data-lang="th"] .eyebrow{ letter-spacing:.06em; }
+:root[data-lang="th"] .item__k{ letter-spacing:.04em; }
+:root[data-lang="th"] .scard__t{ letter-spacing:.06em; }
+:root[data-lang="th"] .ft__cols h4{ letter-spacing:.05em; }
+:root[data-lang="th"] .cert__s{ letter-spacing:normal; }
+:root[data-lang="th"] .jrail__i span{ letter-spacing:.04em; }
+:root[data-lang="th"] .badge{ letter-spacing:.04em; }
+:root[data-lang="th"] .tabpane__n{ letter-spacing:.05em; }
+
+/* The same stacking is why Thai needs more room between lines than the 1.6 the
+   page is set in. These are the blocks that actually run to several lines; the
+   headings and the ledes already sit at 1.75 or looser and are left alone. */
+:root[data-lang="th"] .item p,
+:root[data-lang="th"] .scard__b p,
+:root[data-lang="th"] .mega__link .s,
+:root[data-lang="th"] .ft__cols a{ line-height:1.85; }
+/* a product title runs two lines in Thai far more often than in English, and 1.45
+   puts the tone marks of the second line into the descenders of the first */
+:root[data-lang="th"] .item h4{ line-height:1.62; }
+
+/* ============================================================
+   MOTION / UTIL
+   ============================================================ */
+.rv{ opacity:0; transform:translateY(24px); transition:opacity .85s var(--ease), transform .85s var(--ease); }
+.rv.in{ opacity:1; transform:none; }
+.rv-d1{ transition-delay:.09s; } .rv-d2{ transition-delay:.18s; } .rv-d3{ transition-delay:.27s; }
+
+.toast{
+  position:fixed; left:50%; bottom:28px; transform:translate(-50%,24px);
+  background:var(--ink); color:var(--cream); padding:14px 24px; border-radius:999px;
+  font-size:13.5px; z-index:70; opacity:0; pointer-events:none;
+  transition:opacity .35s var(--ease), transform .35s var(--ease);
+}
+.toast.show{ opacity:1; transform:translate(-50%,0); }
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  .rv{ opacity:1; transform:none; }
+}
+
+/* ============================================================
+   PAGES WITHOUT A HERO
+   ============================================================ */
+/* A page that opens straight onto content sits too close under the sticky
+   header, so it gets a little air the hero would otherwise have provided. */
+.page--plain{ padding-top:clamp(16px,3.5vw,44px); }
+</style>
+
+<!-- SVG sprite — every illustration drawn for this brand -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="gTom" cx="34%" cy="26%" r="82%">
+      <stop offset="0%"  stop-color="#F08A6C"/>
+      <stop offset="26%" stop-color="#D8452C"/>
+      <stop offset="66%" stop-color="#A62D1B"/>
+      <stop offset="100%" stop-color="#6B1A0E"/>
+    </radialGradient>
+    <radialGradient id="gTomS" cx="34%" cy="26%" r="82%">
+      <stop offset="0%"  stop-color="#E9744F"/>
+      <stop offset="55%" stop-color="#B33420"/>
+      <stop offset="100%" stop-color="#701C0F"/>
+    </radialGradient>
+    <linearGradient id="gLeaf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5C9268"/><stop offset="100%" stop-color="#2F5C3B"/>
+    </linearGradient>
+    <linearGradient id="gJuice" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D24C31"/><stop offset="100%" stop-color="#8E2317"/>
+    </linearGradient>
+    <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E0CDA0"/><stop offset="100%" stop-color="#A98A63"/>
+    </linearGradient>
+    <linearGradient id="gSoil" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7A5B3C"/><stop offset="100%" stop-color="#4A3524"/>
+    </linearGradient>
+
+    <!-- tomato, full detail -->
+    <symbol id="i-tomato" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="356" rx="112" ry="17" fill="#7A2419" opacity=".16"/>
+      <g class="drop">
+        <path d="M200 92c74 0 132 50 132 118 0 76-58 128-132 128S68 286 68 210C68 142 126 92 200 92Z" fill="url(#gTom)"/>
+        <path d="M200 92c74 0 132 50 132 118 0 76-58 128-132 128" fill="none" stroke="#5E160B" stroke-opacity=".18" stroke-width="3"/>
+        <g fill="#6B1A0E" opacity=".13">
+          <path d="M137 118c-16 30-22 60-22 92s6 62 22 92c-9-6-17-13-24-21-13-26-19-49-19-71s6-45 19-71c7-8 15-15 24-21Z"/>
+          <path d="M263 118c16 30 22 60 22 92s-6 62-22 92c9-6 17-13 24-21 13-26 19-49 19-71s-6-45-19-71c-7-8-15-15-24-21Z"/>
+        </g>
+        <ellipse cx="156" cy="150" rx="36" ry="24" fill="#fff" opacity=".26" transform="rotate(-28 156 150)"/>
+        <ellipse cx="143" cy="140" rx="14" ry="9" fill="#fff" opacity=".38" transform="rotate(-28 143 140)"/>
+        <g fill="url(#gLeaf)">
+          <path d="M200 118 191 52l9 32 9-32-9 66Z"/>
+          <path d="M200 118 138 74l40 22-30-36 52 58Z"/>
+          <path d="M200 118 262 74l-40 22 30-36-52 58Z"/>
+          <path d="M200 118 118 112l44 6-40-20 78 20Z"/>
+          <path d="M200 118 282 112l-44 6 40-20-78 20Z"/>
+          <path d="M200 118 146 158l38-24-46 10 62 14Z"/>
+          <path d="M200 118 254 158l-38-24 46 10-62 14Z"/>
+        </g>
+        <path d="M197 58c0-14 2-24 5-30 3 8 4 18 3 31Z" fill="#3F7A4E"/>
+        <circle cx="200" cy="116" r="11" fill="#35603F"/>
+      </g>
+    </symbol>
+
+    <!-- seed -->
+    <symbol id="i-seed" viewBox="0 0 400 400">
+      <path d="M40 300h320v70H40z" fill="url(#gSoil)"/>
+      <path d="M40 300c40-10 78-6 118 2s78 12 120 4 62-14 82-16v80H40Z" fill="url(#gSoil)"/>
+      <g opacity=".5" fill="#2E2013">
+        <circle cx="96" cy="330" r="5"/><circle cx="160" cy="345" r="4"/><circle cx="236" cy="332" r="5"/><circle cx="300" cy="348" r="4"/>
+      </g>
+      <g transform="translate(200 250)">
+        <ellipse cx="0" cy="0" rx="34" ry="46" fill="#E6D4A8"/>
+        <ellipse cx="-8" cy="-10" rx="14" ry="20" fill="#F5E9C9"/>
+        <path d="M0-46c10 16 14 32 12 48s-8 30-18 44" fill="none" stroke="#B99B62" stroke-width="3" stroke-linecap="round"/>
+        <path d="M0-46C-8-30-12-14-10 2s8 30 18 44" fill="none" stroke="#B99B62" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+      </g>
+      <g stroke="#3F7A4E" stroke-width="4" stroke-linecap="round" fill="none" opacity=".9">
+        <path d="M200 204v-46"/><path d="M200 176c-14-8-22-22-22-38 16 2 26 12 30 26"/><path d="M200 168c13-9 20-24 19-40-16 3-25 14-28 28"/>
+      </g>
+      <g fill="#F2EBDE" opacity=".5">
+        <circle cx="86" cy="120" r="3"/><circle cx="320" cy="96" r="3.5"/><circle cx="286" cy="176" r="2.5"/><circle cx="112" cy="200" r="2.5"/>
+      </g>
+    </symbol>
+
+    <!-- seedling tray / nursery -->
+    <symbol id="i-nursery" viewBox="0 0 400 400">
+      <rect x="46" y="252" width="308" height="86" rx="10" fill="#8E6F4B"/>
+      <rect x="46" y="252" width="308" height="22" rx="10" fill="#A5825A"/>
+      <g fill="#5B452C">
+        <rect x="70" y="278" width="62" height="48" rx="6"/><rect x="146" y="278" width="62" height="48" rx="6"/>
+        <rect x="222" y="278" width="62" height="48" rx="6"/><rect x="298" y="278" width="34" height="48" rx="6"/>
+      </g>
+      <g stroke="#3F7A4E" stroke-width="5" stroke-linecap="round" fill="none">
+        <path d="M101 278v-62"/><path d="M177 278v-84"/><path d="M253 278v-70"/><path d="M317 278v-50"/>
+      </g>
+      <g fill="url(#gLeaf)">
+        <ellipse cx="80" cy="212" rx="24" ry="12" transform="rotate(-22 80 212)"/><ellipse cx="122" cy="206" rx="24" ry="12" transform="rotate(22 122 206)"/>
+        <ellipse cx="154" cy="190" rx="26" ry="13" transform="rotate(-22 154 190)"/><ellipse cx="200" cy="182" rx="26" ry="13" transform="rotate(22 200 182)"/>
+        <ellipse cx="232" cy="204" rx="25" ry="12" transform="rotate(-22 232 204)"/><ellipse cx="274" cy="198" rx="25" ry="12" transform="rotate(22 274 198)"/>
+        <ellipse cx="298" cy="224" rx="20" ry="10" transform="rotate(-22 298 224)"/><ellipse cx="334" cy="220" rx="20" ry="10" transform="rotate(22 334 220)"/>
+      </g>
+      <g stroke="#C6B48E" stroke-width="3" fill="none" opacity=".65">
+        <path d="M56 150 200 66l144 84"/><path d="M200 66v-24"/>
+      </g>
+    </symbol>
+
+    <!-- greenhouse rows -->
+    <symbol id="i-greenhouse" viewBox="0 0 400 400">
+      <path d="M32 330V190L200 96l168 94v140Z" fill="#EFE6D6" opacity=".5"/>
+      <path d="M32 190 200 96l168 94" fill="none" stroke="#3F7A4E" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M32 330V190M368 330V190" stroke="#3F7A4E" stroke-width="6"/>
+      <g stroke="#3F7A4E" stroke-width="2.5" opacity=".45">
+        <path d="M116 143v187M200 96v234M284 143v187"/><path d="M32 240h336M32 286h336"/>
+      </g>
+      <g>
+        <path d="M96 330v-96" stroke="#2F5C3B" stroke-width="5" fill="none"/>
+        <path d="M200 330v-116" stroke="#2F5C3B" stroke-width="5" fill="none"/>
+        <path d="M304 330v-96" stroke="#2F5C3B" stroke-width="5" fill="none"/>
+        <g fill="url(#gLeaf)">
+          <ellipse cx="78" cy="252" rx="19" ry="10" transform="rotate(-24 78 252)"/><ellipse cx="114" cy="272" rx="19" ry="10" transform="rotate(24 114 272)"/>
+          <ellipse cx="182" cy="232" rx="19" ry="10" transform="rotate(-24 182 232)"/><ellipse cx="218" cy="254" rx="19" ry="10" transform="rotate(24 218 254)"/>
+          <ellipse cx="286" cy="252" rx="19" ry="10" transform="rotate(-24 286 252)"/><ellipse cx="322" cy="272" rx="19" ry="10" transform="rotate(24 322 272)"/>
+        </g>
+        <g>
+          <circle cx="88" cy="292" r="13" fill="url(#gTomS)"/><circle cx="110" cy="308" r="10" fill="url(#gTomS)"/>
+          <circle cx="192" cy="272" r="14" fill="url(#gTomS)"/><circle cx="214" cy="296" r="11" fill="#C9A227"/>
+          <circle cx="296" cy="292" r="13" fill="url(#gTomS)"/><circle cx="318" cy="306" r="10" fill="#3A2A28"/>
+        </g>
+      </g>
+      <rect x="24" y="330" width="352" height="10" rx="5" fill="#8E6F4B"/>
+    </symbol>
+
+    <!-- black tomato extract — the 90 g bottle, deliberately dark so it does not
+         read as the 75 ml drinking bottle sitting next to it on the shelf -->
+    <symbol id="i-concentrate" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="346" rx="70" ry="12" fill="#7A2419" opacity=".14"/>
+      <rect x="176" y="58" width="48" height="24" rx="8" fill="#2E2B28"/>
+      <rect x="186" y="82" width="28" height="30" rx="5" fill="#4A3524"/>
+      <path d="M158 112h84c19 0 34 15 34 34v150c0 17-14 30-30 30H154c-17 0-30-14-30-30V146c0-19 15-34 34-34Z" fill="#5A3F28"/>
+      <path d="M158 112h84c19 0 34 15 34 34v150c0 17-14 30-30 30H154c-17 0-30-14-30-30V146c0-19 15-34 34-34Z" fill="#2E1B10" opacity=".45"/>
+      <path d="M148 150c-4 8-4 14-4 22v104c0 11 3 17 9 21-9-1-17-9-17-21V172c0-9 4-16 12-22Z" fill="#fff" opacity=".22"/>
+      <rect x="146" y="188" width="108" height="94" rx="6" fill="#F7F1E8" opacity=".95"/>
+      <circle cx="200" cy="222" r="17" fill="#2E2B28"/>
+      <circle cx="194" cy="216" r="5" fill="#fff" opacity=".22"/>
+      <path d="M200 204c1-6 4-10 9-12-2 5-4 9-7 12Z" fill="#3F7A4E"/>
+      <g fill="#6E675C"><rect x="164" y="252" width="72" height="5" rx="2.5"/><rect x="176" y="264" width="48" height="4" rx="2"/></g>
+      <g fill="#F2EBDE" opacity=".4"><circle cx="100" cy="140" r="5"/><circle cx="306" cy="216" r="4"/></g>
+    </symbol>
+
+    <!-- body lotion — the 200 ml pump bottle -->
+    <symbol id="i-lotion" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="352" rx="76" ry="13" fill="#7A2419" opacity=".13"/>
+      <rect x="176" y="68" width="48" height="24" rx="10" fill="#8E8578"/>
+      <path d="M224 74h26c7 0 12 5 12 12v14h-18V86h-20Z" fill="#8E8578"/>
+      <rect x="190" y="92" width="20" height="20" fill="#6E675C"/>
+      <rect x="174" y="108" width="52" height="26" rx="8" fill="#C6B48E"/>
+      <rect x="174" y="108" width="52" height="11" rx="5" fill="#DACBA9"/>
+      <path d="M156 134h88c16 0 28 12 28 28v160c0 16-12 28-28 28h-88c-16 0-28-12-28-28V162c0-16 12-28 28-28Z" fill="#E7DCC2"/>
+      <path d="M156 134h88c16 0 28 12 28 28v160c0 16-12 28-28 28h-88c-16 0-28-12-28-28V162c0-16 12-28 28-28Z" fill="url(#gJuice)" opacity=".42"/>
+      <path d="M146 172c-4 9-4 15-4 24v106c0 11 3 18 9 22-9-1-16-9-16-22V194c0-9 3-17 11-22Z" fill="#fff" opacity=".3"/>
+      <rect x="146" y="198" width="108" height="88" rx="6" fill="#F7F1E8" opacity=".95"/>
+      <circle cx="200" cy="228" r="15" fill="#A6362A" opacity=".85"/>
+      <g fill="#6E675C"><rect x="164" y="258" width="72" height="5" rx="2.5"/><rect x="176" y="270" width="48" height="4" rx="2"/></g>
+      <g fill="#F2EBDE" opacity=".45"><circle cx="98" cy="152" r="5"/><circle cx="308" cy="232" r="4"/></g>
+    </symbol>
+
+    <!-- body sunscreen — same bottle, sun on the label -->
+    <symbol id="i-sunlotion" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="352" rx="76" ry="13" fill="#7A2419" opacity=".13"/>
+      <rect x="176" y="68" width="48" height="24" rx="10" fill="#8E8578"/>
+      <path d="M224 74h26c7 0 12 5 12 12v14h-18V86h-20Z" fill="#8E8578"/>
+      <rect x="190" y="92" width="20" height="20" fill="#6E675C"/>
+      <rect x="174" y="108" width="52" height="26" rx="8" fill="#C6B48E"/>
+      <rect x="174" y="108" width="52" height="11" rx="5" fill="#DACBA9"/>
+      <path d="M156 134h88c16 0 28 12 28 28v160c0 16-12 28-28 28h-88c-16 0-28-12-28-28V162c0-16 12-28 28-28Z" fill="#E7DCC2"/>
+      <path d="M156 134h88c16 0 28 12 28 28v160c0 16-12 28-28 28h-88c-16 0-28-12-28-28V162c0-16 12-28 28-28Z" fill="url(#gGold)" opacity=".38"/>
+      <path d="M146 172c-4 9-4 15-4 24v106c0 11 3 18 9 22-9-1-16-9-16-22V194c0-9 3-17 11-22Z" fill="#fff" opacity=".3"/>
+      <rect x="146" y="198" width="108" height="88" rx="6" fill="#F7F1E8" opacity=".95"/>
+      <circle cx="200" cy="230" r="16" fill="url(#gGold)"/>
+      <g stroke="#AD8347" stroke-width="4" stroke-linecap="round">
+        <path d="M200 202v-8M200 266v-8M228 230h8M164 230h8M220 210l6-6M174 256l6-6M220 250l6 6M174 204l6 6"/>
+      </g>
+      <g fill="#6E675C"><rect x="176" y="270" width="48" height="4" rx="2"/></g>
+      <g fill="#F2EBDE" opacity=".45"><circle cx="98" cy="152" r="5"/><circle cx="308" cy="232" r="4"/></g>
+    </symbol>
+
+    <!-- essence — the slim concentrate vial -->
+    <symbol id="i-essence" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="350" rx="58" ry="11" fill="#7A2419" opacity=".13"/>
+      <path d="M200 44c14 18 22 30 22 40a22 22 0 0 1-44 0c0-10 8-22 22-40Z" fill="url(#gJuice)" opacity=".85"/>
+      <path d="M193 66c-4 6-6 11-6 15a9 9 0 0 0 5 8c-6-2-9-7-9-13 0-4 3-8 10-10Z" fill="#fff" opacity=".45"/>
+      <rect x="176" y="116" width="48" height="24" rx="7" fill="#3B342B"/>
+      <rect x="184" y="140" width="32" height="18" rx="5" fill="#8E8578"/>
+      <path d="M170 158h60c11 0 20 9 20 20v140c0 11-9 20-20 20h-60c-11 0-20-9-20-20V178c0-11 9-20 20-20Z" fill="#E7DCC2"/>
+      <path d="M170 158h60c11 0 20 9 20 20v140c0 11-9 20-20 20h-60c-11 0-20-9-20-20V178c0-11 9-20 20-20Z" fill="url(#gJuice)" opacity=".5"/>
+      <path d="M164 192c-3 7-3 12-3 19v92c0 9 2 14 7 17-7-1-13-8-13-18V210c0-7 2-13 9-18Z" fill="#fff" opacity=".3"/>
+      <rect x="166" y="212" width="68" height="72" rx="5" fill="#F7F1E8" opacity=".95"/>
+      <circle cx="200" cy="238" r="12" fill="#A6362A" opacity=".8"/>
+      <g fill="#6E675C"><rect x="178" y="264" width="44" height="4" rx="2"/></g>
+    </symbol>
+
+    <!-- cold extraction -->
+    <symbol id="i-extract" viewBox="0 0 400 400">
+      <rect x="96" y="76" width="208" height="120" rx="16" fill="#D9CDB4"/>
+      <rect x="112" y="92" width="176" height="72" rx="9" fill="#3B342B"/>
+      <g fill="#C24A34"><circle cx="146" cy="128" r="9"/><circle cx="176" cy="128" r="9" opacity=".5"/><circle cx="206" cy="128" r="9" opacity=".28"/></g>
+      <rect x="236" y="116" width="40" height="24" rx="5" fill="#3F7A4E"/>
+      <rect x="118" y="178" width="164" height="14" rx="7" fill="#B7A88A"/>
+      <path d="M186 196h28v42h-28z" fill="#C0B294"/>
+      <path d="M200 246c9 0 16 8 16 18s-7 18-16 18-16-8-16-18 7-18 16-18Z" fill="url(#gJuice)"/>
+      <g opacity=".6"><circle cx="200" cy="228" r="5" fill="#C24A34"/></g>
+      <path d="M120 300h160c8 0 14 6 14 14v18c0 8-6 14-14 14H120c-8 0-14-6-14-14v-18c0-8 6-14 14-14Z" fill="#D9CDB4"/>
+      <path d="M124 306h152v22H124z" fill="url(#gJuice)" opacity=".85"/>
+      <g fill="#F2EBDE" opacity=".35"><circle cx="70" cy="132" r="4"/><circle cx="330" cy="240" r="4"/><circle cx="76" cy="252" r="3"/></g>
+      <g stroke="#3F7A4E" stroke-width="3" fill="none" opacity=".8">
+        <path d="M300 210c14 0 22 10 22 22s-10 22-22 22"/><path d="M78 200c-14 0-22 10-22 22s10 22 22 22"/>
+      </g>
+    </symbol>
+
+    <!-- juice bottle -->
+    <symbol id="i-bottle" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="362" rx="76" ry="12" fill="#7A2419" opacity=".14"/>
+      <rect x="176" y="52" width="48" height="34" rx="6" fill="#3F7A4E"/>
+      <rect x="180" y="82" width="40" height="26" fill="#D9CDB4"/>
+      <path d="M180 104c0 22-38 34-38 78v152c0 18 12 30 30 30h56c18 0 30-12 30-30V182c0-44-38-56-38-78Z" fill="#EBE0C8"/>
+      <path d="M180 104c0 22-38 34-38 78v152c0 18 12 30 30 30h56c18 0 30-12 30-30V182c0-44-38-56-38-78Z" fill="url(#gJuice)" opacity=".92"/>
+      <path d="M158 196c-6 12-8 22-8 34v104c0 10 4 16 10 18-8 2-16-6-16-18V220c0-10 4-18 14-24Z" fill="#fff" opacity=".22"/>
+      <rect x="150" y="228" width="100" height="88" rx="6" fill="#F5EEDF"/>
+      <g fill="#A6362A"><circle cx="200" cy="256" r="13"/></g>
+      <g fill="#6E675C">
+        <rect x="168" y="280" width="64" height="5" rx="2.5"/>
+        <rect x="178" y="292" width="44" height="4" rx="2" opacity=".7"/>
+        <rect x="184" y="302" width="32" height="4" rx="2" opacity=".5"/>
+      </g>
+      <g fill="#F2EBDE" opacity=".45"><circle cx="94" cy="140" r="4"/><circle cx="312" cy="180" r="4"/><circle cx="308" cy="300" r="3"/></g>
+    </symbol>
+
+    <!-- soap bar: rounded slab seen slightly from above, tomato stamped on the face -->
+    <symbol id="i-soap" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="304" rx="122" ry="21" fill="#7E6740" opacity=".13"/>
+      <path d="M88 194v42a46 46 0 0 0 46 46h132a46 46 0 0 0 46-46v-42Z" fill="#B8945F"/>
+      <path d="M88 194v42a46 46 0 0 0 46 46h18V194Z" fill="#000" opacity=".07"/>
+      <ellipse cx="200" cy="194" rx="112" ry="43" fill="#E0CDA0"/>
+      <ellipse cx="200" cy="194" rx="90" ry="30" fill="none" stroke="#C6AC7B" stroke-width="2.5"/>
+      <ellipse cx="158" cy="178" rx="32" ry="11" fill="#fff" opacity=".5" transform="rotate(-9 158 178)"/>
+      <circle cx="200" cy="196" r="17" fill="#D8402F"/>
+      <path d="M200 182c-5-7-11-10-17-10 3 6 9 9 17 10Zm0 0c5-7 11-10 17-10-3 6-9 9-17 10Z" fill="#3F7A4E"/>
+      <g fill="none" stroke="#C6AC7B" stroke-width="3">
+        <circle cx="98" cy="116" r="15"/><circle cx="131" cy="88" r="8"/>
+        <circle cx="302" cy="108" r="11"/><circle cx="277" cy="80" r="6"/>
+      </g>
+    </symbol>
+
+    <!-- serum dropper -->
+    <symbol id="i-serum" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="352" rx="70" ry="12" fill="#7A2419" opacity=".13"/>
+      <rect x="172" y="46" width="56" height="20" rx="8" fill="#3B342B"/>
+      <rect x="186" y="66" width="28" height="72" rx="6" fill="#D9CDB4" opacity=".8"/>
+      <rect x="192" y="72" width="16" height="56" rx="4" fill="url(#gJuice)" opacity=".7"/>
+      <path d="M148 150h104c14 0 24 10 24 24v146c0 14-10 24-24 24H148c-14 0-24-10-24-24V174c0-14 10-24 24-24Z" fill="#E7DCC2"/>
+      <path d="M148 150h104c14 0 24 10 24 24v146c0 14-10 24-24 24H148c-14 0-24-10-24-24V174c0-14 10-24 24-24Z" fill="url(#gJuice)" opacity=".55"/>
+      <path d="M140 186c-4 8-4 14-4 22v96c0 10 3 16 8 20-8 0-14-8-14-20V206c0-8 3-15 10-20Z" fill="#fff" opacity=".3"/>
+      <rect x="146" y="216" width="108" height="72" rx="5" fill="#F7F1E8" opacity=".95"/>
+      <g fill="#3F7A4E"><path d="M200 234c8 8 12 15 12 22a12 12 0 0 1-24 0c0-7 4-14 12-22Z"/></g>
+      <g fill="#6E675C"><rect x="168" y="270" width="64" height="4" rx="2"/></g>
+    </symbol>
+
+    <!-- cream jar -->
+    <symbol id="i-cream" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="336" rx="106" ry="16" fill="#7A2419" opacity=".13"/>
+      <rect x="112" y="118" width="176" height="40" rx="12" fill="#C6B48E"/>
+      <rect x="112" y="118" width="176" height="16" rx="8" fill="#DACBA9"/>
+      <path d="M124 158h152c10 0 18 8 18 18v122c0 12-10 22-22 22H128c-12 0-22-10-22-22V176c0-10 8-18 18-18Z" fill="#EBE0C8"/>
+      <path d="M124 158h152c10 0 18 8 18 18v122c0 12-10 22-22 22H128c-12 0-22-10-22-22V176c0-10 8-18 18-18Z" fill="url(#gJuice)" opacity=".45"/>
+      <path d="M118 182c-4 8-4 12-4 20v92c0 10 4 16 10 20-10-2-18-10-18-22V200c0-8 4-14 12-18Z" fill="#fff" opacity=".3"/>
+      <rect x="132" y="212" width="136" height="70" rx="6" fill="#F7F1E8" opacity=".95"/>
+      <circle cx="200" cy="238" r="14" fill="#A6362A" opacity=".85"/>
+      <g fill="#6E675C"><rect x="160" y="262" width="80" height="5" rx="2.5"/></g>
+      <g fill="#F2EBDE" opacity=".45"><circle cx="86" cy="126" r="5"/><circle cx="318" cy="200" r="4"/></g>
+    </symbol>
+
+    <!-- sun / uv -->
+    <symbol id="i-uv" viewBox="0 0 400 400">
+      <circle cx="200" cy="176" r="62" fill="url(#gGold)"/>
+      <g stroke="#AD8347" stroke-width="7" stroke-linecap="round">
+        <path d="M200 82V52M200 300v-30M294 176h30M76 176h30M267 109l21-21M112 264l21-21M267 243l21 21M112 88l21 21"/>
+      </g>
+      <path d="M108 296c0-30 24-54 54-54 8-24 30-40 56-40 34 0 62 28 62 62 0 4 0 8-1 12 18 6 31 23 31 42 0 24-20 44-44 44H150c-23 0-42-19-42-42Z" fill="#F2EBDE" opacity=".9"/>
+      <path d="M108 296c0-30 24-54 54-54 8-24 30-40 56-40" fill="none" stroke="#C6B48E" stroke-width="4"/>
+      <g fill="#A6362A" opacity=".7"><circle cx="196" cy="300" r="9"/><circle cx="232" cy="308" r="7"/><circle cx="162" cy="310" r="6"/></g>
+    </symbol>
+
+    <!-- tablets -->
+    <symbol id="i-tablet" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="344" rx="100" ry="16" fill="#7A2419" opacity=".13"/>
+      <path d="M132 148h136c12 0 22 10 22 22v146c0 12-10 22-22 22H132c-12 0-22-10-22-22V170c0-12 10-22 22-22Z" fill="#EBE0C8"/>
+      <path d="M110 170c0-12 10-22 22-22h136c12 0 22 10 22 22v34H110Z" fill="#A6362A"/>
+      <rect x="150" y="112" width="100" height="40" rx="10" fill="#C6B48E"/>
+      <rect x="136" y="224" width="128" height="76" rx="6" fill="#F7F1E8"/>
+      <g fill="#A6362A">
+        <circle cx="166" cy="250" r="12"/><circle cx="200" cy="250" r="12" opacity=".7"/><circle cx="234" cy="250" r="12" opacity=".45"/>
+      </g>
+      <g fill="#6E675C"><rect x="158" y="276" width="84" height="4" rx="2"/><rect x="172" y="286" width="56" height="4" rx="2" opacity=".6"/></g>
+      <g>
+        <circle cx="86" cy="288" r="22" fill="#C24A34"/><circle cx="80" cy="282" r="7" fill="#fff" opacity=".35"/>
+        <circle cx="318" cy="300" r="18" fill="#C9A227"/><circle cx="313" cy="295" r="6" fill="#fff" opacity=".35"/>
+      </g>
+    </symbol>
+
+    <!-- gift set -->
+    <symbol id="i-gift" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="344" rx="112" ry="16" fill="#7A2419" opacity=".13"/>
+      <rect x="92" y="168" width="216" height="164" rx="10" fill="#D9CDB4"/>
+      <rect x="80" y="140" width="240" height="44" rx="8" fill="#E7DCC2"/>
+      <rect x="186" y="140" width="28" height="192" fill="#A6362A" opacity=".85"/>
+      <rect x="80" y="152" width="240" height="20" fill="#A6362A" opacity=".85"/>
+      <path d="M200 140c-16-26-38-34-50-22s-2 30 26 30h24Zm0 0c16-26 38-34 50-22s2 30-26 30h-24Z" fill="#C24A34"/>
+      <g opacity=".9">
+        <rect x="120" y="196" width="34" height="96" rx="6" fill="url(#gJuice)"/>
+        <rect x="246" y="196" width="34" height="96" rx="6" fill="url(#gJuice)"/>
+      </g>
+    </symbol>
+
+    <!-- six-bottle carton -->
+    <symbol id="i-boxset" viewBox="0 0 400 400">
+      <ellipse cx="200" cy="346" rx="118" ry="16" fill="#7A2419" opacity=".13"/>
+      <g>
+        <g fill="url(#gJuice)">
+          <rect x="118" y="118" width="34" height="104" rx="8"/>
+          <rect x="183" y="104" width="34" height="118" rx="8"/>
+          <rect x="248" y="118" width="34" height="104" rx="8"/>
+        </g>
+        <g fill="#3F7A4E">
+          <rect x="124" y="104" width="22" height="18" rx="4"/>
+          <rect x="189" y="90" width="22" height="18" rx="4"/>
+          <rect x="254" y="104" width="22" height="18" rx="4"/>
+        </g>
+        <g fill="#fff" opacity=".22">
+          <rect x="124" y="132" width="9" height="72" rx="4"/>
+          <rect x="189" y="118" width="9" height="86" rx="4"/>
+          <rect x="254" y="132" width="9" height="72" rx="4"/>
+        </g>
+      </g>
+      <path d="M96 206h208l14 118H82Z" fill="#D9CDB4"/>
+      <path d="M96 206h208l-6 26H102Z" fill="#EDE3CC"/>
+      <g fill="#A6362A" opacity=".9"><rect x="150" y="256" width="100" height="8" rx="4"/></g>
+      <g fill="#6E675C" opacity=".55"><rect x="168" y="278" width="64" height="6" rx="3"/></g>
+      <path d="M82 324h236" stroke="#B7A88A" stroke-width="5"/>
+    </symbol>
+
+    <!-- fresh tomatoes crate -->
+    <symbol id="i-crate" viewBox="0 0 400 400">
+      <path d="M76 232h248l-18 108H94Z" fill="#A5825A"/>
+      <g stroke="#7A5F3E" stroke-width="4"><path d="M92 262h216M88 292h224M84 320h232"/></g>
+      <circle cx="150" cy="216" r="38" fill="url(#gTomS)"/>
+      <circle cx="228" cy="206" r="44" fill="url(#gTom)"/>
+      <circle cx="292" cy="222" r="30" fill="#C9A227"/>
+      <circle cx="108" cy="226" r="26" fill="#3A2A28"/>
+      <g fill="url(#gLeaf)">
+        <path d="M228 162c6-14 4-24-2-30 8 2 14 10 16 20Z"/><path d="M150 178c-6-12-14-18-22-18 4 8 12 14 22 18Z"/>
+      </g>
+      <ellipse cx="212" cy="188" rx="16" ry="10" fill="#fff" opacity=".25" transform="rotate(-25 212 188)"/>
+    </symbol>
+
+    <!-- heart / health -->
+    <symbol id="i-heart" viewBox="0 0 400 400">
+      <path d="M200 322S82 254 82 176c0-40 32-70 70-70 22 0 40 10 48 26 8-16 26-26 48-26 38 0 70 30 70 70 0 78-118 146-118 146Z" fill="url(#gTom)"/>
+      <path d="M100 200h52l18-34 24 66 20-42 16 22h70" fill="none" stroke="#F7F1E8" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- leaf shield / safe -->
+    <symbol id="i-shield" viewBox="0 0 400 400">
+      <path d="M200 60l112 44v100c0 74-46 118-112 142-66-24-112-68-112-142V104Z" fill="#3F7A4E"/>
+      <path d="M200 88l86 34v82c0 58-34 92-86 112-52-20-86-54-86-112v-82Z" fill="#F7F1E8" opacity=".14"/>
+      <path d="M254 148c-58-6-96 22-96 66 0 14 4 26 12 36 22-40 46-62 76-76-26 18-44 42-56 76 8 4 18 6 28 6 34 0 58-30 58-72 0-14-8-28-22-36Z" fill="#F7F1E8" opacity=".92"/>
+    </symbol>
+
+    <!-- snow / cold -->
+    <symbol id="i-cold" viewBox="0 0 400 400">
+      <g stroke="#3F7A4E" stroke-width="10" stroke-linecap="round">
+        <path d="M200 76v248M92 138l216 124M308 138 92 262"/>
+      </g>
+      <g stroke="#3F7A4E" stroke-width="9" stroke-linecap="round" fill="none">
+        <path d="M200 112l-24-24M200 112l24-24M200 288l-24 24M200 288l24 24"/>
+        <path d="M118 160l-33-4M118 160l4-33M282 240l33 4M282 240l-4 33"/>
+        <path d="M282 160l33-4M282 160l-4-33M118 240l-33 4M118 240l4 33"/>
+      </g>
+      <circle cx="200" cy="200" r="30" fill="url(#gTom)"/>
+    </symbol>
+
+    <!-- medal -->
+    <symbol id="i-medal" viewBox="0 0 400 400">
+      <path d="M140 44h48l40 96h-48Z" fill="#A6362A"/><path d="M260 44h-48l-40 96h48Z" fill="#7A2419"/>
+      <circle cx="200" cy="248" r="104" fill="url(#gGold)"/>
+      <circle cx="200" cy="248" r="82" fill="none" stroke="#8F7247" stroke-width="4"/>
+      <path d="M200 194l16 34 38 5-28 26 7 37-33-18-33 18 7-37-28-26 38-5Z" fill="#7E6740" opacity=".8"/>
+    </symbol>
+
+    <!-- truck -->
+    <symbol id="i-truck" viewBox="0 0 400 400">
+      <rect x="46" y="146" width="186" height="120" rx="10" fill="#D9CDB4"/>
+      <path d="M232 178h62l50 58v30h-112Z" fill="#C6B48E"/>
+      <rect x="248" y="192" width="42" height="34" rx="5" fill="#F7F1E8" opacity=".7"/>
+      <circle cx="112" cy="282" r="30" fill="#3B342B"/><circle cx="112" cy="282" r="12" fill="#C6B48E"/>
+      <circle cx="288" cy="282" r="30" fill="#3B342B"/><circle cx="288" cy="282" r="12" fill="#C6B48E"/>
+      <circle cx="132" cy="204" r="34" fill="url(#gTom)"/>
+      <path d="M46 266h298" stroke="#8E7A56" stroke-width="6"/>
+    </symbol>
+
+    <!-- footsteps / visit -->
+    <symbol id="i-visit" viewBox="0 0 400 400">
+      <path d="M200 60c46 0 84 38 84 84 0 62-84 156-84 156S116 206 116 144c0-46 38-84 84-84Z" fill="url(#gTom)"/>
+      <circle cx="200" cy="142" r="34" fill="#F7F1E8"/>
+      <g fill="url(#gLeaf)">
+        <ellipse cx="122" cy="330" rx="34" ry="15" transform="rotate(-16 122 330)"/>
+        <ellipse cx="278" cy="342" rx="34" ry="15" transform="rotate(16 278 342)"/>
+      </g>
+    </symbol>
+
+    <!-- map -->
+    <symbol id="i-map" viewBox="0 0 480 200">
+      <rect width="480" height="200" fill="#E5DCC5"/>
+      <g stroke="#CDBF9E" stroke-width="2" fill="none">
+        <path d="M0 60h480M0 130h480M120 0v200M300 0v200"/>
+      </g>
+      <path d="M0 150C90 120 150 170 240 140s150-70 240-40" fill="none" stroke="#B9C4A6" stroke-width="14"/>
+      <path d="M60 0c40 60 20 110 80 140s120 10 160 60" fill="none" stroke="#D8CDAF" stroke-width="10"/>
+      <g><circle cx="300" cy="100" r="24" fill="#A6362A" opacity=".18"/><circle cx="300" cy="100" r="9" fill="#A6362A"/></g>
+    </symbol>
+  </defs>
+</svg>
+<!-- ============================================================ -->
+
+<div class="topbar" id="topbar">
+<header class="hdr" id="hdr">
+  <div class="hdr__in">
+    <a class="brand" href="index.html" aria-label="ONA Healthy หน้าแรก" data-en-aria="ONA Healthy home">
+      <svg class="brand__mark" viewBox="0 0 400 400" aria-hidden="true"><use href="#i-tomato"/></svg>
+      <span class="brand__wd">ONA&nbsp;HEALTHY</span>
+    </a>
+
+    <nav class="nav" aria-label="เมนูหลัก" data-en-aria="Main menu">
+      <div class="nav__item" data-mega="mega-shop">
+        <button class="nav__btn" aria-expanded="false" aria-controls="mega-shop" data-en-text="Products">ผลิตภัณฑ์
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        </button>
+      </div>
+      <div class="nav__item" data-mega="mega-health">
+        <button class="nav__btn" aria-expanded="false" aria-controls="mega-health" data-en-text="Your Health">สุขภาพของคุณ
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        </button>
+      </div>
+      <a class="nav__btn" href="index.html#journey" data-en="Field to Bottle">จากไร่สู่ขวด</a>
+      <a class="nav__btn" href="index.html#visit" data-en="Visit the Farm">เยือนสวน</a>
+      <a class="nav__btn" href="index.html#awards" data-en="Awards">รางวัล</a>
+    </nav>
+
+    <div class="hdr__right">
+      <button class="icon-btn" aria-label="ค้นหา" data-en-aria="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      </button>
+      <button class="langbtn" id="langBtn" aria-label="เปลี่ยนเป็นภาษาอังกฤษ" data-en-aria="Switch to Thai">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/>
+          <path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18Z"/>
+        </svg>
+        <span class="langbtn__code" id="langCode">EN</span>
+      </button>
+      <a class="btn btn--fill btn--sm" href="https://line.me/ti/p/~ykl1681y" target="_blank" rel="noopener" data-en="Order">สั่งซื้อ</a>
+      <button class="icon-btn menu-toggle" id="menuOpen" aria-label="เปิดเมนู" data-en-aria="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="announce-wrap">
+  <div class="announce" id="announce">
+    <span data-en-text="Free nationwide delivery on the ">จัดส่งฟรีทั่วประเทศสำหรับ <b>Monthly Health Pack</b><span class="ann-more" data-en=" · Farm open daily 08:30–18:00"> · เปิดให้เยี่ยมชมสวนทุกวัน 08:30–18:00 น.</span></span>
+  </div>
+</div>
+</div>
+
+<!-- MEGA: products -->
+<div class="mega" id="mega-shop">
+  <div class="mega__in g">
+    <div class="mega__grid">
+      <div class="mega__col">
+        <h4 data-en="Wellness">กลุ่มสุขภาพ</h4>
+        <div class="mega__list">
+          <a class="mega__link" href="products.html"><span><span class="t" data-en="Pure Tomato Juice">น้ำมะเขือเทศสกัดแท้</span><br><span class="s" data-en="Cold-pressed from three varieties">สกัดเย็นจากมะเขือเทศ 3 สายพันธุ์</span></span></a>
+          <a class="mega__link" href="products.html"><span><span class="t" data-en="Tomato Tablets">มะเขือเทศอัดเม็ด</span><br><span class="s" data-en="Chewable and easy to carry">แบบเม็ด เคี้ยวได้ พกพาสะดวก</span></span></a>
+          <a class="mega__link" href="products.html"><span><span class="t" data-en="Fresh Farm Tomatoes">มะเขือเทศสดจากสวน</span><br><span class="s" data-en="Seasonal harvest">ผลผลิตตามฤดูกาล</span></span></a>
+        </div>
+      </div>
+      <div class="mega__col">
+        <h4 data-en="Skincare">กลุ่มความงาม</h4>
+        <div class="mega__list">
+          <a class="mega__link" href="products.html"><span><span class="t" data-en="Face Mask Soap">สบู่มาร์คหน้า</span><br><span class="s" data-en="Handmade, cured for two years">ทำมือ บ่มนาน 2 ปี</span></span></a>
+          <a class="mega__link" href="products.html"><span><span class="t" data-en="Serum and face cream">เซรั่ม และครีมบำรุง</span><br><span class="s" data-en="Tomato, gac fruit, vitamin B3">มะเขือเทศ ฟักข้าว วิตามินบี3</span></span></a>
+          <a class="mega__link" href="products.html"><span><span class="t" data-en="Sun protection">ครีมกันแดด</span><br><span class="s" data-en="Water-resistant, for daily use">กันน้ำ สำหรับใช้ประจำวัน</span></span></a>
+        </div>
+      </div>
+      <div class="mega__feature">
+        <div>
+          <p class="eyebrow" style="color:var(--tomato)" data-en="Best seller">ขายดี</p>
+          <h4 class="serif" style="font-size:22px;line-height:1.4;margin-top:10px" data-en-html="Monthly Health Pack<br>free nationwide delivery">Monthly Health Pack<br>จัดส่งฟรีทั่วประเทศ</h4>
+        </div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+          <a class="btn btn--out btn--sm" href="products.html" data-en="View details">ดูรายละเอียด</a>
+          <svg class="fig" viewBox="0 0 400 400" aria-hidden="true"><use href="#i-gift"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MEGA: health -->
+<div class="mega" id="mega-health">
+  <div class="mega__in g">
+    <div class="mega__grid">
+      <div class="mega__col">
+        <h4 data-en="From the inside">ดูแลจากภายใน</h4>
+        <div class="mega__list">
+          <a class="mega__link" href="knowledge.html"><span><span class="t" data-en="Three varieties">มะเขือเทศ 3 สายพันธุ์</span><br><span class="s" data-en="Why we grow a lower-yield variety">เหตุผลที่เราเลือกปลูกสายพันธุ์ผลผลิตน้อย</span></span></a>
+          <a class="mega__link" href="knowledge.html"><span><span class="t" data-en="Nothing added">ไม่เติมส่วนผสมเพิ่ม</span><br><span class="s" data-en="No sugar, no colouring, no preservative">ไม่มีน้ำตาล ไม่มีสี ไม่มีสารกันบูด</span></span></a>
+        </div>
+      </div>
+      <div class="mega__col">
+        <h4 data-en="From the outside">ดูแลจากภายนอก</h4>
+        <div class="mega__list">
+          <a class="mega__link" href="knowledge.html"><span><span class="t" data-en="Made on the same site">ผลิตในพื้นที่เดียวกัน</span><br><span class="s" data-en="From the same harvest">ใช้ผลผลิตจากแปลงเดียวกัน</span></span></a>
+          <a class="mega__link" href="knowledge.html"><span><span class="t" data-en="Cured for two years">บ่มนาน 2 ปี</span><br><span class="s" data-en="Handmade soap, one bar at a time">สบู่ทำมือ ผลิตทีละก้อน</span></span></a>
+        </div>
+      </div>
+      <div class="mega__feature">
+        <div>
+          <p class="eyebrow" style="color:var(--vine)" data-en="Open to visitors">เปิดให้เยี่ยมชม</p>
+          <h4 class="serif" style="font-size:22px;line-height:1.4;margin-top:10px" data-en-html="See the farm<br>before you decide">เยี่ยมชมพื้นที่จริง<br>ก่อนตัดสินใจ</h4>
+        </div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+          <a class="btn btn--out btn--sm" href="index.html#visit" data-en="Book a visit">จองเยี่ยมชม</a>
+          <svg class="fig" viewBox="0 0 400 400" aria-hidden="true"><use href="#i-greenhouse"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mnav" id="mnav">
+  <div class="mnav__top">
+    <span class="brand__wd">ONA&nbsp;HEALTHY</span>
+    <button class="icon-btn" id="menuClose" aria-label="ปิดเมนู" data-en-aria="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav class="mnav__list">
+    <a href="products.html" data-en="Products">ผลิตภัณฑ์</a>
+    <a href="index.html#why" data-en="Your Health">สุขภาพของคุณ</a>
+    <a href="index.html#journey" data-en="Field to Bottle">จากไร่สู่ขวด</a>
+    <a href="index.html#visit" data-en="Visit the Farm">เยือนสวน</a>
+    <a href="index.html#awards" data-en="Awards">รางวัล</a>
+    <a href="index.html#contact" data-en="Contact">ติดต่อ</a>
+  </nav>
+  <a class="btn btn--fill" style="margin-top:30px;width:100%" href="https://line.me/ti/p/~ykl1681y" target="_blank" rel="noopener" data-en="Order via LINE">สั่งซื้อผ่าน LINE</a>
+</div>
+<main id="top">
+
+  <section class="wopen g">
+    <div class="wopen__copy rv">
+      <p class="eyebrow" style="color:var(--tomato)" data-en="ONE FAMILY, ONE PIECE OF LAND">ครอบครัวเดียว ที่ดินผืนเดียว</p>
+      <h1 class="display" data-en-html="Every step is&lt;br&gt;ours to oversee">ทุกขั้นตอน<br>เราดูแลเอง</h1>
+      <p class="lede" data-en="Seed selection, raising the seedlings, growing, pressing, curing the soap, bottling and quality checking all happen on the same site. This page gathers the detail for anyone who would like to understand it before deciding.">ตั้งแต่การคัดเลือกเมล็ดพันธุ์ การเพาะกล้า การปลูก การสกัด การบ่มสบู่ การบรรจุ ไปจนถึงการตรวจสอบคุณภาพ ทุกขั้นตอนเกิดขึ้นในพื้นที่เดียวกัน หน้านี้รวบรวมรายละเอียดไว้สำหรับผู้ที่ต้องการทำความเข้าใจก่อนตัดสินใจ</p>
+      <p class="wopen__meta mono rv rv-d1" data-en="About 8 minutes to read">ใช้เวลาอ่านประมาณ 8 นาที</p>
+    </div>
+    <div class="wopen__art rv rv-d2" aria-hidden="true">
+      <svg viewBox="0 0 400 400"><use href="#i-tomato"/></svg>
+    </div>
+  </section>
+
+  <div class="wtoc">
+    <div class="g">
+      <nav class="wtoc__list" aria-label="สารบัญ" data-en-aria="Contents">
+        <a href="#colours" data-en="Three colours">มะเขือเทศสามสี</a>
+        <a href="#inside" data-en="What is in a tomato">ในมะเขือเทศมีอะไร</a>
+        <a href="#benefits" data-en="What it is for">ประโยชน์</a>
+        <a href="#wellness" data-en="Things you drink or swallow">กลุ่มสุขภาพ</a>
+        <a href="#skincare" data-en="Things you put on skin">กลุ่มความงาม</a>
+        <a href="#standards" data-en="Standards">มาตรฐาน</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ===================== THREE COLOURS ===================== -->
+  <section class="sec sec--tight g" id="colours">
+    <div class="sechead rv">
+      <p class="eyebrow" data-en="THREE COLOURS">สามสี</p>
+      <h2 data-en="Why we do not stop at red">ทำไมไม่หยุดอยู่แค่สีแดง</h2>
+      <p class="lede" data-en="The colour of a tomato comes from its pigment, and the pigment is the antioxidant. Grow one colour and you get one of them, so we grow three and press them together.">สีของมะเขือเทศมาจากรงควัตถุ ซึ่งเป็นสารต้านอนุมูลอิสระ การปลูกเพียงสีเดียวจึงได้สารเพียงชนิดเดียว เราจึงปลูกสามสีแล้วสกัดรวมกัน</p>
+    </div>
+
+    <div class="certrow rv">
+      <div class="cert"><span class="cert__m" data-en="Red">สีแดง</span><span class="cert__s" data-en="Lycopene — the pigment the fruit is best known for">ไลโคปีน รงควัตถุที่เป็นที่รู้จักมากที่สุด</span></div>
+      <div class="cert"><span class="cert__m" data-en="Yellow">สีเหลือง</span><span class="cert__s" data-en="Milder and sweeter, and it carries vitamin A">รสนุ่มและหวานกว่า และให้วิตามินเอ</span></div>
+      <div class="cert"><span class="cert__m" data-en="Black">สีดำ</span><span class="cert__s" data-en="The one we choose to grow, though it yields less">สายพันธุ์ที่เราเลือกปลูก แม้ให้ผลผลิตน้อยกว่า</span></div>
+      <div class="cert"><span class="cert__m" data-en="Cherry">เชอร์รี่</span><span class="cert__s" data-en="Grown for the table, sold fresh in season">ปลูกไว้กินสด ขายตามฤดูกาล</span></div>
+      <div class="cert"><span class="cert__m" data-en="Pressed cold">สกัดเย็น</span><span class="cert__s" data-en="Temperature controlled, so the pigments survive">ควบคุมอุณหภูมิ รงควัตถุจึงคงอยู่</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== WHAT IS INSIDE ===================== -->
+  <section class="sec sec--tight g" id="inside">
+    <div class="sechead rv">
+      <p class="eyebrow" data-en="WHAT IS INSIDE">สารสำคัญในผล</p>
+      <h2 data-en="What a tomato contains">สิ่งที่อยู่ในมะเขือเทศ</h2>
+    </div>
+
+    <div class="wnote rv">
+      <dl class="wspec wspec--wide">
+        <dt data-en="Lycopene">ไลโคปีน</dt>
+        <dd data-en="The red pigment in the fruit. An antioxidant, and the reason a ripe tomato is red.">รงควัตถุสีแดงในผล เป็นสารต้านอนุมูลอิสระ และเป็นเหตุผลที่มะเขือเทศสุกแล้วมีสีแดง</dd>
+
+        <dt data-en="Anthocyanin">แอนโทไซยานิน</dt>
+        <dd data-en="The pigment that makes the black variety dark. Also an antioxidant, and the reason we choose to grow something that yields less than the red.">รงควัตถุที่ทำให้สายพันธุ์สีดำมีสีเข้ม เป็นสารต้านอนุมูลอิสระเช่นเดียวกัน และเป็นเหตุผลที่เราเลือกปลูกสายพันธุ์ที่ให้ผลผลิตน้อยกว่า</dd>
+
+        <dt data-en="Vitamin C">วิตามินซี</dt>
+        <dd data-en="Present naturally in the fruit, and retained by pressing at a controlled temperature, since heat is what breaks it down.">มีอยู่ตามธรรมชาติในผล และคงอยู่ได้ด้วยการสกัดแบบควบคุมอุณหภูมิ เนื่องจากความร้อนทำให้วิตามินซีสลายตัว</dd>
+
+        <dt data-en="Fibre">ไฟเบอร์</dt>
+        <dd data-en="Left behind when the fruit is pressed into juice, and retained when it is dried into tablets. If fibre is what you want, the tablets are the one to choose.">ไม่ติดมาเมื่อคั้นเป็นน้ำ แต่ยังคงอยู่เมื่อทำเป็นเม็ด หากต้องการไฟเบอร์ ควรเลือกชนิดอัดเม็ด</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===================== BENEFITS ===================== -->
+  <section class="sec sec--tight g" id="benefits">
+    <div class="sechead rv">
+      <p class="eyebrow" data-en="WHAT IT IS FOR">ประโยชน์</p>
+      <h2 data-en="Why people eat it">เหตุผลที่คนรับประทานมะเขือเทศ</h2>
+      <p class="lede" data-en="These are the everyday reasons people eat tomatoes. Each one describes ordinary nourishment, not the treatment of an illness.">นี่คือเหตุผลที่คนทั่วไปกินมะเขือเทศกันในชีวิตประจำวัน ทุกข้อเป็นการบำรุงตามปกติ ไม่ใช่การรักษาโรค</p>
+    </div>
+
+    <ol class="benelist rv">
+      <li class="bene__i"><p data-en="Skin">บำรุงผิวพรรณ</p></li>
+      <li class="bene__i"><p data-en="Fine lines">ชะลอริ้วรอยแห่งวัย</p></li>
+      <li class="bene__i"><p data-en="Eyes">บำรุงสายตา</p></li>
+      <li class="bene__i"><p data-en="Bones">เสริมสร้างกระดูก</p></li>
+      <li class="bene__i"><p data-en="Hair">บำรุงเส้นผม</p></li>
+    </ol>
+
+    <div class="wnote wnote--flag rv">
+      <h3 data-en="If you have a health condition">หากคุณมีโรคประจำตัว</h3>
+      <p data-en="Tomato is food. What is on this page is food and cosmetics, not medicine, and none of it is intended to prevent or treat illness.">มะเขือเทศเป็นอาหาร ผลิตภัณฑ์ในหน้านี้เป็นอาหารและเครื่องสำอาง ไม่ใช่ยา และไม่ได้มีไว้เพื่อป้องกันหรือรักษาโรค</p>
+      <p data-en="If you are under treatment or taking regular medication, please check with your doctor or pharmacist first. We grow tomatoes. We are not doctors.">หากอยู่ระหว่างการรักษา หรือรับประทานยาประจำ ควรปรึกษาแพทย์หรือเภสัชกรก่อน เราเป็นผู้ปลูกและผู้ผลิต ไม่ใช่ผู้ให้คำแนะนำทางการแพทย์</p>
+    </div>
+  </section>
+
+  <!-- ===================== WELLNESS ===================== -->
+  <section class="sec sec--tight g" id="wellness">
+    <div class="sechead rv">
+      <p class="eyebrow" data-en="THINGS YOU DRINK OR SWALLOW">กลุ่มสุขภาพ</p>
+      <h2 data-en="Choosing the one that suits you">เลือกชนิดที่เหมาะกับคุณ</h2>
+      <p class="lede" data-en="The bottle and the tablet are not one product in two sizes. Pressing leaves the fibre behind, while drying retains it. If fibre is what you want, the tablets are the one to choose.">แบบขวดกับแบบอัดเม็ดไม่ใช่ผลิตภัณฑ์เดียวกันที่ทำมาคนละขนาด เมื่อคั้นเป็นน้ำ ไฟเบอร์จะไม่ติดมาด้วย แต่ชนิดอัดเม็ดยังคงมีอยู่ หากต้องการไฟเบอร์ ควรเลือกชนิดอัดเม็ด</p>
+    </div>
+
+    <article class="wlead rv" id="w-juice">
+      <div class="wlead__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-bottle"/></svg></div>
+      <div class="wlead__b">
+        <p class="eyebrow" style="color:var(--tomato)" data-en="The one we are known for">ผลิตภัณฑ์ที่เป็นที่รู้จักมากที่สุดของเรา</p>
+        <h3 data-en="Onato 100% Pure Tomato Juice">Onato น้ำมะเขือเทศสกัดแท้ 100%</h3>
+        <p data-en="Three colours of tomato pressed cold together with the black variety. No sugar, no colouring and no preservative — what keeps it for a year is the cold press and the bottling. We run the line at night, when energy use is lower. One bottle is ten calories, which makes it easy to drink every day.">มะเขือเทศสามสีสกัดเย็นร่วมกับสายพันธุ์สีดำ ไม่เติมน้ำตาล ไม่ใส่สี และไม่ใส่สารกันบูด สิ่งที่ทำให้เก็บได้หนึ่งปีคือกระบวนการสกัดเย็นและการบรรจุ เราเดินสายการผลิตในช่วงกลางคืนซึ่งใช้พลังงานน้อยกว่า และหนึ่งขวดให้พลังงาน 10 กิโลแคลอรี จึงดื่มได้ในทุกวัน</p>
+        <dl class="wspec">
+          <dt data-en="Made from">ทำจาก</dt><dd data-en="Red, yellow and black tomato">มะเขือเทศสีแดง เหลือง และดำ</dd>
+          <dt data-en="Keeps">เก็บได้</dt><dd data-en="A year — FDA registered, lab tested">หนึ่งปี จดแจ้ง อย. ผ่านการตรวจแล็บ</dd>
+          <dt data-en="Size">ขนาด</dt><dd data-en="75 ml · 10 kcal">75 มล. · 10 กิโลแคลอรี</dd>
+        </dl>
+        <figure class="wsay">
+          <blockquote data-en="&ldquo;So easy to drink. None of the salty or grassy taste the other brands have.&rdquo;">“ดื่มง่ายมากครับ ไม่เค็มหรือเหม็นเขียวเหมือนยี่ห้ออื่น”</blockquote>
+          <figcaption data-en="Kittisak, customer">คุณกิตติศักดิ์ ลูกค้า</figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <div class="wgrid rv">
+      <article class="wcard" id="w-blackplus">
+        <div class="wcard__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-concentrate"/></svg></div>
+        <div class="wcard__b">
+          <h3 data-en="Black Tomato Plus">Black Tomato Plus</h3>
+          <p data-en="A separate product from the bottle above, not a larger size of the same thing. The two names sit close enough that it is worth stating plainly. Red and yellow with the black variety, for the anthocyanin.">เป็นผลิตภัณฑ์คนละรายการกับขวดด้านบน ไม่ใช่ขนาดที่ใหญ่ขึ้นของสิ่งเดียวกัน ชื่อทั้งสองใกล้เคียงกันมาก จึงขอระบุไว้ให้ชัดเจน สกัดจากสีแดงและสีเหลืองร่วมกับสายพันธุ์สีดำ เพื่อแอนโทไซยานิน</p>
+          <dl class="wspec wspec--tight">
+            <dt data-en="Size">ขนาด</dt><dd data-en="90 g">90 ก.</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="wcard" id="w-tablet">
+        <div class="wcard__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-tablet"/></svg></div>
+        <div class="wcard__b">
+          <h3 data-en="Tomato Tablets">มะเขือเทศอัดเม็ด</h3>
+          <p data-en="Dried and pressed rather than juiced, so the fibre remains. This is the one to choose if fibre is what you are after. Sharp and fresh to eat, and easy to carry through the day.">ทำแห้งแล้วอัดเม็ดแทนการคั้น ไฟเบอร์จึงยังคงอยู่ หากต้องการไฟเบอร์ ควรเลือกชนิดนี้ รสเปรี้ยวสดชื่น เหมาะกับการพกติดตัวและรับประทานระหว่างวัน</p>
+          <dl class="wspec wspec--tight">
+            <dt data-en="Strength">ปริมาณ</dt><dd data-en="1 tablet ≈ 20 cherry tomatoes">1 เม็ด ≈ มะเขือเทศผลเล็ก 20 ผล</dd>
+            <dt data-en="Size">ขนาด</dt><dd data-en="50 g · 100 tablets">50 ก. · 100 เม็ด</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="wcard" id="w-fresh">
+        <div class="wcard__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-crate"/></svg></div>
+        <div class="wcard__b">
+          <h3 data-en="Fresh Farm Tomatoes">มะเขือเทศสดจากสวน</h3>
+          <p data-en="The crop itself, grown under insect netting with sticky traps in place of pesticide, so it is looked after while still on the vine.">ตัวผลผลิตเอง ปลูกในโรงเรือนกางมุ้งและใช้กับดักกาวเหนียวแทนยาฆ่าแมลง ผลผลิตจึงได้รับการดูแลตั้งแต่ยังอยู่บนต้น</p>
+          <dl class="wspec wspec--tight">
+            <dt data-en="Varieties">สายพันธุ์</dt><dd data-en="Red, yellow, cherry, black — by season">แดง เหลือง เชอร์รี่ ดำ ตามฤดูกาล</dd>
+          </dl>
+        </div>
+      </article>
+    </div>
+
+    <p class="wmore rv"><a class="ulink" href="products.html" data-en="Sizes and prices are listed on the products page">ดูขนาดและราคาทั้งหมดได้ในหน้าผลิตภัณฑ์</a></p>
+  </section>
+
+  <!-- ===================== SKINCARE ===================== -->
+  <section class="sec sec--tight g" id="skincare">
+    <div class="sechead rv">
+      <p class="eyebrow" data-en="THINGS YOU PUT ON SKIN">กลุ่มความงาม</p>
+      <h2 data-en="The order matters as much as the product">ลำดับการใช้สำคัญไม่แพ้ตัวผลิตภัณฑ์</h2>
+      <p class="lede" data-en="Cleanse, then serum, then cream, with sun protection last. A serum applied over a cream will not reach the skin.">ล้างหน้า จากนั้นเซรั่ม ตามด้วยครีม และกันแดดเป็นชั้นสุดท้าย การทาเซรั่มทับครีมจะทำให้เซรั่มซึมไม่ถึงผิว</p>
+    </div>
+
+    <article class="wlead rv" id="w-soap">
+      <div class="wlead__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-soap"/></svg></div>
+      <div class="wlead__b">
+        <p class="eyebrow" style="color:var(--tomato)" data-en="The one people come back for">ผลิตภัณฑ์ที่ลูกค้ากลับมาซื้อซ้ำมากที่สุด</p>
+        <h3 data-en="Tomato &amp; Real Honey Mask Soap">สบู่มาร์คหน้ามะเขือเทศน้ำผึ้งแท้</h3>
+        <p data-en="The longest process we run. Cut one bar at a time and then cured for several weeks, which is what keeps a bar sound for two years. It washes, and it works as a mask. Gentle enough that most of the reviews come from people who describe themselves as reacting to everything.">เป็นผลิตภัณฑ์ที่ใช้เวลานานที่สุดของเรา ตัดทีละก้อนแล้วบ่มไว้หลายสัปดาห์ ซึ่งเป็นขั้นตอนที่ทำให้เนื้อสบู่คงสภาพได้สองปี ใช้ล้างหน้าและใช้พอกหน้าได้ และอ่อนโยนพอที่รีวิวส่วนใหญ่มาจากผู้ที่ระบุว่าตนเองแพ้ง่าย</p>
+        <dl class="wspec">
+          <dt data-en="Made from">ทำจาก</dt><dd data-en="Real tomato and pure honey">มะเขือเทศแท้และน้ำผึ้งบริสุทธิ์</dd>
+          <dt data-en="How to use">วิธีใช้</dt><dd data-en="Wash, or leave on as a mask for 5 minutes and rinse — avoid the eye area">ล้างหน้า หรือพอกทิ้งไว้ 5 นาทีแล้วล้างออก เว้นรอบดวงตา</dd>
+          <dt data-en="Comes with">ของแถม</dt><dd data-en="A solid teak dish, in the box">จานรองสบู่ไม้สักแท้ในกล่อง</dd>
+        </dl>
+        <figure class="wsay">
+          <blockquote data-en="&ldquo;It smells good and it cleans well as a mask. The important part is my face is not tight and dry after washing.&rdquo;">“กลิ่นหอมดี มาร์คหน้าสะอาดดีคะ ที่สำคัญคือหน้าไม่แห้งตึงหลังจากล้างด้วย”</blockquote>
+          <figcaption data-en="Phitchayanin Sripaeng, customer">คุณพิชญานิน ศรีแป้ง ลูกค้า</figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <div class="wgrid rv">
+      <article class="wcard" id="w-serum">
+        <div class="wcard__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-serum"/></svg></div>
+        <div class="wcard__b">
+          <h3 data-en="Bright Serum">Bright Serum เซรั่มมะเขือเทศ</h3>
+          <p data-en="Concentrated, built on antioxidants from the black variety, for dark spots and marks left by acne.">เนื้อเข้มข้น ใช้แอนตี้ออกซิแดนต์จากมะเขือเทศสีดำ สำหรับดูแลจุดด่างดำและรอยจากสิว</p>
+          <dl class="wspec wspec--tight">
+            <dt data-en="Step">ลำดับ</dt><dd data-en="After cleansing, before the cream">หลังล้างหน้า ก่อนทาครีม</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="wcard" id="w-cream">
+        <div class="wcard__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-cream"/></svg></div>
+        <div class="wcard__b">
+          <h3>AMANA Perfect Cream</h3>
+          <p data-en="The face cream, and the only product carrying the AMANA name rather than ONA Healthy. Tomato extract with seven further plant extracts and antioxidants from the black variety.">ครีมบำรุงผิวหน้า และเป็นผลิตภัณฑ์เดียวที่ใช้ชื่อ AMANA แทน ONA Healthy ผสมสารสกัดมะเขือเทศร่วมกับสารสกัดจากพืชอีกเจ็ดชนิด และแอนตี้ออกซิแดนต์จากมะเขือเทศสีดำ</p>
+          <dl class="wspec wspec--tight">
+            <dt data-en="Step">ลำดับ</dt><dd data-en="After the serum, morning and night">หลังเซรั่ม เช้า–เย็น</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="wcard" id="w-essence">
+        <div class="wcard__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-essence"/></svg></div>
+        <div class="wcard__b">
+          <h3 data-en="Tomato and Cucumber Essence">เอสเซนส์มะเขือเทศ และแตงกวา</h3>
+          <p data-en="The most recent of them, and concentrated enough that one drop is the dose. Two versions: tomato, or cucumber for dry, lined skin.">เป็นผลิตภัณฑ์ล่าสุด เนื้อเข้มข้นจนใช้เพียงหยดเดียว มีสองสูตร คือมะเขือเทศ และแตงกวาสำหรับผิวแห้งกร้านและมีริ้วรอย</p>
+          <dl class="wspec wspec--tight">
+            <dt data-en="Step">ลำดับ</dt><dd data-en="One drop, before your cream">หยดเดียว ก่อนทาครีม</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="wcard" id="w-uv">
+        <div class="wcard__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-uv"/></svg></div>
+        <div class="wcard__b">
+          <h3 data-en="UV Protection — face">UV Protection สำหรับผิวหน้า</h3>
+          <p data-en="Water-resistant, light on the skin and leaves no white cast, which makes it easy to use every morning.">กันน้ำ เนื้อบางเบา และไม่ทิ้งคราบขาว จึงใช้ได้เป็นประจำทุกเช้า</p>
+          <dl class="wspec wspec--tight">
+            <dt data-en="Step">ลำดับ</dt><dd data-en="Last, over the cream">ชั้นสุดท้าย ทาทับครีม</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="wcard" id="w-lotion">
+        <div class="wcard__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-lotion"/></svg></div>
+        <div class="wcard__b">
+          <h3 data-en="Body Lotion">โลชั่นบำรุงผิวกาย</h3>
+          <p data-en="For dry, rough skin. It absorbs quickly and leaves no film, which is what makes it easy to keep using.">สำหรับผิวแห้งกร้าน ซึมเร็วและไม่ทิ้งความเหนียว จึงใช้ต่อเนื่องได้ในทุกวัน</p>
+          <dl class="wspec wspec--tight">
+            <dt data-en="Size">ขนาด</dt><dd data-en="200 ml pump">ขวดปั๊ม 200 มล.</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="wcard" id="w-sunlotion">
+        <div class="wcard__fig"><svg viewBox="0 0 400 400" aria-hidden="true"><use href="#i-sunlotion"/></svg></div>
+        <div class="wcard__b">
+          <h3 data-en="Body Sunscreen">โลชั่นกันแดดผิวกาย</h3>
+          <p data-en="Protects against UVA and UVB with moisturiser already in it, so on days outdoors it can replace the body lotion.">ปกป้องผิวจาก UVA และ UVB พร้อมส่วนผสมบำรุงในตัว ในวันที่ต้องออกแดดจึงใช้แทนโลชั่นได้โดยไม่ต้องทาซ้อน</p>
+          <dl class="wspec wspec--tight">
+            <dt data-en="Size">ขนาด</dt><dd data-en="200 ml pump">ขวดปั๊ม 200 มล.</dd>
+          </dl>
+        </div>
+      </article>
+    </div>
+
+    <p class="wmore rv"><a class="ulink" href="products.html" data-en="Sizes and prices are listed on the products page">ดูขนาดและราคาทั้งหมดได้ในหน้าผลิตภัณฑ์</a></p>
+  </section>
+
+  <!-- ===================== WHAT WE CANNOT DO ===================== -->
+  <section class="sec sec--tight g" id="honest">
+    <div class="wnote wnote--flag rv">
+      <h3 data-en="Before you order">ก่อนสั่งซื้อ</h3>
+      <p data-en="We are a family farm and we make what our own hands can manage, so some things are not always in stock, and soap has to cure for weeks before it can leave.">เราเป็นสวนขนาดครอบครัว ผลิตได้ตามกำลังที่มี สินค้าบางรายการจึงอาจไม่พร้อมจัดส่งตลอดเวลา และสบู่ต้องผ่านการบ่มหลายสัปดาห์ก่อนจึงจะจัดส่งได้</p>
+      <p data-en="Ask us before you order and we will tell you what is ready. You will be speaking to the people who grow and make it.">สอบถามรายการที่พร้อมจัดส่งได้ก่อนสั่งซื้อ ผู้ที่ตอบคือผู้ปลูกและผู้ผลิตเอง</p>
+    </div>
+  </section>
+
+  <!-- ===================== STANDARDS ===================== -->
+  <section class="sec sec--tight g" id="standards">
+    <div class="sechead rv">
+      <p class="eyebrow" data-en="STANDARDS">มาตรฐาน</p>
+      <h2 data-en="Standards and certification">มาตรฐานและการรับรอง</h2>
+    </div>
+
+    <div class="certrow rv">
+      <div class="cert"><span class="cert__m" data-en="FDA">อย.</span><span class="cert__s" data-en="Thai Food and Drug Administration">คณะกรรมการอาหารและยา</span></div>
+      <div class="cert"><span class="cert__m">Q</span><span class="cert__s" data-en="Agricultural product standard">มาตรฐานสินค้าเกษตร</span></div>
+      <div class="cert"><span class="cert__m">OTOP</span><span class="cert__s" data-en="One Tambon One Product">หนึ่งตำบลหนึ่งผลิตภัณฑ์</span></div>
+      <div class="cert"><span class="cert__m">SME</span><span class="cert__s" data-en="Provincial SME emblem">ตราสัญลักษณ์ผู้ประกอบการจังหวัด</span></div>
+      <div class="cert"><span class="cert__m" data-en="2562">2562</span><span class="cert__s" data-en="Provincial Star OTOP award">รางวัลดาวเด่น OTOP ระดับจังหวัด</span></div>
+    </div>
+
+    <p class="shopnote rv" data-en="Q mark certificate 03-9001-53-393-000041. Prices and sizes on this page are taken from our own brochure — confirm the current price via LINE before ordering.">ใบรับรองเครื่องหมาย Q เลขที่ มกษ. 03-9001-53-393-000041 · ราคาและขนาดในหน้านี้อ้างอิงจากโบรชัวร์ของเราเอง กรุณาสอบถามราคาล่าสุดทาง LINE ก่อนสั่งซื้อ</p>
+  </section>
+</main>
+<!-- ===================== FOOTER ===================== -->
+<footer class="ft g">
+  <div class="ft__news rv">
+    <h3 data-en="Harvest dates and offers, sent to you directly from the farm">รับข่าวสารรอบเก็บเกี่ยวและรายการส่งเสริมการขายจากสวนโดยตรง</h3>
+    <form class="nform" id="newsForm">
+      <input type="email" placeholder="อีเมลของคุณ" aria-label="อีเมลของคุณ" data-en-placeholder="Your email" data-en-aria="Your email" required>
+      <button class="btn btn--light" type="submit" data-en="Subscribe">สมัครรับข่าวสาร</button>
+    </form>
+    <p class="ft__note" data-en="We look after your details carefully, and you can unsubscribe at any time.">เราดูแลข้อมูลของคุณอย่างระมัดระวัง และสามารถยกเลิกรับข่าวสารได้ทุกเมื่อ</p>
+  </div>
+
+  <div class="ft__cols">
+    <div class="ft__about">
+      <div class="brand">
+        <svg class="brand__mark" viewBox="0 0 400 400" aria-hidden="true"><use href="#i-tomato"/></svg>
+        <span class="brand__wd">ONA&nbsp;HEALTHY</span>
+      </div>
+      <p data-en="A pesticide-free tomato farm that grows, presses and bottles on one site in Phichai, Uttaradit.">สวนมะเขือเทศปลอดสารพิษ ปลูก สกัด และบรรจุในพื้นที่เดียวกัน ที่อำเภอพิชัย จังหวัดอุตรดิตถ์</p>
+    </div>
+    <div>
+      <h4 data-en="Products">ผลิตภัณฑ์</h4>
+      <ul>
+        <li><a href="products.html" data-en="Wellness">กลุ่มสุขภาพ</a></li>
+        <li><a href="products.html" data-en="Skincare">กลุ่มความงาม</a></li>
+        <li><a href="products.html" data-en="Gift sets">ชุดของขวัญ</a></li>
+        <li><a href="products.html" data-en="Fresh tomatoes">มะเขือเทศสด</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-en="About">เกี่ยวกับเรา</h4>
+      <ul>
+        <li><a href="index.html#journey" data-en="Field to Bottle">จากไร่สู่ขวด</a></li>
+        <li><a href="index.html#awards" data-en="Awards and certification">รางวัลและการรับรอง</a></li>
+        <li><a href="index.html#visit" data-en="Visit the Farm">เยือนสวน</a></li>
+        <li><a href="index.html#why" data-en="How we work">แนวทางการผลิต</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-en="Follow">ติดตามเรา</h4>
+      <ul>
+        <li><a href="https://facebook.com/OnaHealthyOfficial" target="_blank" rel="noopener">Facebook</a></li>
+        <li><a href="https://instagram.com/ona_healthy" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://tiktok.com/@ona.healthy" target="_blank" rel="noopener">TikTok</a></li>
+        <li><a href="https://line.me/ti/p/~ykl1681y" target="_blank" rel="noopener">LINE @ykl1681y</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ft__bot">
+    <span data-en="© 2026 ONA Healthy · Pesticide-free tomato farm, Phichai, Uttaradit">© 2569 ONA Healthy · สวนมะเขือเทศปลอดสารพิษ อำเภอพิชัย จังหวัดอุตรดิตถ์</span>
+    <span data-en="Prices and product details may change. Please ask us for current information before ordering.">ราคาและรายละเอียดผลิตภัณฑ์อาจมีการเปลี่ยนแปลง กรุณาสอบถามข้อมูลล่าสุดก่อนสั่งซื้อ</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" data-en="Thank you — you are subscribed.">สมัครรับข่าวสารเรียบร้อยแล้ว ขอบคุณค่ะ</div>
+
+<script>
+(function(){
+  'use strict';
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $  = function(s,c){ return (c||document).querySelector(s); };
+  var $$ = function(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+
+  /* ---------- language ----------
+     Thai is what sits in the markup, so the page still reads correctly with no
+     JavaScript. English lives next to it in data-en / data-en-html / data-en-text
+     / data-en-aria / data-en-placeholder, and swapping is a straight text swap. */
+  var langNodes = $$('[data-en],[data-en-html],[data-en-text],[data-en-aria],[data-en-placeholder]');
+  langNodes.forEach(function(el){
+    if (el.hasAttribute('data-en-html')) el._th = el.innerHTML;
+    else if (el.hasAttribute('data-en')) el._th = el.textContent;
+    else if (el.hasAttribute('data-en-text')) {
+      // element mixes text with child elements: remember only its own text nodes
+      el._thText = [];
+      Array.prototype.forEach.call(el.childNodes, function(n){
+        if (n.nodeType === 3 && n.nodeValue.trim()) el._thText.push([n, n.nodeValue]);
+      });
+    }
+    if (el.hasAttribute('data-en-aria')) el._thAria = el.getAttribute('aria-label');
+    if (el.hasAttribute('data-en-placeholder')) el._thPh = el.getAttribute('placeholder');
+  });
+
+  var langBtn = $('#langBtn');
+  var langCode = $('#langCode');
+
+  function setLang(lang){
+    var en = lang === 'en';
+    document.documentElement.setAttribute('data-lang', lang);
+    document.documentElement.lang = lang;
+
+    langNodes.forEach(function(el){
+      if (el.hasAttribute('data-en-html')){
+        el.innerHTML = en ? el.getAttribute('data-en-html') : el._th;
+      } else if (el.hasAttribute('data-en')){
+        el.textContent = en ? el.getAttribute('data-en') : el._th;
+      } else if (el._thText){
+        // only the first own text node carries the translated string
+        el._thText.forEach(function(pair, i){
+          pair[0].nodeValue = en ? (i === 0 ? el.getAttribute('data-en-text') : '') : pair[1];
+        });
+      }
+      if (el.hasAttribute('data-en-aria')) el.setAttribute('aria-label', en ? el.getAttribute('data-en-aria') : el._thAria);
+      if (el.hasAttribute('data-en-placeholder')) el.setAttribute('placeholder', en ? el.getAttribute('data-en-placeholder') : el._thPh);
+    });
+
+    if (langCode) langCode.textContent = en ? 'TH' : 'EN';   // label shows what you switch to
+    try { localStorage.setItem('ona-lang', lang); } catch(e){}
+  }
+
+  if (langBtn){
+    langBtn.addEventListener('click', function(){
+      setLang(document.documentElement.getAttribute('data-lang') === 'en' ? 'th' : 'en');
+    });
+  }
+  /* the first setLang() runs at the very bottom of this file, once every other
+     control has been wired — calling it here would touch not-yet-assigned vars */
+
+  /* ---------- cross-page anchors ----------
+     Header and footer are shared by every page, so they spell the home page out
+     (index.html#section). That way the links still work with JavaScript off —
+     the markup itself points somewhere real from every page. On the home page
+     that would reload the page to reach a section already on screen, so shorten
+     those links to a bare hash and let the browser scroll instead. */
+  $$('a[href^="index.html#"]').forEach(function(a){
+    var id = a.getAttribute('href').slice(11);   // past 'index.html#'
+    if (id && document.getElementById(id)){
+      a.setAttribute('href', '#' + id);
+    }
+  });
+
+  /* ---------- sticky stack: hairline, announcement reveal, offsets ---------- */
+  var hdr = $('#hdr');
+  var topbar = $('#topbar');
+  var topbarH = 78;
+  var ANNOUNCE_AT = 90;   // px scrolled before the strip rolls open
+
+  function syncHeader(){
+    hdr.classList.toggle('is-stuck', scrollY > 12);
+    topbar.classList.toggle('has-announce', scrollY > ANNOUNCE_AT);
+    var r = topbar.getBoundingClientRect();
+    topbarH = r.height;
+    var root = document.documentElement.style;
+    root.setProperty('--topbar-h', Math.round(topbarH) + 'px');
+    root.setProperty('--mega-top', Math.max(0, Math.round(r.bottom)) + 'px');
+  }
+  syncHeader();
+  addEventListener('scroll', syncHeader, { passive:true });
+  addEventListener('resize', syncHeader);
+  /* the strip animates open, so keep measuring while it does */
+  topbar.addEventListener('transitionend', syncHeader);
+
+  /* ---------- mega menu ---------- */
+  var items = $$('.nav__item');
+  var openId = null;
+  function closeMega(){
+    if (!openId) return;
+    var m = document.getElementById(openId);
+    if (m) m.classList.remove('open');
+    items.forEach(function(i){
+      i.classList.remove('open');
+      var b = $('.nav__btn', i); if (b) b.setAttribute('aria-expanded','false');
+    });
+    openId = null;
+  }
+  function openMega(id, item){
+    if (openId === id) return;
+    closeMega();
+    var m = document.getElementById(id);
+    if (!m) return;
+    m.classList.add('open');
+    item.classList.add('open');
+    var b = $('.nav__btn', item); if (b) b.setAttribute('aria-expanded','true');
+    openId = id;
+  }
+  var hoverTimer;
+  items.forEach(function(item){
+    var id = item.getAttribute('data-mega');
+    var mega = document.getElementById(id);
+    var btn = $('.nav__btn', item);
+    item.addEventListener('mouseenter', function(){ clearTimeout(hoverTimer); openMega(id, item); });
+    item.addEventListener('mouseleave', function(){ hoverTimer = setTimeout(closeMega, 220); });
+    if (mega){
+      mega.addEventListener('mouseenter', function(){ clearTimeout(hoverTimer); });
+      mega.addEventListener('mouseleave', function(){ hoverTimer = setTimeout(closeMega, 220); });
+    }
+    if (btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        if (openId === id) closeMega(); else openMega(id, item);
+      });
+    }
+  });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape'){ closeMega(); closeMobile(); } });
+
+  /* ---------- mobile nav ---------- */
+  var mnav = $('#mnav');
+  function closeMobile(){ mnav.classList.remove('open'); document.body.style.overflow=''; }
+  $('#menuOpen').addEventListener('click', function(){ mnav.classList.add('open'); document.body.style.overflow='hidden'; });
+  $('#menuClose').addEventListener('click', closeMobile);
+  $$('.mnav__list a, .mnav .btn').forEach(function(a){ a.addEventListener('click', closeMobile); });
+
+  /* ---------- reveal on scroll ---------- */
+  if ('IntersectionObserver' in window && !reduce){
+    var rio = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); rio.unobserve(e.target); } });
+    }, { threshold:.12, rootMargin:'0px 0px -6% 0px' });
+    $$('.rv').forEach(function(el){ rio.observe(el); });
+  } else {
+    $$('.rv').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- pinned journey ---------- */
+  var track = $('#jTrack');
+  var jSlides = $$('.jslide');
+  var jFigs   = $$('.jfig');
+  var jRail   = $$('.jrail__i');
+  var jCount  = jSlides.length;
+  var jCur = -1;
+
+  function setJourney(i){
+    if (i === jCur) return;
+    jCur = i;
+    jSlides.forEach(function(el,k){ el.classList.toggle('on', k===i); });
+    jFigs.forEach(function(el,k){ el.classList.toggle('on', k===i); });
+    jRail.forEach(function(el,k){ el.classList.toggle('on', k===i); });
+  }
+  function onJourneyScroll(){
+    if (!track) return;
+    var r = track.getBoundingClientRect();
+    var total = r.height - (innerHeight - topbarH);
+    if (total <= 0) { setJourney(0); return; }
+    var p = Math.max(0, Math.min(0.9999, (-r.top) / total));
+    setJourney(Math.floor(p * jCount));
+  }
+  jRail.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var i = +btn.getAttribute('data-j');
+      var r = track.getBoundingClientRect();
+      var docTop = r.top + scrollY;                 // offsetTop is relative to .journey, not the page
+      var total = r.height - (innerHeight - topbarH);
+      if (total <= 0) return;
+      scrollTo({ top: docTop + total * ((i + .5) / jCount), behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
+  /* Driven by rAF while the section is on screen rather than by scroll events:
+     mobile browsers coalesce or drop scroll events during momentum scrolling,
+     which leaves the sequence frozen on the first step. */
+  var jRaf = 0;
+  function jTick(){ onJourneyScroll(); jRaf = requestAnimationFrame(jTick); }
+  function jStart(){ if (!jRaf) jRaf = requestAnimationFrame(jTick); }
+  function jStop(){ if (jRaf){ cancelAnimationFrame(jRaf); jRaf = 0; } }
+  if (track && 'IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      es[0].isIntersecting ? jStart() : jStop();
+    }, { rootMargin:'120px 0px' }).observe(track);
+  } else {
+    jStart();
+  }
+  addEventListener('scroll', onJourneyScroll, { passive:true });
+  addEventListener('resize', onJourneyScroll);
+  /* last resort: fires once after scrolling settles, so the sequence still lands
+     on the right step where frames and scroll events are being throttled */
+  addEventListener('scrollend', onJourneyScroll);
+  onJourneyScroll();
+
+  function pad(n){ return (n<10?'0':'') + n; }
+
+  /* ---------- tablist (the farm-day programme) ---------- */
+  var tabSec = $('.tabsec');
+  var wTabs  = $$('.tabsec__tab');
+  var wPanes = $$('.tabpane');
+  var TAB_MS = 3000;
+
+  function setWhy(i, focus){
+    wTabs.forEach(function(t,k){
+      var on = k === i;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      if (on && focus) t.focus();
+    });
+    wPanes.forEach(function(p,k){ p.hidden = k !== i; });
+  }
+  function currentTab(){
+    var i = wTabs.findIndex(function(t){ return t.getAttribute('aria-selected') === 'true'; });
+    return i < 0 ? 0 : i;
+  }
+
+  /* Autoplay cycles the programme continuously and does not stop for anything the
+     reader does — hovering and clicking both leave it running. Picking a tab only
+     restarts the clock from that tab, so a deliberate choice still gets its full
+     dwell time before the cycle moves on. It pauses only where carrying on would
+     be broken rather than merely unwanted: off screen, or in a hidden tab where no
+     frames arrive and the fill bar would drift out of step with the timer. */
+  var tabTimer = 0, tabVisible = false;
+  function tabsPlay(){
+    tabsPause();
+    if (reduce || !tabVisible || wTabs.length < 2) return;
+    if (tabSec) tabSec.classList.add('is-playing');
+    tabTimer = setInterval(function(){
+      setWhy((currentTab() + 1) % wTabs.length);
+    }, TAB_MS);
+  }
+  function tabsPause(){
+    clearInterval(tabTimer); tabTimer = 0;
+    if (tabSec) tabSec.classList.remove('is-playing');
+  }
+
+  wTabs.forEach(function(tab, i){
+    tab.addEventListener('click', function(){ setWhy(i); tabsPlay(); });
+    tab.addEventListener('keydown', function(e){
+      var last = wTabs.length - 1, n = null;
+      if (e.key === 'ArrowRight') n = i === last ? 0 : i + 1;
+      else if (e.key === 'ArrowLeft') n = i === 0 ? last : i - 1;
+      else if (e.key === 'Home') n = 0;
+      else if (e.key === 'End') n = last;
+      if (n !== null){ e.preventDefault(); setWhy(n, true); tabsPlay(); }
+    });
+  });
+
+  if (tabSec){
+    /* Watch the panel, not the whole section, and take any sliver of it as
+       visible: the section is taller than a laptop viewport, so a fractional
+       threshold on it can never be met and autoplay would simply never start. */
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        tabVisible = es[0].isIntersecting;
+        tabVisible ? tabsPlay() : tabsPause();
+      }, { threshold:0 }).observe($('.tabsec__panel') || tabSec);
+    } else {
+      tabVisible = true; tabsPlay();
+    }
+    /* a backgrounded tab gets no frames, so the fill bar would desync */
+    document.addEventListener('visibilitychange', function(){
+      document.hidden ? tabsPause() : tabsPlay();
+    });
+  }
+
+  /* ---------- scenario rail ---------- */
+  var rs = $('#railScroll');
+  var rCount = $('#railCount');
+  var cards = rs ? $$('.scard', rs) : [];
+
+  /* The rail is padded by one gutter and snaps on the x-axis, so scrollLeft never
+     starts at 0 and relative scrollBy() fights the snap. Work off which card is
+     currently nearest the scrollport edge instead. */
+  function railEdge(){
+    return rs.getBoundingClientRect().left + (parseFloat(getComputedStyle(rs).paddingLeft) || 0);
+  }
+  function railIndex(){
+    var edge = railEdge();
+    var best = 0, bestDist = Infinity;
+    cards.forEach(function(c, i){
+      var d = Math.abs(c.getBoundingClientRect().left - edge);
+      if (d < bestDist){ bestDist = d; best = i; }
+    });
+    return best;
+  }
+  /* Tweened by hand: scrollTo({behavior:'smooth'}) is unreliable on an
+     overflow container with scroll-snap, so drive scrollLeft per frame. */
+  var railAnim = 0, railGuard = 0, RAIL_DUR = 680;
+  function railGo(i){
+    i = Math.max(0, Math.min(cards.length - 1, i));
+    var from = rs.scrollLeft;
+    var to = from + (cards[i].getBoundingClientRect().left - railEdge());
+    cancelAnimationFrame(railAnim);
+    clearTimeout(railGuard);
+    if (reduce || from === to){ rs.scrollLeft = to; railSync(); return; }
+
+    /* Snap points fight a per-frame scrollLeft write — the browser keeps nudging
+       toward the nearest one, which is what makes the travel look like it is
+       stuttering. Suspend snapping for the length of the glide and restore it
+       after, so momentum dragging still snaps as before. */
+    rs.style.scrollSnapType = 'none';
+
+    var t0 = performance.now();
+    railAnim = requestAnimationFrame(function step(now){
+      var p = Math.min(1, (now - t0) / RAIL_DUR);
+      /* ease-in-out: eases away from rest and settles back into it, rather than
+         leaving at full speed the way a plain ease-out does */
+      var e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      rs.scrollLeft = from + (to - from) * e;
+      if (p < 1) railAnim = requestAnimationFrame(step);
+      else { rs.style.scrollSnapType = ''; railSync(); }
+    });
+    /* If frames are not being served — background tab, a host that has paused
+       compositing — the tween never runs. Land the scroll anyway. */
+    railGuard = setTimeout(function(){
+      if (Math.abs(rs.scrollLeft - to) > 1){
+        cancelAnimationFrame(railAnim);
+        rs.scrollLeft = to;
+      }
+      rs.style.scrollSnapType = '';
+      railSync();
+    }, RAIL_DUR + 180);
+  }
+  function railSync(){
+    var i = railIndex();
+    rCount.textContent = pad(i + 1) + ' / ' + pad(cards.length);
+    $('#railPrev').disabled = i === 0;
+    $('#railNext').disabled = rs.scrollLeft >= rs.scrollWidth - rs.clientWidth - 2;
+  }
+  if (rs && cards.length){
+    $('#railPrev').addEventListener('click', function(){ railGo(railIndex() - 1); });
+    $('#railNext').addEventListener('click', function(){ railGo(railIndex() + 1); });
+    rs.addEventListener('scroll', railSync, { passive:true });
+    addEventListener('resize', railSync);
+    railSync();
+  }
+
+  /* ---------- awards carousel ---------- */
+  var aTrack = $('#aTrack');
+  var aSlides = aTrack ? $$('.aslide', aTrack) : [];
+  var aCur = 0;
+  function aSync(){
+    if (!aTrack) return;
+    aTrack.style.transform = 'translateX(' + (-aCur * 100) + '%)';
+    $('#aCount').textContent = pad(aCur+1) + ' / ' + pad(aSlides.length);
+    $('#aPrev').disabled = aCur === 0;
+    $('#aNext').disabled = aCur === aSlides.length - 1;
+  }
+  if (aTrack){
+    $('#aPrev').addEventListener('click', function(){ if (aCur>0){ aCur--; aSync(); } });
+    $('#aNext').addEventListener('click', function(){ if (aCur<aSlides.length-1){ aCur++; aSync(); } });
+    aSync();
+  }
+
+  /* ---------- shop filter ---------- */
+  var filts = $$('.filt');
+  var itemsEls = $$('.item');
+  filts.forEach(function(f){
+    f.addEventListener('click', function(){
+      filts.forEach(function(x){ x.classList.remove('on'); });
+      f.classList.add('on');
+      var v = f.getAttribute('data-f');
+      itemsEls.forEach(function(it){
+        it.hidden = !(v === 'all' || it.getAttribute('data-c') === v);
+      });
+    });
+  });
+
+  /* ---------- newsletter ---------- */
+  var toast = $('#toast');
+  var newsForm = $('#newsForm');
+  if (newsForm) newsForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    toast.classList.add('show');
+    e.target.reset();
+    setTimeout(function(){ toast.classList.remove('show'); }, 2800);
+  });
+
+  /* ---------- hero film ---------- */
+  /* Plays once on load and settles on its final frame. The cut from that frame
+     back to the first is a bigger jump than any movement inside the clip, so it
+     is deliberately not looped.
+
+     It also plays regardless of prefers-reduced-motion, which the owner asked for
+     explicitly: the cover is meant to be moving the moment the page opens. A
+     muted eight-second clip that stops by itself is the mildest form of that, but
+     it is still motion someone may have asked not to see — the guard belongs here
+     if it is ever wanted back. */
+  (function(){
+    var film = $('.hero__film');
+    if (!film) return;
+    /* `autoplay muted playsinline` is what every current browser asks for, but a
+       handful of states refuse it outright anyway — iOS Low Power Mode, data
+       saver, and embedded webviews that hold media until the page is touched.
+       The rejection has to be caught either way or it surfaces as an unhandled
+       error; catching it also gives somewhere to try again, on the first sign of
+       life from the visitor, so the cover is moving as early as it is allowed. */
+    var start = function(){
+      var p = film.play();
+      if (p && p.catch) p.catch(function(){});
+    };
+    var events = ['pointerdown', 'keydown', 'touchstart', 'scroll'];
+    var retry = function(){
+      events.forEach(function(ev){ window.removeEventListener(ev, retry); });
+      start();
+    };
+    start();
+    /* A resolved play() is not proof of playback. Embedded webviews hand back a
+       promise that settles cleanly and then hold the clock at zero until the page
+       is touched, so the only reliable check is whether the element actually left
+       the paused state. Where it did not, wait for the first sign of life from the
+       visitor and start there. */
+    setTimeout(function(){
+      if (!film.paused) return;
+      events.forEach(function(ev){
+        window.addEventListener(ev, retry, { passive: true });
+      });
+    }, 400);
+  })();
+
+  /* ---------- apply the stored language, last, so nothing above is half-built ---------- */
+  (function(){
+    var saved = null;
+    try { saved = localStorage.getItem('ona-lang'); } catch(e){}
+    if (saved !== 'th' && saved !== 'en'){
+      saved = (navigator.language || '').toLowerCase().indexOf('th') === 0 ? 'th' : 'en';
+    }
+    setLang(saved);
+  })();
+})();
+</script>

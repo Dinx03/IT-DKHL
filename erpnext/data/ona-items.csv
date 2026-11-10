@@ -1,0 +1,16 @@
+﻿item_code,item_name,item_group,stock_uom,is_stock_item,has_batch_no,has_expiry_date,shelf_life_in_days,standard_rate,description
+ONATO-JUICE-75,Onato Tomato Juice 100% 75ml,Products,Nos,1,1,1,365,56,น้ำมะเขือเทศ 100% สกัดเย็น มะเขือเทศสามสีและพันธุ์ดำ ไม่เติมน้ำตาล สีและสารกันเสีย 10 กิโลแคลอรีต่อขวด ผ่าน อย. เก็บได้ 1 ปี
+BLACK-TOMATO-90,Black Tomato Plus 90g,Products,Nos,1,1,1,,190,มะเขือเทศสกัดเข้มข้น 100% แดงและเหลืองผสมพันธุ์ดำ - คนละตัวกับน้ำขวด 75ml
+ONATO-BOXSET-6,Onato Box Set 6 ขวด,Products,Nos,1,1,1,365,320,ชุด 6 ขวด สำหรับดื่มหนึ่งสัปดาห์
+ONATO-MONTHLY,Onato Monthly Health Pack,Products,Nos,1,1,1,365,1200,ชุดดื่มหนึ่งเดือน 24-30 ขวด ส่งฟรีทั่วประเทศ
+ONATO-GIFTSET,Onato Premium Gift Set,Products,Nos,1,1,1,365,590,ชุดของขวัญเพื่อสุขภาพ
+TOMATO-TABLET-50,Tomato Tablets 50g 100 เม็ด,Products,Nos,1,1,1,,350,ไลโคปีนธรรมชาติและสารต้านอนุมูลอิสระจากผลไม้วิตามินซี แบบเคี้ยว 1 เม็ดเทียบเท่ามะเขือเทศเชอรี่ 20 ลูก
+FRESH-TOMATO,มะเขือเทศสด ตามฤดูกาล,Products,Kg,1,1,1,,0,ปลูกในโรงเรือน หลายสายพันธุ์ ตามฤดูกาล - สอบถามราคา
+SOAP-TOMATO-HONEY,Tomato & Honey Mask Soap 75ml,Products,Nos,1,1,1,730,56,สบู่ทำมือ 100% บ่มให้อยู่ได้ 2 ปี เหมาะกับผิวแพ้ง่าย ใช้ล้างหน้าและพอกได้ แถมจานไม้สัก สินค้า OTOP
+AMANA-CREAM-30,AMANA Perfect Cream 30g,Products,Nos,1,1,1,,380,ครีมบำรุงหน้า สารสกัดมะเขือเทศและพืชอีก 7 ชนิด สารต้านอนุมูลอิสระจากมะเขือเทศพันธุ์ดำ
+SERUM-BRIGHT-20,ONA Healthy Bright Serum 20g,Products,Nos,1,1,1,,499,สารต้านอนุมูลอิสระจากมะเขือเทศพันธุ์ดำ สำหรับจุดด่างดำและรอยสิว ใช้ก่อนครีม AMANA
+UV-PROTECT-20,ONA Healthy UV Protection 20g,Products,Nos,1,1,1,,499,กันแดดสำหรับหน้า กันน้ำ สกัดจากมะเขือเทศ ไม่ทิ้งคราบขาว
+LOTION-200,ONA Healthy Lotion 200ml,Products,Nos,1,1,1,,250,โลชั่นบำรุงผิวกาย สำหรับผิวแห้งกร้าน
+SUNSCREEN-200,ONA Healthy Sunscreen 200ml,Products,Nos,1,1,1,,280,โลชั่นกันแดดสำหรับผิวกาย ป้องกัน UVA/UVB มีมอยส์เจอไรเซอร์ในตัว
+ESSENCE-TOMATO,Tomato Essence,Products,Nos,1,1,1,,229,เอสเซนส์เข้มข้น หยดเดียวก่อนทาครีม
+ESSENCE-CUCUMBER,Cucumber Essence,Products,Nos,1,1,1,,229,เอสเซนส์เข้มข้น หยดเดียวก่อนทาครีม

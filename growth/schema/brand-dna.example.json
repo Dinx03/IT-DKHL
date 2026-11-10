@@ -1,0 +1,126 @@
+{
+  "schema": "brand-dna/1",
+
+  "_rule": "ห้ามเก็บข้อเท็จจริงที่ ERPNext เป็นเจ้าของ (ราคา สต็อก ล็อต วันหมดอายุ) ที่นี่ — เก็บได้แค่ pointer ว่าไปดึงจากไหน มิฉะนั้น AI จะตอบราคาเก่าค้างอยู่เป็นเดือน",
+
+  "identity": {
+    "display_name": "ONA Healthy",
+    "erp_company": "ONA Healthy",
+    "industry": "health_beverage_and_skincare",
+    "markets": ["TH"],
+    "languages": ["th", "en"],
+    "positioning_th": "เครื่องดื่มและผลิตภัณฑ์ดูแลผิวจากวัตถุดิบในสวนของเราเอง ผลิตเป็นล็อต ตรวจสอบย้อนกลับได้",
+    "proof_points": [
+      "ผลิตเองจากสวน ควบคุมตั้งแต่วัตถุดิบ",
+      "ระบุล็อตและวันหมดอายุทุกขวด"
+    ],
+    "product_lines": [
+      { "key": "health", "label_th": "สายสุขภาพ", "erp_item_group": "สายสุขภาพ" },
+      { "key": "skin",   "label_th": "สายผิว",    "erp_item_group": "สายผิว" }
+    ],
+    "hero_products": [
+      { "erp_item_code": "<ใส่รหัสจริงจาก ERPNext>", "name_th": "น้ำมะเขือเทศ Onato" }
+    ]
+  },
+
+  "audience": {
+    "segments": [
+      {
+        "key": "health_conscious_35_55",
+        "label_th": "คนดูแลสุขภาพ 35-55 ปี",
+        "pains_th": ["ไม่มั่นใจว่าของที่กินมีอะไรผสม", "เคยซื้อของที่โฆษณาเกินจริง"],
+        "objections_th": ["แพงกว่าท้องตลาด", "ต้องกินนานแค่ไหนถึงเห็นผล"],
+        "channels": ["facebook", "line_oa"]
+      },
+      {
+        "key": "skincare_25_40",
+        "label_th": "กลุ่มดูแลผิว 25-40 ปี",
+        "pains_th": ["ผิวแพ้ง่าย กลัวส่วนผสม", "ไม่รู้ว่าเหมาะกับสภาพผิวตัวเองไหม"],
+        "objections_th": ["ใช้แล้วแพ้จะทำยังไง"],
+        "channels": ["instagram", "tiktok"]
+      }
+    ]
+  },
+
+  "voice": {
+    "tone_default": "friendly_expert",
+    "tone_by_platform": {
+      "facebook":  { "tone": "friendly_expert", "length": "medium", "emoji": "sparing" },
+      "instagram": { "tone": "warm_visual",     "length": "short",  "emoji": "moderate" },
+      "tiktok":    { "tone": "casual_direct",   "length": "very_short", "hook_first_3s": true },
+      "line_oa":   { "tone": "polite_service",  "length": "short",  "emoji": "minimal" }
+    },
+    "pronouns": { "brand_th": "เรา", "customer_th": "คุณ" },
+    "must_use_th": ["บอกที่มาของวัตถุดิบ", "บอกวิธีใช้/ปริมาณที่แนะนำ"],
+    "avoid_phrases_th": [
+      "ลดน้ำหนักได้จริง",
+      "รักษาสิว",
+      "ขาวใสใน 7 วัน",
+      "การันตีผลลัพธ์",
+      "แท็กเพื่อนที่ต้องการ",
+      "คอมเมนต์คำว่า"
+    ],
+    "reading_level": "everyday",
+    "_note": "avoid_phrases_th คือช่องที่ Analyst agent เสนอเพิ่มบ่อยที่สุด ผ่าน brand_dna_proposals"
+  },
+
+  "claims_policy": {
+    "regulatory_context": ["TH_FDA_food_supplement", "TH_FDA_cosmetic"],
+    "banned_claim_types": [
+      "cure", "treat", "prevent_disease",
+      "guaranteed_result", "before_after_weight", "medical_advice"
+    ],
+    "allowed_claim_style_th": "พูดถึงส่วนประกอบและการใช้งาน ไม่พูดถึงผลการรักษา",
+    "required_disclaimers": {
+      "health": "ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล ไม่ใช่ยา ไม่มีผลในการรักษาโรค",
+      "skin": "ทดสอบการแพ้ก่อนใช้ หากมีอาการระคายเคืองให้หยุดใช้"
+    },
+    "aigc": {
+      "label_realistic_people": true,
+      "label_realistic_scenes": true,
+      "_why": "IG ตัดสิทธิ์แนะนำถ้าโพสต์คน AI สมจริงซ้ำๆ โดยไม่ติดป้าย · TikTok ลบ/จำกัดถ้าไม่ติด AIGC label"
+    }
+  },
+
+  "offer": {
+    "_pointer_warning": "ชื่อ price_list และ warehouse ต้องตรงกับที่มีจริงใน ERPNext เป๊ะๆ เช็คก่อนเสมอ — ของ ONA จริงดู brand-dna.ona.v1.json",
+    "price_source":  "erpnext://Item Price?price_list=<ชื่อ Price List จริง>",
+    "stock_source":  "erpnext://Bin?warehouse=<ชื่อ Warehouse จริง>",
+    "batch_source":  "erpnext://Batch?item={item}&expiry_date>today",
+    "shipping_policy_th": "<เขียนครั้งเดียวที่นี่ ทุก agent ใช้ข้อความเดียวกัน>",
+    "return_policy_th": "<...>"
+  },
+
+  "channel_prefs": {
+    "posting_windows": {
+      "facebook":  ["09:00", "19:00"],
+      "instagram": ["12:00", "20:00"],
+      "tiktok":    ["18:00", "21:00"]
+    },
+    "max_posts_per_day": { "facebook": 1, "instagram": 2, "tiktok": 2, "x": 3 },
+    "_why_max": "author diversity decay — โพสต์ที่ 2,3,4 จากบัญชีเดียวในฟีดเดียวถูกลดคะแนนทบต้น"
+  },
+
+  "escalation": {
+    "handoff_to_human_when_th": [
+      "ถามเรื่องอาการหรือโรคของตัวเอง",
+      "ขอคืนเงิน / ร้องเรียนคุณภาพ",
+      "แจ้งว่าใช้แล้วแพ้",
+      "ยอดสั่งซื้อเกิน 20000 บาท",
+      "ขอใบกำกับภาษี / เงื่อนไขราคาส่ง"
+    ],
+    "never_answer_th": [
+      "คำแนะนำทางการแพทย์",
+      "ยืนยันว่าใช้แล้วหายจากโรค",
+      "เปรียบเทียบว่าดีกว่ายา"
+    ],
+    "max_ai_turns_before_offer_human": 8
+  },
+
+  "learned": {
+    "_written_by": "agent:analyst ผ่าน brand_dna_proposals ที่คนกดอนุมัติแล้วเท่านั้น",
+    "top_questions_th": [],
+    "winning_angles": [],
+    "losing_angles": []
+  }
+}

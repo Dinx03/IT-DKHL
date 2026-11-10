@@ -1,0 +1,1087 @@
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  /* Deliberately single-theme. The brand's retail space is white end to end, so a dark
+     palette would misrepresent it — every colour below is painted explicitly and the page
+     holds its own ground regardless of the viewer's system theme. */
+  color-scheme: light;
+
+  /* ground is a warm off-white; pure white is reserved for cards that sit on it,
+     mirroring white product boxes on the shop's white shelving */
+  --cream:    #FAF8F4;
+  --cream-2:  #F2EEE8;
+  --surface:  #FFFFFF;
+  --tint:     #F7F4EF;   /* product-tile fill — one shade for every tile */
+  --ink:      #2E2B28;
+  --ink-2:    #67635C;
+  --ink-3:    #6F6960;
+  --tomato:   #B53426;   /* UI red — small marks only, never a large fill */
+  --tomato-l: #D8402F;   /* the fruit itself, inside illustrations */
+  --tomato-d: #8E2A1F;
+  --tomato-wash: #F7E7E3; /* soft red for badges */
+  --vine:     #3F7A4E;
+  --vine-d:   #2F5C3B;
+  --oak:      #8C6C47;   /* pale-wood neutral from the shop floor */
+  --noir:     #2E2B28;
+  --on-noir:  #FAF8F4;
+  --line:     #EAE5DD;
+  --gut: clamp(20px, 5vw, 64px);
+  /* the widest the reading column is allowed to get; beyond this the page
+     centres and the surplus becomes margin */
+  --shell-max: 1580px;
+  /* the same alignment expressed as padding, for full-bleed rows (the card rail)
+     that must start flush with the column but still scroll past the edge */
+  --shell-pad: max(var(--gut), calc((100% - var(--shell-max)) / 2 + var(--gut)));
+  /* tinted blocks sit inside the page ground rather than spanning it, so the
+     ground stays visible down both edges and reads as a frame */
+  --frame: clamp(12px, 1.8vw, 24px);
+  --panel-radius: 12px;
+  --hdr-h: 78px;      /* header alone — fixed, so the hero never reflows */
+  --topbar-h: 78px;   /* header + announcement strip — JS keeps this current */
+  --shadow-sm: 0 2px 6px -2px rgba(46,43,40,.08);
+  --shadow-md: 0 14px 34px -18px rgba(46,43,40,.28), 0 3px 8px -4px rgba(46,43,40,.08);
+  --shadow-lg: 0 40px 90px -44px rgba(46,43,40,.34);
+  --arch: 999px 999px 14px 14px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+
+  /* Playfair Display and Poppins carry no Thai, so the Thai page keeps Thai-native
+     faces and only the English page switches to the Latin pair. */
+  --font-display: "Trirong", Georgia, serif;
+  --font-body:    "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, monospace;
+  /* used in both languages: the wordmark and the wide-tracked uppercase labels are
+     Latin either way, and this is the pairing the brand board specifies */
+  --font-brand:   "Playfair Display", "Trirong", Georgia, serif;
+  --font-label:   "Poppins", "IBM Plex Sans Thai", system-ui, sans-serif;
+}
+:root[data-lang="en"]{
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body:    "Poppins", system-ui, sans-serif;
+}
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+/* every in-page target clears the sticky header, and on the knowledge page the
+   contents bar underneath it as well */
+:target, [id]{ scroll-margin-top:calc(var(--topbar-h) + 84px); }
+body{
+  margin:0; background:var(--cream); color:var(--ink);
+  font-family:var(--font-body);
+  font-weight:400; line-height:1.6; -webkit-font-smoothing:antialiased;
+  /* clip, not hidden: `overflow-x:hidden` forces overflow-y to auto, which turns
+     body into the scroll container and stops window scroll events from firing —
+     that silently kills the scroll-driven journey section */
+  overflow-x:clip;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; }
+h1,h2,h3,h4{ margin:0; font-weight:400; }
+p{ margin:0; }
+ul{ margin:0; padding:0; list-style:none; }
+
+/* ---- 22-column shell, mirroring the reference grid ---- */
+.g{
+  display:grid;
+  grid-template-columns:
+    [full-start] var(--gut)
+    [main-start] repeat(22, minmax(0,1fr))
+    [main-end] var(--gut) [full-end];
+  /* Past the cap the grid stops growing and centres instead. On a wide monitor a
+     gutter that stays at 64px lets lines run the full width of the glass, which
+     is tiring to read; holding the measure turns the extra space into margin and
+     the page reads as an indented column rather than an edge-to-edge sheet. */
+  max-width:var(--shell-max);
+  margin-inline:auto;
+}
+.main{ grid-column: main-start / main-end; }
+.full{ grid-column: full-start / full-end; }
+
+/* ---- type roles ---- */
+.display{
+  font-family:var(--font-display); font-weight:200;
+  line-height:1.18; letter-spacing:-.012em; text-wrap:balance;
+}
+.serif{ font-family:var(--font-display); font-weight:300; }
+/* the wide-tracked uppercase label from the brand board */
+.eyebrow{
+  font-size:12px; font-weight:500; letter-spacing:.24em; text-transform:uppercase;
+  font-family:var(--font-label);
+}
+.mono{ font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+.lede{ color:var(--ink-2); font-size:clamp(15px,1.15vw,17px); line-height:1.75; }
+
+/* ---- buttons ---- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  font-size:14px; font-weight:600; letter-spacing:.01em;
+  padding:15px 30px; border:1px solid transparent; border-radius:999px;
+  cursor:pointer; white-space:nowrap; position:relative; overflow:hidden;
+  transition:background .35s var(--ease), color .35s var(--ease),
+             border-color .35s var(--ease), transform .35s var(--ease);
+}
+.btn:focus-visible{ outline:2px solid var(--tomato); outline-offset:3px; }
+.btn:active{ transform:scale(.975); }
+.btn--fill{ background:var(--ink); color:var(--cream); }
+.btn--fill:hover{ background:var(--tomato); color:#fff; }
+.btn--out{ border-color:currentColor; color:var(--ink); }
+.btn--out:hover{ background:var(--ink); color:var(--cream); border-color:var(--ink); }
+.btn--light{ background:var(--cream); color:var(--ink); }
+.btn--light:hover{ background:var(--tomato); color:#fff; }
+.btn--ghost-l{ border-color:rgba(247,241,232,.45); color:var(--on-noir); }
+.btn--ghost-l:hover{ background:rgba(247,241,232,.14); border-color:rgba(247,241,232,.8); }
+.btn--sm{ padding:11px 22px; font-size:13px; }
+
+/* link with animated underline */
+.ulink{ position:relative; display:inline-block; padding-bottom:2px; }
+.ulink::after{
+  content:""; position:absolute; left:0; bottom:0; height:1px; width:100%;
+  background:currentColor; transform:scaleX(0); transform-origin:right;
+  transition:transform .45s var(--ease);
+}
+.ulink:hover::after{ transform:scaleX(1); transform-origin:left; }
+
+/* ============================================================
+   ANNOUNCEMENT + HEADER + MEGA MENU
+   ============================================================ */
+/* header and announcement travel together as one sticky stack */
+.topbar{ position:sticky; top:0; z-index:50; }
+
+/* the strip is collapsed at the top of the page and rolls open once you scroll,
+   so the first thing seen is the brand, not an offer */
+.announce-wrap{
+  display:grid; grid-template-rows:0fr;
+  transition:grid-template-rows .5s var(--ease);
+}
+.topbar.has-announce .announce-wrap{ grid-template-rows:1fr; }
+.announce{
+  overflow:hidden; min-height:0;
+  background:var(--noir); color:var(--on-noir);
+  font-size:12.5px; letter-spacing:.02em; text-align:center;
+}
+.announce > span{ display:block; padding:10px 16px; }
+.announce b{ font-weight:600; color:var(--on-noir); }
+/* the strip must stay one line — a three-line bar swallows a phone screen */
+@media (max-width:680px){
+  .ann-more{ display:none; }
+  .announce{ font-size:11.5px; }
+  .announce > span{ padding:9px 12px; }
+}
+
+.hdr{
+  height:var(--hdr-h);
+  background:color-mix(in srgb, var(--cream) 86%, transparent);
+  backdrop-filter:saturate(1.6) blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .4s var(--ease), background .4s var(--ease);
+}
+.hdr.is-stuck{ border-bottom-color:var(--line); }
+.hdr__in{
+  height:var(--hdr-h); display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--gut); gap:24px;
+  max-width:var(--shell-max); margin-inline:auto;
+}
+.brand{ display:flex; align-items:center; gap:11px; flex-shrink:0; }
+.brand__mark{ width:26px; height:26px; }
+.brand__wd{
+  font-family:var(--font-brand); font-weight:400; font-size:19px; letter-spacing:.06em;
+}
+.nav{ display:flex; align-items:center; gap:6px; }
+.nav__item{ position:relative; }
+.nav__btn{
+  background:none; border:0; cursor:pointer; padding:10px 15px;
+  font-size:14.5px; display:inline-flex; align-items:center; gap:6px;
+  border-radius:999px; transition:background .3s var(--ease);
+}
+.nav__btn:hover, .nav__item.open .nav__btn{ background:color-mix(in srgb, var(--ink) 7%, transparent); }
+.nav__btn svg{ width:11px; height:11px; transition:transform .35s var(--ease); }
+.nav__item.open .nav__btn svg{ transform:rotate(180deg); }
+.hdr__right{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.icon-btn{
+  background:none; border:0; cursor:pointer; width:40px; height:40px;
+  display:grid; place-items:center; border-radius:50%;
+  transition:background .3s var(--ease);
+}
+.icon-btn:hover{ background:color-mix(in srgb, var(--ink) 8%, transparent); }
+.icon-btn svg{ width:19px; height:19px; }
+
+/* language switch */
+.langbtn{
+  display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+  background:none; border:1px solid var(--line); border-radius:999px;
+  padding:8px 14px 8px 11px; color:var(--ink);
+  font-family:var(--font-label); font-size:12px; font-weight:500; letter-spacing:.1em;
+  transition:border-color .3s var(--ease), background .3s var(--ease);
+}
+.langbtn:hover{ border-color:var(--ink); background:color-mix(in srgb, var(--ink) 5%, transparent); }
+.langbtn:focus-visible{ outline:2px solid var(--tomato); outline-offset:2px; }
+.langbtn svg{ width:16px; height:16px; flex-shrink:0; }
+.langbtn__code{ font-variant-numeric:tabular-nums; }
+@media (max-width:560px){
+  .langbtn{ padding:8px 11px; }
+  .langbtn__code{ display:none; }
+  /* the header runs out of room on a phone: search is decorative and the order
+     CTA is already the full-width button inside the mobile menu */
+  .hdr__right .icon-btn:not(.menu-toggle){ display:none; }
+  .hdr__right .btn--fill{ display:none; }
+}
+
+/* mega panel */
+.mega{
+  position:fixed; left:0; right:0; top:var(--mega-top, 116px);
+  background:var(--surface); border-bottom:1px solid var(--line);
+  z-index:45; overflow:hidden;
+  max-height:0; opacity:0; pointer-events:none;
+  transition:max-height .5s var(--ease), opacity .3s var(--ease);
+}
+.mega.open{ max-height:520px; opacity:1; pointer-events:auto; }
+.mega__in{ padding:44px 0 52px; }
+.mega__grid{ grid-column:main-start/main-end; display:grid; grid-template-columns:1fr 1fr 1.15fr; gap:48px; }
+@media (max-width:1040px){ .mega{ display:none; } }
+.mega__col h4{
+  font-size:11.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-3); margin-bottom:18px; font-family:var(--font-label);
+}
+.mega__list{ display:flex; flex-direction:column; gap:2px; }
+.mega__link{
+  display:flex; align-items:center; gap:14px; padding:11px 12px; margin-left:-12px;
+  border-radius:10px; transition:background .3s var(--ease);
+}
+.mega__link:hover{ background:color-mix(in srgb, var(--ink) 5%, transparent); }
+.mega__link .dot{ width:30px; height:30px; border-radius:50%; flex-shrink:0; }
+.mega__link .t{ font-size:15px; }
+.mega__link .s{ font-size:12.5px; color:var(--ink-2); }
+.mega__feature{
+  background:var(--cream-2); border-radius:14px; padding:26px; display:flex;
+  flex-direction:column; justify-content:space-between; gap:18px; min-height:210px;
+}
+.mega__feature .fig{ height:104px; }
+
+/* mobile nav */
+.menu-toggle{ display:none; }
+.mnav{
+  position:fixed; inset:0; z-index:55; background:var(--cream);
+  padding:24px var(--gut) 40px; overflow-y:auto;
+  transform:translateY(-100%); transition:transform .5s var(--ease);
+}
+.mnav.open{ transform:translateY(0); }
+.mnav__top{ display:flex; justify-content:space-between; align-items:center; height:54px; margin-bottom:22px; }
+.mnav__list{ display:flex; flex-direction:column; }
+.mnav__list a{
+  font-family:var(--font-display); font-weight:300; font-size:30px; line-height:1.5;
+  padding:12px 0; border-bottom:1px solid var(--line);
+}
+@media (max-width:1040px){
+  .nav{ display:none; }
+  .menu-toggle{ display:grid; }
+}
+
+/* ============================================================
+   HERO — full-bleed film, copy straight on it
+   ============================================================ */
+/* The film fills the opening screen at every size and is simply cropped to fit;
+   nothing is laid over it and nothing fades into it.
+
+   The copy is held in the top fifth of the frame because that is where the
+   footage is quietest — measured over the eight seconds, dark ink there averages
+   7.4:1 against 4.4:1 in the middle of the frame. Averages are not the whole
+   story: the darkest pixels in that band still bring single letters down to
+   1.7:1, so a headline can fall into the foliage as the clip moves. The fix for
+   that is upstream, in a paler grade on the clip itself — not another veil here,
+   which is what the last three passes kept reaching for. */
+.hero{
+  position:relative;
+  background:var(--cream);
+  padding:0 var(--frame) var(--frame);
+  /* pull the gutter in by the frame so the copy still lands on the page's line */
+  --gut: max(0px, calc(clamp(20px,5vw,64px) - var(--frame)));
+  min-height:calc(100svh - var(--hdr-h));
+  display:flex; flex-direction:column;
+}
+.hero__panel{
+  position:absolute; z-index:0;
+  top:0; left:var(--frame); right:var(--frame); bottom:var(--frame);
+  /* Square at the top, round at the bottom. The top edge tucks under the sticky
+     header, so rounding it would cut a notch out of nothing and make the film read
+     as a card sitting on the page; left square, it reads as the picture coming
+     down from the top of the window. The bottom keeps the radius because that is
+     where the film actually ends, and round is the shape the rest of the UI uses. */
+  border-radius:0 0 var(--panel-radius) var(--panel-radius);
+  overflow:hidden;
+}
+.hero__film{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover; object-position:50% 50%;
+  pointer-events:none; user-select:none;
+  /* keeps the panel from flickering when the compositor promotes the video */
+  backface-visibility:hidden;
+}
+/* `width:100%` is not decoration. `.g` carries `margin-inline:auto`, and an auto
+   cross-axis margin switches off stretch for a flex item, so without this the grid
+   shrinks to its content, the 22 `1fr` columns collapse, and the copy ends up a
+   few pixels wide against the left edge. */
+.hero__in{ position:relative; z-index:2; width:100%; padding-top:clamp(26px,5vh,60px); row-gap:0; }
+.hero__copy{ grid-column:main-start / main-end; text-align:center; }
+.hero h1{
+  font-size:clamp(2.35rem, 6.2vw, 6rem);
+  margin:0 auto; max-width:17ch;
+}
+.hero h1 .tint{ color:var(--tomato); font-style:italic; font-weight:300; }
+/* Latin runs narrower per character than Thai, so the measure widens in English */
+:root[data-lang="en"] .hero h1{ max-width:23ch; }
+/* Thai breaks at syllable boundaries, which splits compounds mid-word at display sizes */
+.nb{ white-space:nowrap; }
+.hero__sub{
+  /* full ink, not the softer secondary grey: over footage that grey measured 3.4:1
+     where ink measures 8:1, and the hierarchy still reads from size and weight.
+
+     Weight 400, not the 300 this line used to carry. A contrast ratio does not
+     move with weight, but 27% of the area behind this line sits under 4.5:1 at any
+     moment and the thin strokes were the part that vanished into it. */
+  font-size:clamp(15.5px,1.35vw,20px); line-height:1.7; color:var(--ink);
+  max-width:46ch; margin:18px auto 0; font-weight:400;
+}
+/* Thai goes one step heavier again. Tone marks sit above the vowels, which sit
+   above the letter — three stacked layers of thin stroke, and they are the first
+   thing moving footage swallows. Latin has nothing above the cap line to lose. */
+:root[data-lang="th"] .hero__sub{ font-weight:500; }
+/* The button sits at the foot of the panel rather than under the standfirst.
+   Spacing it away from the copy only moved it onto the middle of the frame, which
+   is where the jar is — the product ends up with a control parked across it. Down
+   here it clears the picture entirely and reads as the one thing to press.
+
+   `margin-top:auto` is what pushes it: `.hero` is a column flex container, so the
+   auto margin absorbs all the leftover height between the copy and the foot. The
+   hero's own bottom padding is the frame, so this padding is measured from the
+   panel's bottom edge. `width:100%` is the usual `.g` guard — see `.hero__in`. */
+.hero__foot{
+  position:relative; z-index:2; width:100%;
+  margin-top:auto;
+  padding-bottom:clamp(32px, 5vh, 64px);
+}
+.hero__cta{ grid-column:main-start / main-end; display:flex; justify-content:center; }
+
+/* trust strip directly under the hero */
+.trust{ border-bottom:1px solid var(--line); }
+.trust__in{
+  grid-column:main-start/main-end; display:flex; gap:clamp(24px,5vw,72px);
+  flex-wrap:wrap; padding:26px 0;
+}
+.trust__in div b{
+  display:block; font-family:var(--font-display); font-weight:300; font-size:clamp(22px,2.4vw,30px);
+  line-height:1.3; color:var(--tomato);
+}
+.trust__in div span{ font-size:12px; color:var(--ink-2); letter-spacing:.02em; }
+
+/* ============================================================
+   PRODUCT STRIP — two full-bleed cards
+   ============================================================ */
+.strip{
+  display:grid; grid-template-columns:1fr 1fr; gap:var(--frame);
+  padding:0 var(--frame);
+}
+.pcard{
+  position:relative; min-height:clamp(430px, 46vw, 580px); overflow:hidden;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:clamp(26px,3vw,44px); background:var(--tint);
+  border-radius:var(--panel-radius);
+}
+.pcard--alt{ background:var(--cream-2); }
+.pcard__fig{
+  position:absolute; left:0; right:0; top:clamp(40px,6vw,72px); bottom:44%;
+  display:grid; place-items:center;
+}
+.pcard__fig svg{ width:min(58%, 240px); transition:transform 1.1s var(--ease); }
+.pcard:hover .pcard__fig svg{ transform:translateY(-8px); }
+.badge{
+  position:absolute; top:clamp(22px,2.4vw,32px); left:clamp(26px,3vw,44px);
+  font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+  font-family:var(--font-mono);
+  background:var(--tomato-wash); color:var(--tomato); padding:6px 12px; border-radius:999px;
+}
+.pcard__body{ position:relative; color:var(--ink); }
+.pcard__name{ font-family:var(--font-display); font-weight:200; font-size:clamp(26px,2.8vw,38px); line-height:1.32; }
+.pcard__price{ font-size:14.5px; font-weight:600; margin-top:10px; color:var(--ink-2); }
+.pcard__price s{ color:var(--ink-3); font-weight:400; margin-right:8px; }
+.pcard__act{ display:flex; gap:10px; margin-top:24px; flex-wrap:wrap; }
+@media (max-width:760px){ .strip{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   PINNED JOURNEY — the signature scroll-driven sequence
+   ============================================================ */
+/* inset panel — no overflow:hidden here, it would break the sticky stage inside */
+.journey{
+  position:relative; background:var(--cream-2);
+  margin:0 var(--frame); border-radius:var(--panel-radius);
+}
+.journey__track{ height:520vh; }
+.journey__stage{
+  position:sticky; top:var(--topbar-h); height:calc(100svh - var(--topbar-h)); overflow:hidden;
+  display:grid; align-content:center;
+}
+.journey__grid{ position:relative; z-index:2; align-items:center; row-gap:36px; }
+.journey__left{ grid-column:main-start / span 11; position:relative; min-height:300px; }
+.journey__right{ grid-column:span 10 / main-end; display:grid; place-items:center; position:relative; min-height:min(52svh,440px); }
+
+.jslide{
+  position:absolute; inset:0; opacity:0; transform:translateY(26px);
+  transition:opacity .7s var(--ease), transform .7s var(--ease);
+  pointer-events:none;
+}
+.jslide.on{ opacity:1; transform:none; pointer-events:auto; }
+.jslide__n{ font-size:12px; letter-spacing:.2em; color:var(--tomato); font-family:var(--font-mono); }
+.jslide h3{ font-family:var(--font-display); font-weight:200; font-size:clamp(28px,3.3vw,44px); line-height:1.28; margin:14px 0 18px; text-wrap:balance; }
+.jslide p{ color:var(--ink-2); font-size:clamp(14.5px,1.1vw,16.5px); line-height:1.8; max-width:40ch; }
+
+.jfig{
+  position:absolute; inset:0; display:grid; place-items:center;
+  opacity:0; transform:scale(.92); transition:opacity .8s var(--ease), transform .8s var(--ease);
+}
+.jfig.on{ opacity:1; transform:none; }
+.jfig svg{ width:min(100%, 400px); }
+
+.jrail{
+  grid-column:main-start / main-end; display:flex; gap:0; margin-top:8px;
+  border-top:1px solid var(--line);
+}
+.jrail__i{
+  flex:1; padding:16px 14px 0; border-top:2px solid transparent; margin-top:-1px;
+  font-size:12px; color:var(--ink-3); text-align:left;
+  background:none; border-left:0; border-right:0; border-bottom:0; cursor:pointer;
+  transition:color .4s var(--ease), border-color .4s var(--ease);
+}
+.jrail__i.on{ color:var(--ink); border-top-color:var(--tomato); }
+.jrail__i:hover{ color:var(--ink); }
+.jrail__i span{ display:block; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; color:var(--ink-3); margin-bottom:4px; }
+@media (max-width:900px){
+  .journey__track{ height:460vh; }
+  .journey__left{ grid-column:main-start/main-end; min-height:230px; }
+  .journey__right{ grid-column:main-start/main-end; min-height:34svh; order:-1; }
+  .jrail__i{ font-size:0; padding-top:12px; }
+  .jrail__i span{ font-size:10px; margin:0; }
+}
+
+/* ============================================================
+   SECTION SCAFFOLD
+   ============================================================ */
+.sec{ padding:clamp(72px,8vw,132px) 0; }
+.sec--tight{ padding:clamp(60px,6vw,104px) 0; }
+/* framed panels pull their gutter in by the frame so text still lines up
+   with the sections above and below */
+.journey{ --gut: max(0px, calc(clamp(20px,5vw,64px) - var(--frame))); }
+/* The pinned sequence opts out of the reading cap. It is a staged scene held at
+   one screen height, not a column of running text — narrowing it pushes the copy
+   and the illustration into each other instead of giving the stage room. */
+.journey .g{ max-width:none; margin-inline:0; }
+.sechead{ grid-column:main-start / span 15; margin-bottom:clamp(44px,5vw,84px); }
+.sechead h2{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(30px,5vw,68px); line-height:1.16; margin:18px 0 0; text-wrap:balance;
+}
+.sechead .lede{ margin-top:18px; max-width:52ch; }
+.sechead .eyebrow{ color:var(--tomato); }
+
+/* ============================================================
+   WHY — split intro, then an underlined tab strip over a tall panel
+   ============================================================ */
+.tabsec{ row-gap:0; align-items:start; }
+.tabsec__head{ grid-column:main-start / span 13; }
+.tabsec__head h2{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(32px,5.6vw,78px); line-height:1.14; margin:20px 0 0; text-wrap:balance;
+}
+.tabsec__aside{ grid-column:span 7 / main-end; align-self:end; padding-bottom:6px; }
+.tabsec__aside p{ color:var(--ink-2); font-size:15px; line-height:1.85; }
+.tabsec__aside a{ display:inline-block; margin-top:20px; font-size:14.5px; font-weight:600; }
+
+.tabsec__tabs{
+  /* one column narrower than the text on each side, so the strip reads as a
+     separate control rather than another line of the heading block */
+  grid-column:3 / 23;
+  display:flex; margin-top:clamp(60px,9vw,140px);
+  border-bottom:1px solid var(--line);
+  overflow-x:auto; scrollbar-width:none;
+}
+.tabsec__tabs::-webkit-scrollbar{ display:none; }
+.tabsec__tab{
+  position:relative;
+  flex:1 1 0; min-width:118px; padding:34px 14px;
+  background:none; border:0; border-bottom:3px solid transparent; margin-bottom:-1px;
+  cursor:pointer; white-space:nowrap; font-size:14.5px; color:var(--ink-2);
+  transition:color .3s var(--ease), border-color .3s var(--ease);
+}
+.tabsec__tab:hover{ color:var(--ink); }
+.tabsec__tab[aria-selected="true"]{ color:var(--ink); }
+.tabsec__tab:focus-visible{ outline:2px solid var(--tomato); outline-offset:-4px; }
+
+/* The underline on the active tab doubles as the timer for the auto-advance:
+   it fills across while the panel is showing, so the movement reads as deliberate
+   rather than the page twitching on its own. With autoplay off it is simply a
+   full-width rule. */
+.tabsec__tab[aria-selected="true"]::after{
+  content:""; position:absolute; left:0; bottom:-3px; height:3px; width:100%;
+  background:var(--tomato); transform-origin:left; transform:scaleX(1);
+}
+.tabsec.is-playing .tabsec__tab[aria-selected="true"]::after{
+  animation:tabfill var(--tab-dur, 3s) linear forwards;
+}
+@keyframes tabfill{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+@media (prefers-reduced-motion: reduce){
+  .tabsec.is-playing .tabsec__tab[aria-selected="true"]::after{ animation:none; transform:scaleX(1); }
+}
+/* optional clock line above the label, for tabs that mark points in a day */
+.tabsec__tab time{
+  display:block; font-family:var(--font-mono);
+  font-size:10.5px; letter-spacing:.12em; color:var(--ink-3); margin-bottom:6px;
+  transition:color .3s var(--ease);
+}
+.tabsec__tab[aria-selected="true"] time{ color:var(--tomato); }
+.tabsec__tab:has(time){ padding-top:22px; padding-bottom:22px; }
+
+.tabsec__panel{ grid-column:main-start / main-end; margin-top:clamp(44px,5.5vw,84px); }
+.tabpane[hidden]{ display:none; }
+.tabpane{
+  display:grid; grid-template-columns:.78fr 1fr; gap:clamp(28px,5vw,76px); align-items:center;
+  animation:paneIn .6s var(--ease) both;
+}
+@keyframes paneIn{ from{ opacity:0; transform:translateY(18px);} to{ opacity:1; transform:none; } }
+.tabpane__fig{
+  aspect-ratio:4/5; border-radius:var(--arch); background:var(--tint);
+  display:grid; place-items:center; box-shadow:var(--shadow-md);
+}
+.tabpane__fig svg{ width:56%; }
+.tabpane__n{ font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; color:var(--tomato); }
+.tabpane h3{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(24px,3.1vw,42px); line-height:1.3; margin:14px 0 18px; text-wrap:balance;
+}
+.tabpane p{ color:var(--ink-2); font-size:15px; line-height:1.85; max-width:46ch; }
+.tabpane .btn{ margin-top:28px; }
+@media (max-width:900px){
+  .tabsec__head, .tabsec__aside{ grid-column:main-start / main-end; }
+  .tabsec__aside{ margin-top:24px; align-self:auto; }
+  .tabpane{ grid-template-columns:1fr; }
+  .tabpane__fig{ aspect-ratio:4/3; }
+}
+
+/* ============================================================
+   SCENARIO RAIL — horizontal, oversized headings
+   ============================================================ */
+.rail{ position:relative; }
+/* Same split as the tabbed section: a tall headline block on the left half and a
+   short paragraph on the right. A headline that runs the full width on one line
+   has no vertical presence, which is what made this section feel cramped. */
+.rail__head{ grid-column:main-start / span 13; }
+.rail__head h2{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(32px,5.6vw,78px); line-height:1.14; margin:20px 0 0; text-wrap:balance;
+}
+.rail__aside{ grid-column:span 7 / main-end; align-self:end; padding-bottom:6px; }
+.rail__aside p{ color:var(--ink-2); font-size:15px; line-height:1.85; }
+.rail__count{ display:block; margin-top:22px; font-family:var(--font-mono); font-size:12.5px; color:var(--ink-3); }
+@media (max-width:900px){
+  .rail__head, .rail__aside{ grid-column:main-start / main-end; }
+  .rail__aside{ margin-top:24px; align-self:auto; }
+}
+.rnav{
+  width:46px; height:46px; border-radius:50%; border:1px solid var(--line);
+  background:none; cursor:pointer; display:grid; place-items:center;
+  transition:all .35s var(--ease);
+}
+.rnav:hover:not(:disabled){ background:var(--ink); color:var(--cream); border-color:var(--ink); }
+.rnav:disabled{ opacity:.3; cursor:default; }
+.rnav svg{ width:16px; height:16px; }
+
+/* Arrows sit on the left and right edges of the rail itself rather than in the
+   heading — a 56px target at the point you are already looking is far easier to
+   hit than a small pair of buttons parked above the content. */
+/* The rail is now framed rather than full-bleed: the scroller is exactly the
+   reading column, so cards are cut off at the same right edge the text stops at
+   instead of running away to the edge of the glass. */
+.rail__wrap{
+  position:relative;
+  max-width:var(--shell-max); margin-inline:auto;
+  padding-inline:var(--gut);
+}
+.rnav--side{
+  position:absolute; top:34%; z-index:4;
+  width:54px; height:54px;
+  /* translucent over a blur so it reads as glass sitting above the cards rather
+     than a solid disc punched into them */
+  background:color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter:saturate(1.4) blur(10px);
+  border:1px solid color-mix(in srgb, var(--ink) 9%, transparent);
+  box-shadow:var(--shadow-md);
+  color:var(--ink);
+  /* the vertical centring lives in the transform, so every hover state has to
+     carry it too */
+  transform:translateY(-50%);
+  transition:background .4s var(--ease), color .4s var(--ease),
+             border-color .4s var(--ease), box-shadow .4s var(--ease),
+             transform .4s var(--ease), opacity .35s var(--ease);
+}
+.rnav--side svg{ width:20px; height:20px; transition:transform .4s var(--ease); }
+.rnav--side:hover:not(:disabled){
+  background:var(--ink); color:var(--cream); border-color:var(--ink);
+  box-shadow:var(--shadow-lg);
+  transform:translateY(-50%) scale(1.07);
+}
+/* the arrow leans the way it travels on hover */
+.rnav--prev:hover:not(:disabled) svg{ transform:translateX(-2px); }
+.rnav--next:hover:not(:disabled) svg{ transform:translateX(2px); }
+.rnav--side:active:not(:disabled){ transform:translateY(-50%) scale(.98); }
+.rnav--side:focus-visible{ outline:2px solid var(--tomato); outline-offset:3px; }
+.rnav--side:disabled{ opacity:0; pointer-events:none; transform:translateY(-50%) scale(.9); }
+.rnav--prev{ left:clamp(4px, 0.8vw, 10px); }
+.rnav--next{ right:clamp(4px, 0.8vw, 10px); }
+@media (max-width:640px){
+  .rnav--side{ width:46px; height:46px; }
+  .rnav--side svg{ width:17px; height:17px; }
+}
+.rail__scroll{
+  display:flex; gap:20px; overflow-x:auto;
+  /* the frame lives on .rail__wrap, so the scroller itself needs no inset and
+     clips its cards at the column edges. Clipping applies to both axes, so it
+     also needs a little vertical room or the hover shadow gets sheared off; the
+     margin gives that height back so nothing shifts. */
+  margin-top:calc(clamp(56px,8vw,120px) - 12px);
+  padding:12px 0 20px;
+  /* proximity, not mandatory: mandatory snap overrides programmatic scrollTo and
+     the arrow buttons end up bouncing back. */
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;
+}
+.rail__scroll::-webkit-scrollbar{ display:none; }
+.scard{
+  flex:0 0 auto; width:min(80vw, 400px); scroll-snap-align:start;
+  border-radius:18px; overflow:hidden; background:var(--surface);
+  box-shadow:var(--shadow-sm); transition:box-shadow .5s var(--ease);
+  display:flex; flex-direction:column;
+}
+.scard:hover{ box-shadow:var(--shadow-md); }
+.scard__fig{ aspect-ratio:4/3; display:grid; place-items:center; position:relative; overflow:hidden; background:var(--tint); }
+.scard__fig svg{ width:52%; transition:transform 1s var(--ease); }
+.scard:hover .scard__fig svg{ transform:scale(1.07); }
+.scard__b{ padding:26px 28px 32px; }
+.scard__t{ font-family:var(--font-label); font-size:11px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--tomato); }
+.scard__b h4{ font-family:var(--font-display); font-weight:200; font-size:clamp(22px,2.4vw,30px); line-height:1.35; margin:12px 0 10px; }
+.scard__b p{ font-size:14px; color:var(--ink-2); line-height:1.7; }
+
+/* ============================================================
+   WHAT THE FRUIT IS FOR
+   ============================================================ */
+/* Lives on the knowledge page. It was on the home page for one revision, between
+   the farm-day tabs and the awards row; the owner took it off once the knowledge
+   page existed to hold the same material at length. */
+.benelist{
+  grid-column:main-start / main-end;
+  display:grid; grid-template-columns:repeat(5,1fr);
+  margin:0; padding:0; list-style:none;
+}
+/* the hairline-and-numeral treatment the journey rail uses, so a row of short
+   claims reads as part of the same family rather than a new device */
+/* A short red tick on the rule instead of a numeral. Skin, lines, eyes, bones,
+   hair is not a sequence — numbering it made a list of five unrelated things look
+   like five ranked steps, which is the listicle tic the owner called out. The
+   journey rail on the home page keeps its numbers, because seed → nursery →
+   growing → pressing → bottling genuinely is an order. */
+.bene__i{ position:relative; border-top:1px solid var(--line); padding:26px 20px 0 0; }
+.bene__i::before{
+  content:""; position:absolute; top:-1px; left:0;
+  width:26px; height:2px; background:var(--tomato);
+}
+.bene__i p{
+  font-family:var(--font-display); font-weight:300;
+  font-size:clamp(17px,1.5vw,22px); line-height:1.45; text-wrap:balance;
+}
+@media (max-width:900px){ .benelist{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:520px){ .benelist{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   AWARDS — dark section w/ carousel
+   ============================================================ */
+/* structure comes from the hairline rules in the cert row, not a background fill */
+.awards{ background:none; }
+.certrow{
+  grid-column:main-start/main-end; display:grid; grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  margin-bottom:clamp(44px,5vw,72px);
+}
+.cert{
+  padding:32px 14px; text-align:center; border-right:1px solid var(--line);
+  display:flex; flex-direction:column; align-items:center; gap:9px;
+  transition:background .4s var(--ease);
+}
+.cert:last-child{ border-right:0; }
+.cert:hover{ background:var(--surface); }
+.cert__logo{ height:72px; width:auto; max-width:100%; margin-bottom:6px; }
+/* cells without a logo keep an empty slot of the same height, so every name sits on one line */
+.cert:not(:has(.cert__logo))::before{ content:""; height:78px; }
+.cert__m{ font-family:var(--font-display); font-weight:300; font-size:20px; }
+.cert__s{ font-size:10.5px; letter-spacing:.05em; color:var(--ink-2); }
+.cert__n{ font-size:11px; letter-spacing:.04em; color:var(--ink-3); }
+@media (max-width:760px){ .certrow{ grid-template-columns:repeat(2,1fr); } .cert{ border-bottom:1px solid var(--line); } }
+
+.awrap{ grid-column:main-start/main-end; }
+.aviewport{ overflow:hidden; }
+.atrack{ display:flex; transition:transform .7s var(--ease); }
+.aslide{ flex:0 0 100%; display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(28px,4vw,64px); align-items:center; }
+.aslide__y{ font-family:var(--font-display); font-weight:200; font-size:clamp(52px,8vw,110px); line-height:1; color:var(--oak); }
+.aslide h3{ font-family:var(--font-display); font-weight:200; font-size:clamp(23px,2.6vw,34px); line-height:1.35; margin-bottom:16px; }
+.aslide p{ font-size:14.5px; line-height:1.8; color:var(--ink-2); }
+.actl{ display:flex; align-items:center; gap:10px; margin-top:clamp(30px,4vw,50px); }
+@media (max-width:760px){ .aslide{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   SHOP GRID
+   ============================================================ */
+.filters{ grid-column:main-start/main-end; display:flex; gap:8px; flex-wrap:wrap; margin-bottom:38px; }
+.filt{
+  padding:10px 21px; border-radius:999px; border:1px solid var(--line); background:none;
+  font-size:13.5px; cursor:pointer; color:var(--ink-2);
+  transition:all .35s var(--ease);
+}
+.filt:hover{ border-color:var(--ink); color:var(--ink); }
+.filt.on{ background:var(--ink); color:var(--cream); border-color:var(--ink); }
+.shop{ grid-column:main-start/main-end; display:grid; grid-template-columns:repeat(4,1fr); gap:26px 22px; }
+.item{ display:flex; flex-direction:column; transition:opacity .45s var(--ease), transform .45s var(--ease); }
+.item[hidden]{ display:none; }
+/* arch-topped tiles echo the shop's arched shelving */
+.item__fig{
+  aspect-ratio:4/5; border-radius:var(--arch); overflow:hidden; display:grid; place-items:center;
+  position:relative; margin-bottom:18px; background:var(--tint);
+  box-shadow:var(--shadow-sm); transition:box-shadow .5s var(--ease);
+}
+.item:hover .item__fig{ box-shadow:var(--shadow-md); }
+.item__fig svg{ width:54%; transition:transform .9s var(--ease); }
+.item:hover .item__fig svg{ transform:scale(1.08) translateY(-4px); }
+.item__quick{
+  position:absolute; left:14px; right:14px; bottom:14px;
+  background:color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter:blur(8px);
+  border-radius:999px; padding:11px; text-align:center; font-size:13px; font-weight:600;
+  opacity:0; transform:translateY(10px); transition:all .45s var(--ease);
+}
+.item:hover .item__quick, .item:focus-within .item__quick{ opacity:1; transform:none; }
+.item__k{ font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); font-family:var(--font-label); }
+.item h4{ font-family:var(--font-display); font-weight:300; font-size:17.5px; line-height:1.45; margin:7px 0 6px; }
+.item p{ font-size:12.5px; color:var(--ink-2); line-height:1.65; flex:1; }
+.item__p{ margin-top:12px; font-size:14.5px; font-weight:600; }
+.item__p s{ color:var(--ink-3); font-weight:400; margin-right:7px; font-size:12.5px; }
+.item__p.ask{ font-weight:400; font-size:13px; color:var(--ink-2); }
+@media (max-width:1000px){ .shop{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width:760px){ .shop{ grid-template-columns:repeat(2,1fr); gap:22px 14px; } }
+
+/* A footnote under a grid or a fact row — the caveats that have to travel with
+   prices and nutrition claims, set quietly enough not to compete with either. */
+.shopnote{
+  grid-column:main-start / main-end;
+  margin-top:clamp(30px,3.6vw,52px); padding-top:20px;
+  border-top:1px solid var(--line);
+  font-size:12.5px; line-height:1.75; color:var(--ink-3); letter-spacing:.02em;
+}
+
+/* ============================================================
+   KNOWLEDGE PAGE — the long-form entries
+   ============================================================ */
+/* A reference page, so it is set to be read rather than scanned: one entry per
+   row, the illustration held small and left of the text instead of on top of it,
+   and the measure capped well short of the column. */
+
+/* The page opens on its own title rather than dropping straight into a section
+   heading. A reference page still has to earn the first thirty seconds, and the
+   fruit standing beside the headline is the only picture the page gets. */
+.wopen{ padding:clamp(40px,6vh,86px) 0 clamp(30px,4vw,54px); align-items:center; }
+.wopen__copy{ grid-column:main-start / span 12; }
+.wopen h1{
+  font-size:clamp(2.1rem,4.6vw,4.2rem); margin:16px 0 0; max-width:18ch;
+}
+.wopen .lede{ margin-top:20px; max-width:46ch; }
+/* the count and the reading time — a long page is easier to start when the reader
+   can see how long it is instead of guessing from the scrollbar */
+.wopen__meta{
+  margin-top:26px; font-size:12px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.wopen__art{ grid-column:span 9 / main-end; display:grid; place-items:center; }
+.wopen__art svg{ width:min(100%, 300px); animation:float 9s ease-in-out infinite; }
+@media (max-width:860px){
+  .wopen__copy, .wopen__art{ grid-column:main-start / main-end; }
+  .wopen__art{ order:-1; margin-bottom:12px; }
+  .wopen__art svg{ width:min(58%, 190px); }
+  .wopen h1{ max-width:none; }
+}
+
+/* The contents bar follows the reader down. It sits outside every section on
+   purpose — sticky only holds while its own containing block is on screen, so
+   inside the intro section it would have vanished after the first scroll, which
+   is exactly where a thirty-thousand-pixel page starts needing it. `--topbar-h`
+   rather than a number, because the announcement strip opens on scroll and
+   changes the height of the sticky stack above it. */
+.wtoc{
+  position:sticky; top:var(--topbar-h); z-index:20;
+  padding:12px 0;
+  background:color-mix(in srgb, var(--cream) 90%, transparent);
+  backdrop-filter:saturate(1.5) blur(12px);
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.wtoc__list{
+  grid-column:main-start / main-end;
+  display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;
+  scroll-padding-left:var(--gut);
+}
+.wtoc__list::-webkit-scrollbar{ display:none; }
+.wtoc__list a{
+  flex:0 0 auto;
+  padding:9px 20px; border-radius:999px; border:1px solid var(--line);
+  font-size:13.5px; color:var(--ink-2); white-space:nowrap;
+  transition:border-color .35s var(--ease), color .35s var(--ease), background .35s var(--ease);
+}
+.wtoc__list a:hover{ border-color:var(--ink); color:var(--ink); }
+
+/* Fourteen identical rows read as a spreadsheet, so each group is built as one
+   feature and then a grid. The lead is the product the group is actually known
+   for — the juice, and the soap the reviews keep coming back to — and it gets a
+   panel, a bigger illustration and room for a real paragraph. The rest sit two
+   across in a lighter shape. Two rhythms instead of one, and the hierarchy says
+   something true rather than just breaking the monotony.
+
+   Nothing here carries a price or a buy button. This is the page someone reads to
+   understand what a thing is; the catalogue is one quiet link away at the foot of
+   each group, and that is where the selling belongs. */
+.wlead{
+  grid-column:main-start / main-end;
+  display:grid; grid-template-columns:.85fr 1.15fr;
+  gap:clamp(26px,4.5vw,68px); align-items:center;
+  background:var(--cream-2); border-radius:var(--panel-radius);
+  padding:clamp(26px,3.4vw,52px);
+}
+.wlead__fig{
+  aspect-ratio:4/5; border-radius:var(--arch); background:var(--surface);
+  display:grid; place-items:center; box-shadow:var(--shadow-md);
+}
+.wlead__fig svg{ width:58%; }
+.wlead h3{
+  font-family:var(--font-display); font-weight:200;
+  font-size:clamp(24px,3vw,40px); line-height:1.28; margin:14px 0 18px;
+  text-wrap:balance;
+}
+.wlead__b > p{ color:var(--ink-2); font-size:15.5px; line-height:1.9; max-width:52ch; }
+
+/* A customer saying what a thing did for them, rather than us saying it. Set as a
+   quiet aside, not a testimonial slab — the moment it is decorated it stops
+   sounding like a person and starts sounding like marketing. */
+.wsay{
+  margin:26px 0 0; padding-left:20px;
+  border-left:2px solid color-mix(in srgb, var(--tomato) 45%, transparent);
+}
+.wsay blockquote{
+  margin:0; font-family:var(--font-display); font-weight:300; font-style:italic;
+  font-size:clamp(16px,1.5vw,19px); line-height:1.6; color:var(--ink);
+  max-width:44ch;
+}
+.wsay figcaption{ margin-top:10px; font-size:12.5px; color:var(--ink-3); }
+
+.wgrid{
+  grid-column:main-start / main-end;
+  display:grid; grid-template-columns:repeat(2,1fr);
+  gap:clamp(24px,3vw,48px) clamp(28px,4vw,72px);
+  margin-top:clamp(34px,4.5vw,72px);
+}
+.wcard{
+  display:grid; grid-template-columns:clamp(76px,8vw,110px) 1fr;
+  gap:clamp(16px,2vw,28px); align-items:start;
+  padding-top:26px; border-top:1px solid var(--line);
+}
+.wcard__fig{
+  aspect-ratio:1/1; border-radius:var(--arch); background:var(--tint);
+  display:grid; place-items:center;
+}
+.wcard__fig svg{ width:66%; }
+.wcard h3{
+  font-family:var(--font-display); font-weight:300;
+  font-size:clamp(18px,1.8vw,24px); line-height:1.35; margin-bottom:10px;
+}
+.wcard__b > p{ color:var(--ink-2); font-size:14px; line-height:1.8; }
+
+/* the one commercial line in each group, kept deliberately quiet */
+.wmore{
+  grid-column:main-start / main-end;
+  margin-top:clamp(30px,3.6vw,52px); font-size:14.5px; color:var(--ink-2);
+}
+
+@media (max-width:900px){
+  .wlead{ grid-template-columns:1fr; }
+  .wlead__fig{ aspect-ratio:4/3; max-width:320px; }
+  .wgrid{ grid-template-columns:1fr; }
+}
+@media (max-width:520px){
+  .wcard{ grid-template-columns:1fr; gap:16px; }
+  .wcard__fig{ max-width:110px; }
+}
+
+/* a block of prose that is not a product — the nutrient table and the notice */
+.wnote{ grid-column:main-start / span 17; }
+.wspec--wide{ grid-template-columns:clamp(96px,11vw,150px) 1fr; gap:20px 32px; }
+.wspec--wide dt{ color:var(--ink); white-space:normal; }
+.wspec--wide dd{ color:var(--ink-2); line-height:1.85; max-width:58ch; }
+/* the legal notice sits in a tinted panel so it reads as a caveat, not as copy */
+.wnote--flag{
+  background:var(--cream-2); border-radius:var(--panel-radius);
+  padding:clamp(24px,3vw,40px); margin-top:clamp(36px,4.5vw,64px);
+}
+.wnote--flag h3{
+  font-family:var(--font-display); font-weight:300; font-size:clamp(19px,1.9vw,25px);
+  line-height:1.4; margin-bottom:14px;
+}
+.wnote--flag p{ color:var(--ink-2); font-size:14.5px; line-height:1.85; max-width:64ch; }
+.wnote--flag p + p{ margin-top:14px; }
+
+@media (max-width:760px){
+  .wspec{ grid-template-columns:1fr; gap:4px 0; }
+  .wspec dt{ margin-top:12px; }
+  .wspec--wide{ grid-template-columns:1fr; }
+  .wnote{ grid-column:main-start / main-end; }
+}
+
+/* ============================================================
+   VISIT
+   ============================================================ */
+/* The closing stretch of the page runs full width. It is the foot of the site
+   rather than something read at length, and letting it span the glass gives the
+   page a base to sit on instead of trailing off in a narrow column. */
+.visit{
+  background:var(--cream-2); border-radius:var(--panel-radius);
+  margin:0 var(--frame);
+  max-width:none;
+  /* pull the gutter in by the frame so the text still lands on the page's line */
+  --gut: max(0px, calc(clamp(20px,5vw,64px) - var(--frame)));
+}
+.visit__in{ grid-column:main-start/main-end; display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(34px,5vw,80px); align-items:center; }
+.visit__card{ background:var(--surface); border-radius:18px; padding:clamp(26px,3vw,40px); box-shadow:var(--shadow-md); }
+.visit__card dl{ display:grid; grid-template-columns:auto 1fr; gap:15px 26px; margin:0; font-size:14px; }
+.visit__card dt{ color:var(--ink-2); white-space:nowrap; }
+.visit__card dd{ margin:0; }
+.visit__map{
+  margin-top:26px; border-radius:12px; overflow:hidden; border:1px solid var(--line);
+  aspect-ratio:16/7; position:relative;
+}
+@media (max-width:860px){ .visit__in{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.ft{
+  background:var(--noir); color:var(--on-noir); padding-top:clamp(60px,7vw,100px);
+  max-width:none; margin-inline:0;   /* full width, like the visit block above it */
+}
+.ft__news{ grid-column:main-start/main-end; padding-bottom:clamp(44px,5vw,70px); border-bottom:1px solid rgba(247,241,232,.16); }
+.ft__news h3{ font-family:var(--font-display); font-weight:200; font-size:clamp(26px,3.4vw,42px); line-height:1.3; max-width:20ch; }
+.nform{ display:flex; gap:10px; margin-top:26px; max-width:440px; flex-wrap:wrap; }
+.nform input{
+  flex:1 1 220px; background:none; border:0; border-bottom:1px solid rgba(247,241,232,.35);
+  padding:13px 2px; color:var(--on-noir); font:inherit; font-size:15px;
+  transition:border-color .35s var(--ease);
+}
+.nform input::placeholder{ color:color-mix(in srgb, var(--on-noir) 45%, transparent); }
+.nform input:focus{ outline:none; border-bottom-color:var(--on-noir); }
+.ft__note{ font-size:11.5px; color:color-mix(in srgb, var(--on-noir) 45%, transparent); margin-top:16px; }
+.ft__cols{ grid-column:main-start/main-end; display:grid; grid-template-columns:1.4fr repeat(3,1fr); gap:38px; padding:clamp(44px,5vw,70px) 0; }
+.ft__cols h4{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:color-mix(in srgb, var(--on-noir) 62%, transparent); font-family:var(--font-label); margin-bottom:18px; }
+.ft__cols li{ margin-bottom:11px; }
+.ft__cols a{ font-size:14px; color:color-mix(in srgb, var(--on-noir) 82%, transparent); transition:color .3s var(--ease); }
+.ft__cols a:hover{ color:var(--on-noir); }
+.ft__about p{ font-size:13.5px; color:color-mix(in srgb, var(--on-noir) 60%, transparent); max-width:34ch; margin-top:16px; line-height:1.75; }
+.ft__bot{
+  grid-column:main-start/main-end; border-top:1px solid rgba(247,241,232,.16);
+  padding:22px 0 34px; display:flex; justify-content:space-between; gap:14px 30px; flex-wrap:wrap;
+  /* was 45%, which measured 3.95:1 — the quietest line on the site still has to
+     clear AA, and this one carries the data-provenance note */
+  font-size:11.5px; color:color-mix(in srgb, var(--on-noir) 58%, transparent);
+}
+@media (max-width:860px){ .ft__cols{ grid-template-columns:1fr 1fr; } }
+
+/* ============================================================
+   READING IN THAI
+   ============================================================ */
+/* Thai is set at the same sizes as English everywhere above, which quietly
+   penalises it. A Thai syllable stacks up to four levels — a vowel below the
+   letter, a vowel above it, and a tone mark above that — where Latin puts nothing
+   above the cap line or below the baseline except descenders. At 10px the upper
+   two layers merge into a single smudge and สกัดเย็น stops being readable as
+   words; the same string in Latin at 10px is merely small.
+
+   So the floor is raised for Thai only, and only on the labels that measured
+   under 12px. Nothing here changes the English page, and none of these sit in a
+   fixed-height box, so raising them cannot reflow a layout.
+
+   Every selector below was measured at under 12px with Thai in it. Three others
+   were in this list on the first pass — .item__k, .scard__t and the tab clock —
+   put there by reading the stylesheet rather than by measuring the page. They were
+   already at or above 12px, and the .scard__t rule made Thai *smaller* than
+   English. Add to this list from a measurement, never from a font-size in the
+   source; the computed value is not always the one written down.
+
+   Measured, in Thai: .jrail__i span 10px, .badge and .cert__s 10.5px,
+   .ft__cols h4 11px, .ft__bot 11.5px. */
+:root[data-lang="th"] .jrail__i span{ font-size:12px; }
+:root[data-lang="th"] .badge{ font-size:12px; }
+:root[data-lang="th"] .cert__s{ font-size:12px; }
+:root[data-lang="th"] .cert__n{ font-size:12px; }
+:root[data-lang="th"] .ft__cols h4{ font-size:12px; }
+:root[data-lang="th"] .ft__bot{ font-size:12.5px; }
+
+/* Wide tracking is a Latin device. The brand board asks for .24em on the label
+   style and it does exactly what it should to ONA HEALTHY — but Thai letters are
+   not standalone units. A consonant carries its vowel and tone mark as one visual
+   cluster, and letter-spacing prises that cluster apart, so the reader has to
+   reassemble each syllable. Tracked-out Thai reads noticeably slower than the same
+   words set solid. The tracking stays wherever the text is Latin, and comes almost
+   all the way off wherever it is Thai. */
+:root[data-lang="th"] .eyebrow{ letter-spacing:.06em; }
+:root[data-lang="th"] .item__k{ letter-spacing:.04em; }
+:root[data-lang="th"] .scard__t{ letter-spacing:.06em; }
+:root[data-lang="th"] .ft__cols h4{ letter-spacing:.05em; }
+:root[data-lang="th"] .cert__s{ letter-spacing:normal; }
+:root[data-lang="th"] .jrail__i span{ letter-spacing:.04em; }
+:root[data-lang="th"] .badge{ letter-spacing:.04em; }
+:root[data-lang="th"] .tabpane__n{ letter-spacing:.05em; }
+
+/* The same stacking is why Thai needs more room between lines than the 1.6 the
+   page is set in. These are the blocks that actually run to several lines; the
+   headings and the ledes already sit at 1.75 or looser and are left alone. */
+:root[data-lang="th"] .item p,
+:root[data-lang="th"] .scard__b p,
+:root[data-lang="th"] .mega__link .s,
+:root[data-lang="th"] .ft__cols a{ line-height:1.85; }
+/* a product title runs two lines in Thai far more often than in English, and 1.45
+   puts the tone marks of the second line into the descenders of the first */
+:root[data-lang="th"] .item h4{ line-height:1.62; }
+
+/* ============================================================
+   MOTION / UTIL
+   ============================================================ */
+.rv{ opacity:0; transform:translateY(24px); transition:opacity .85s var(--ease), transform .85s var(--ease); }
+.rv.in{ opacity:1; transform:none; }
+.rv-d1{ transition-delay:.09s; } .rv-d2{ transition-delay:.18s; } .rv-d3{ transition-delay:.27s; }
+
+.toast{
+  position:fixed; left:50%; bottom:28px; transform:translate(-50%,24px);
+  background:var(--ink); color:var(--cream); padding:14px 24px; border-radius:999px;
+  font-size:13.5px; z-index:70; opacity:0; pointer-events:none;
+  transition:opacity .35s var(--ease), transform .35s var(--ease);
+}
+.toast.show{ opacity:1; transform:translate(-50%,0); }
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  .rv{ opacity:1; transform:none; }
+}
+
+/* ============================================================
+   PAGES WITHOUT A HERO
+   ============================================================ */
+/* A page that opens straight onto content sits too close under the sticky
+   header, so it gets a little air the hero would otherwise have provided. */
+.page--plain{ padding-top:clamp(16px,3.5vw,44px); }

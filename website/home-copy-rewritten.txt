@@ -1,0 +1,763 @@
+คำทั้งหมดที่ปรากฏบนหน้าแรก — ONA Healthy  (ฉบับเรียบเรียงใหม่)
+
+หน้าแรกประกอบขึ้นจากสามไฟล์ เรียงตามลำดับที่ผู้อ่านเห็นจริง
+
+  TH   ข้อความไทยที่อยู่ในมาร์กอัป
+  EN   คำแปลที่อยู่ในแอตทริบิวต์ data-en
+  /    คือการขึ้นบรรทัดใหม่ในต้นฉบับ
+
+แก้ไทยแล้วต้องแก้อังกฤษตามด้วยเสมอ ไม่งั้นสลับภาษาแล้วจะเหลือไทยค้างบนหน้า
+ตัวเลขในวงเล็บเหลี่ยมคือเลขบรรทัดในไฟล์ต้นฉบับ ใช้หาตำแหน่งตอนแก้
+
+
+======================================================================
+  แถบบน · เมนู · เมนูมือถือ
+  src/header.html
+======================================================================
+
+[11]
+  TH  ผลิตภัณฑ์ สุขภาพของคุณ จากไร่สู่ขวด เยือนสวน รางวัล
+  EN  Main menu        <data-en-aria>
+
+[13]
+  TH  ผลิตภัณฑ์
+  EN  Products        <data-en-text>
+
+[18]
+  TH  สุขภาพของคุณ
+  EN  Your Health        <data-en-text>
+
+[22]
+  TH  จากไร่สู่ขวด
+  EN  Field to Bottle
+
+[23]
+  TH  เยือนสวน
+  EN  Visit the Farm
+
+[24]
+  TH  รางวัล
+  EN  Awards
+
+[28]
+  EN  Search        <data-en-aria>
+
+[31]
+  TH  EN
+  EN  Switch to Thai        <data-en-aria>
+
+[38]
+  TH  สั่งซื้อ
+  EN  Order
+
+[39]
+  EN  Open menu        <data-en-aria>
+
+[47]
+  TH  · เปิดให้เยี่ยมชมสวนทุกวัน 08:30–18:00 น.
+  EN  · Farm open daily 08:30–18:00
+
+[47]
+  TH  จัดส่งฟรีทั่วประเทศสำหรับ Monthly Health Pack · เปิดให้เยี่ยมชมสวนทุกวัน 08:30–18:00 น.
+  EN  Free nationwide delivery on the        <data-en-text>
+
+[57]
+  TH  กลุ่มสุขภาพ
+  EN  Wellness
+
+[59]
+  TH  น้ำมะเขือเทศสกัดแท้
+  EN  Pure Tomato Juice
+
+[59]
+  TH  สกัดเย็นจากมะเขือเทศ 3 สายพันธุ์
+  EN  Cold-pressed from three varieties
+
+[60]
+  TH  มะเขือเทศอัดเม็ด
+  EN  Tomato Tablets
+
+[60]
+  TH  แบบเม็ด เคี้ยวได้ พกพาสะดวก
+  EN  Chewable and easy to carry
+
+[61]
+  TH  มะเขือเทศสดจากสวน
+  EN  Fresh Farm Tomatoes
+
+[61]
+  TH  ผลผลิตตามฤดูกาล
+  EN  Seasonal harvest
+
+[65]
+  TH  กลุ่มความงาม
+  EN  Skincare
+
+[67]
+  TH  สบู่มาร์คหน้า
+  EN  Face Mask Soap
+
+[67]
+  TH  ทำมือ บ่มนาน 2 ปี
+  EN  Handmade, cured for two years
+
+[68]
+  TH  เซรั่ม และครีมบำรุง
+  EN  Serum and face cream
+
+[68]
+  TH  มะเขือเทศ ฟักข้าว วิตามินบี3
+  EN  Tomato, gac fruit, vitamin B3
+
+[69]
+  TH  ครีมกันแดด
+  EN  Sun protection
+
+[69]
+  TH  กันน้ำ สำหรับใช้ประจำวัน
+  EN  Water-resistant, for daily use
+
+[74]
+  TH  ขายดี
+  EN  Best seller
+
+[75]
+  TH  Monthly Health Pack / จัดส่งฟรีทั่วประเทศ
+  EN  Monthly Health Pack / free nationwide delivery        <data-en-html>
+
+[78]
+  TH  ดูรายละเอียด
+  EN  View details
+
+[91]
+  TH  ดูแลจากภายใน
+  EN  From the inside
+
+[93]
+  TH  มะเขือเทศ 3 สายพันธุ์
+  EN  Three varieties
+
+[93]
+  TH  เหตุผลที่เราเลือกปลูกสายพันธุ์ผลผลิตน้อย
+  EN  Why we grow a lower-yield variety
+
+[94]
+  TH  ไม่เติมส่วนผสมเพิ่ม
+  EN  Nothing added
+
+[94]
+  TH  ไม่มีน้ำตาล ไม่มีสี ไม่มีสารกันบูด
+  EN  No sugar, no colouring, no preservative
+
+[98]
+  TH  ดูแลจากภายนอก
+  EN  From the outside
+
+[100]
+  TH  ผลิตในพื้นที่เดียวกัน
+  EN  Made on the same site
+
+[100]
+  TH  ใช้ผลผลิตจากแปลงเดียวกัน
+  EN  From the same harvest
+
+[101]
+  TH  บ่มนาน 2 ปี
+  EN  Cured for two years
+
+[101]
+  TH  สบู่ทำมือ ผลิตทีละก้อน
+  EN  Handmade soap, one bar at a time
+
+[106]
+  TH  เปิดให้เยี่ยมชม
+  EN  Open to visitors
+
+[107]
+  TH  เยี่ยมชมพื้นที่จริง / ก่อนตัดสินใจ
+  EN  See the farm / before you decide        <data-en-html>
+
+[110]
+  TH  จองเยี่ยมชม
+  EN  Book a visit
+
+[122]
+  EN  Close menu        <data-en-aria>
+
+[132]
+  TH  ติดต่อ
+  EN  Contact
+
+[134]
+  TH  สั่งซื้อผ่าน LINE
+  EN  Order via LINE
+
+
+======================================================================
+  เนื้อหาหน้าแรก
+  src/page-home.html
+======================================================================
+
+[12]
+  TH  ปลูกเอง
+  EN  Grown here.
+
+[12]
+  TH  สกัดเอง
+  EN  Pressed here.
+
+[13]
+  TH  ทุกขวดตรวจสอบที่มาได้ ตั้งแต่การคัดเมล็ดพันธุ์จนถึงการบรรจุ
+  EN  Every bottle can be traced, from seed selection through to bottling.
+
+[18]
+  TH  ดูผลิตภัณฑ์ทั้งหมด
+  EN  View our products
+
+[25]
+  TH  8 ปี
+  EN  8 years
+
+[25]
+  TH  ดำเนินงานต่อเนื่อง
+  EN  Years in operation
+
+[26]
+  TH  ปลูกในแปลงของเราเอง
+  EN  Grown on our own land
+
+[27]
+  TH  1 แห่ง
+  EN  1 site
+
+[27]
+  TH  ปลูก สกัด และบรรจุในพื้นที่เดียว
+  EN  Growing, pressing and bottling in one place
+
+[28]
+  TH  อย. · Q · OTOP
+  EN  Thai FDA · Q Mark · OTOP
+
+[28]
+  TH  การรับรองที่ได้รับ
+  EN  Certifications held
+
+[33]
+  TH  ราคาพิเศษ Onato น้ำมะเขือเทศสกัดแท้ 56.- เริ่มต้น 50.- / 75 มล. ดูรายละเอียด สั่งซื้อ สินค้า OTOP สบู่มาร์คหน้ามะเขือเทศน้ำผึ้ง ทำมือ · บ่มนาน 2 ปี ดูรายละเอียด สอบถามราคา
+  EN  Featured products        <data-en-aria>
+
+[36]
+  TH  ราคาพิเศษ
+  EN  Special price
+
+[38]
+  TH  Onato น้ำมะเขือเทศสกัดแท้
+  EN  Onato Pure Tomato Juice
+
+[39]
+  TH  เริ่มต้น 50.- / 75 มล.
+  EN  from 50.- / 75 ml
+
+[41]
+  TH  ดูรายละเอียด
+  EN  View details
+
+[42]
+  TH  สั่งซื้อ
+  EN  Order
+
+[48]
+  TH  สินค้า OTOP
+  EN  OTOP product
+
+[50]
+  TH  สบู่มาร์คหน้ามะเขือเทศน้ำผึ้ง
+  EN  Tomato and Honey Mask Soap
+
+[51]
+  TH  ทำมือ · บ่มนาน 2 ปี
+  EN  Handmade · cured for two years
+
+[54]
+  TH  สอบถามราคา
+  EN  Ask for price
+
+[67]
+  TH  ขั้นที่ 01 / 05
+  EN  Step 01 / 05
+
+[68]
+  TH  การคัดเลือกเมล็ดพันธุ์
+  EN  Selecting the seed
+
+[69]
+  TH  เราคัดเลือกเมล็ดพันธุ์เอง ทั้งสายพันธุ์สีแดง สีเหลือง ผลเล็ก และสายพันธุ์สีดำซึ่งเป็นแหล่งของแอนโทไซยานินและไลโคปีน การเลือกตั้งแต่ต้นทางช่วยให้ควบคุมคุณภาพของผลผลิตในแต่ละรอบได้
+  EN  We select the seed ourselves — red, yellow and cherry varieties alongside a black one that carries anthocyanin and lycopene. Choosing at this stage is what lets us keep quality steady from one harvest to the next.
+
+[72]
+  TH  ขั้นที่ 02 / 05
+  EN  Step 02 / 05
+
+[73]
+  TH  การเพาะกล้าในโรงเรือน
+  EN  Raising the seedlings
+
+[74]
+  TH  เราเพาะกล้าในโรงเรือนของเราเอง ควบคุมความชื้นและแสงตั้งแต่ต้น และคัดเลือกต้นกล้าที่แข็งแรงก่อนย้ายลงแปลง เพื่อช่วยให้การปลูกในแต่ละรอบมีคุณภาพสม่ำเสมอ
+  EN  Seedlings are raised in our own nursery, with humidity and light controlled from the start. We select the strongest before moving them to the beds, which helps keep each planting consistent.
+
+[77]
+  TH  ขั้นที่ 03 / 05
+  EN  Step 03 / 05
+
+[78]
+  TH  การดูแลแปลงโดยไม่ใช้ยาฆ่าแมลง
+  EN  Managing the beds without pesticides
+
+[79]
+  TH  เราใช้โรงเรือนกางมุ้งกันแมลงและชีวภัณฑ์อย่างกับดักกาวเหนียว แทนการใช้ยาฆ่าแมลง เพื่อดูแลผลผลิตตั้งแต่ต้นทาง
+  EN  We use insect netting and biological controls such as sticky traps in place of pesticides, so the crop is looked after from the beginning.
+
+[82]
+  TH  ขั้นที่ 04 / 05
+  EN  Step 04 / 05
+
+[83]
+  TH  การสกัดเย็น
+  EN  Cold pressing
+
+[84]
+  TH  เราใช้กระบวนการสกัดแบบควบคุมอุณหภูมิ เพื่อช่วยคงคุณค่าของวัตถุดิบไว้ และเดินสายการผลิตในช่วงกลางคืนซึ่งใช้พลังงานน้อยกว่า
+  EN  Extraction is temperature-controlled, which helps retain the character of the fruit. We run the line at night, when energy use is lower.
+
+[87]
+  TH  ขั้นที่ 05 / 05
+  EN  Step 05 / 05
+
+[88]
+  TH  การบรรจุและการตรวจสอบย้อนกลับ
+  EN  Bottling and traceability
+
+[89]
+  TH  ผลิตภัณฑ์ผ่านการตรวจสอบคุณภาพและบรรจุในพื้นที่เดียวกับแปลงปลูก ทำให้สามารถระบุได้ว่าแต่ละขวดมาจากรอบเก็บเกี่ยวใด
+  EN  Products are quality-checked and bottled on the same site where they are grown, so each bottle can be identified with the harvest it came from.
+
+[101]
+  TH  01 เมล็ดพันธุ์ 02 เพาะกล้า 03 ปลูก 04 สกัดเย็น 05 บรรจุ
+  EN  Production steps        <data-en-aria>
+
+[102]
+  TH  เมล็ดพันธุ์
+  EN  Seed
+
+[103]
+  TH  เพาะกล้า
+  EN  Nursery
+
+[104]
+  TH  ปลูก
+  EN  Growing
+
+[105]
+  TH  สกัดเย็น
+  EN  Pressing
+
+[106]
+  TH  บรรจุ
+  EN  Bottling
+
+[114]
+  TH  แนวทางการผลิตของเรา ทุกขั้นตอน / อยู่ในพื้นที่ / เดียวกัน เราดูแลกระบวนการผลิตตั้งแต่การคัดเลือกเมล็ดพันธุ์ การปลูก การสกัด ไปจนถึงการบรรจุ เพื่อให้สามารถติดตามและควบคุมคุณภาพในแต่ละขั้นตอนได้อย่างต่อเนื่อง 01 / 06 สุขภาพ การคัดเลือกเมล็ดพันธุ์ เราปลูกทั้งสายพันธุ์สีแดง สีเหลือง และสายพันธุ์สีดำ ซึ่งให้ผลผลิตน้อยกว่า แต่เป็นสายพันธุ์ที่ให้แอนโทไซยานิน สุขภาพ การดูแลโดยไม่ใช้ยาฆ่าแมลง เราใช้โรงเรือนกางมุ้งและกับดักกาวเหนียวในการดูแลแปลง แทนการใช้ยาฆ่าแมลง ความงาม การสกัดแบบควบคุมอุณหภูมิ ควบคุมอุณหภูมิระหว่างการสกัดเพื่อช่วยคงคุณค่าของวัตถุดิบ และเดินสายการผลิตในช่วงกลางคืนซึ่งใช้พลังงานน้อยกว่า ความงาม การผลิตสบู่ทีละก้อน ตัดด้วยมือแล้วบ่มไว้หลายสัปดาห์ เป็นขั้นตอนที่ใช้เวลานานที่สุดในกระบวนการของเรา ความงาม การผลิตภายในพื้นที่ของเรา ตั้งแต่การคัดเมล็ดพันธุ์จนถึงการบรรจุ ดำเนินการภายในพื้นที่เดียวกันโดยครอบครัวของเรา ทำให้ติดตามรายละเอียดในแต่ละขั้นตอนได้อย่างใกล้ชิด มาตรฐาน การตรวจสอบย้อนกลับ อย. · เครื่องหมาย Q · OTOP และสามารถระบุได้ว่าแต่ละขวดมาจากรอบเก็บเกี่ยวใด คุณค่าจากมะเขือเทศที่เราปลูก
+  EN  How we work        <data-en-aria>
+
+[117]
+  TH  แนวทางการผลิตของเรา
+  EN  HOW WE WORK
+
+[118]
+  TH  ทุกขั้นตอน / อยู่ในพื้นที่ / เดียวกัน
+  EN  Every stage / in one / place        <data-en-html>
+
+[121]
+  TH  เราดูแลกระบวนการผลิตตั้งแต่การคัดเลือกเมล็ดพันธุ์ การปลูก การสกัด ไปจนถึงการบรรจุ เพื่อให้สามารถติดตามและควบคุมคุณภาพในแต่ละขั้นตอนได้อย่างต่อเนื่อง
+  EN  We oversee production from seed selection through growing, pressing and bottling, so that quality can be followed and managed at every stage.
+
+[126]
+  EN  Previous        <data-en-aria>
+
+[127]
+  EN  Next        <data-en-aria>
+
+[131]
+  TH  สุขภาพ
+  EN  Wellness
+
+[131]
+  TH  การคัดเลือกเมล็ดพันธุ์
+  EN  Seed selection
+
+[131]
+  TH  เราปลูกทั้งสายพันธุ์สีแดง สีเหลือง และสายพันธุ์สีดำ ซึ่งให้ผลผลิตน้อยกว่า แต่เป็นสายพันธุ์ที่ให้แอนโทไซยานิน
+  EN  We grow red and yellow varieties alongside a black one. It yields less, but it is the variety that carries anthocyanin.
+
+[135]
+  TH  การดูแลโดยไม่ใช้ยาฆ่าแมลง
+  EN  Grown without pesticides
+
+[135]
+  TH  เราใช้โรงเรือนกางมุ้งและกับดักกาวเหนียวในการดูแลแปลง แทนการใช้ยาฆ่าแมลง
+  EN  We manage the beds with insect netting and sticky traps rather than pesticides.
+
+[139]
+  TH  ความงาม
+  EN  Skincare
+
+[139]
+  TH  การสกัดแบบควบคุมอุณหภูมิ
+  EN  Temperature-controlled pressing
+
+[139]
+  TH  ควบคุมอุณหภูมิระหว่างการสกัดเพื่อช่วยคงคุณค่าของวัตถุดิบ และเดินสายการผลิตในช่วงกลางคืนซึ่งใช้พลังงานน้อยกว่า
+  EN  Temperature is controlled during pressing to help retain the character of the fruit, and the line runs at night, when energy use is lower.
+
+[143]
+  TH  การผลิตสบู่ทีละก้อน
+  EN  Soap made one bar at a time
+
+[143]
+  TH  ตัดด้วยมือแล้วบ่มไว้หลายสัปดาห์ เป็นขั้นตอนที่ใช้เวลานานที่สุดในกระบวนการของเรา
+  EN  Cut by hand and then left to cure for several weeks. It is the longest process we run.
+
+[147]
+  TH  การผลิตภายในพื้นที่ของเรา
+  EN  Production kept on site
+
+[147]
+  TH  ตั้งแต่การคัดเมล็ดพันธุ์จนถึงการบรรจุ ดำเนินการภายในพื้นที่เดียวกันโดยครอบครัวของเรา ทำให้ติดตามรายละเอียดในแต่ละขั้นตอนได้อย่างใกล้ชิด
+  EN  From seed selection to bottling, the process is overseen within our own site and by the same family, allowing us to stay close to each stage of production.
+
+[151]
+  TH  มาตรฐาน
+  EN  Standards
+
+[151]
+  TH  การตรวจสอบย้อนกลับ
+  EN  Traceability
+
+[151]
+  TH  อย. · เครื่องหมาย Q · OTOP และสามารถระบุได้ว่าแต่ละขวดมาจากรอบเก็บเกี่ยวใด
+  EN  Thai FDA · Q Mark · OTOP, and every bottle can be identified with its harvest.
+
+[156]
+  TH  คุณค่าจากมะเขือเทศที่เราปลูก
+  EN  About the tomatoes we grow
+
+[163]
+  TH  หนึ่งวันที่สวน
+  EN  A DAY AT THE FARM
+
+[164]
+  TH  เยี่ยมชมได้ / ตลอดทั้งวัน
+  EN  Open to visitors / through the day        <data-en-html>
+
+[167]
+  TH  ONA Healthy Estate เปิดให้ผู้มาเยือนได้เห็นกระบวนการผลิตด้วยตนเอง ตั้งแต่แปลงปลูกในโรงเรือนจนถึงผลิตภัณฑ์ที่บรรจุเสร็จ เปิดทุกวัน 08:30–18:00 น. และแวะเลือกซื้อผลิตภัณฑ์ที่หน้าสวนได้โดยไม่ต้องจองล่วงหน้า
+  EN  ONA Healthy Estate is open for visitors to see the process for themselves, from the rows under cover through to the finished bottle. Open daily 08:30–18:00, and you are welcome to stop by the farm shop without booking.
+
+[168]
+  TH  ดูที่อยู่และแผนที่ →
+  EN  Address and map →
+
+[171]
+  TH  08:30 โรงเรือน 09:45 เพาะกล้า 11:00 จุดสกัด 13:30 ห้องบ่มสบู่ 16:00 ร้านค้าหน้าสวน
+  EN  Farm tour programme        <data-en-aria>
+
+[172]
+  TH  โรงเรือน
+  EN  Greenhouse
+
+[174]
+  TH  จุดสกัด
+  EN  Press line
+
+[175]
+  TH  ห้องบ่มสบู่
+  EN  Soap room
+
+[176]
+  TH  ร้านค้าหน้าสวน
+  EN  Farm shop
+
+[183]
+  TH  08:30 · จุดที่ 01 / 05
+  EN  08:30 · Stop 01 / 05
+
+[184]
+  TH  โรงเรือนมะเขือเทศ
+  EN  The tomato houses
+
+[185]
+  TH  เริ่มต้นที่แปลงมะเขือเทศสามสี ทั้งสีแดง สีเหลือง ผลเล็ก และสายพันธุ์สีดำ ผู้เยี่ยมชมจะได้เห็นโรงเรือนกางมุ้งและกับดักกาวเหนียวที่เราใช้ในการดูแลแปลง
+  EN  The visit begins among the rows of red, yellow and cherry tomatoes, alongside the black variety. You can see the insect netting and the sticky traps we use to manage the beds.
+
+[186]
+  TH  จองเยี่ยมชมผ่าน LINE
+  EN  Book a visit via LINE
+
+[193]
+  TH  09:45 · จุดที่ 02 / 05
+  EN  09:45 · Stop 02 / 05
+
+[194]
+  TH  โรงเรือนเพาะกล้า
+  EN  The seedling nursery
+
+[195]
+  TH  โรงเรือนเพาะกล้าที่ควบคุมความชื้นและแสงตั้งแต่ต้น เราคัดเลือกต้นกล้าที่แข็งแรงก่อนย้ายลงแปลง เพื่อช่วยให้การปลูกในแต่ละรอบมีคุณภาพสม่ำเสมอ
+  EN  A nursery where humidity and light are controlled from the start. We select the strongest seedlings before moving them to the beds, which helps keep each planting consistent.
+
+[196]
+  TH  ดูเส้นทางจากไร่สู่ขวด
+  EN  See field to bottle
+
+[203]
+  TH  11:00 · จุดที่ 03 / 05
+  EN  11:00 · Stop 03 / 05
+
+[204]
+  TH  จุดสกัดแบบควบคุมอุณหภูมิ
+  EN  The temperature-controlled press
+
+[205]
+  TH  เครื่องสกัดแบบควบคุมอุณหภูมิ ซึ่งช่วยให้น้ำมะเขือเทศมีรสชาติที่ดื่มง่ายและเก็บได้นานหนึ่งปีโดยไม่ใส่สารกันบูด เราเดินสายการผลิตในช่วงกลางคืน แต่เปิดให้ชมเครื่องและอธิบายขั้นตอนได้ตลอดวัน
+  EN  The temperature-controlled press, which is what makes the juice easy to drink and keeps it for a year without preservatives. The line runs at night, but the machinery and the process can be seen and explained at any time of day.
+
+[206]
+  TH  ดูน้ำมะเขือเทศสกัดแท้
+  EN  See the tomato juice
+
+[213]
+  TH  13:30 · จุดที่ 04 / 05
+  EN  13:30 · Stop 04 / 05
+
+[214]
+  TH  ห้องบ่มสบู่
+  EN  The soap curing room
+
+[215]
+  TH  งานฝีมือ OTOP ที่ผลิตทีละก้อน ตั้งแต่การผสมวัตถุดิบจนถึงการบ่มที่ทำให้เนื้อสบู่คงสภาพได้นานสองปี เป็นขั้นตอนที่ใช้เวลานานที่สุดในกระบวนการของเรา และเป็นเหตุผลที่สบู่หนึ่งก้อนใช้ได้นาน
+  EN  OTOP craft made one bar at a time, from mixing through to the curing that keeps a bar sound for two years. It is the longest process we run, and the reason a single bar lasts as long as it does.
+
+[216]
+  TH  ดูสบู่มาร์คหน้า
+  EN  See the mask soap
+
+[223]
+  TH  16:00 · จุดที่ 05 / 05
+  EN  16:00 · Stop 05 / 05
+
+[224]
+  TH  ร้านค้าหน้าสวน
+  EN  The farm shop
+
+[225]
+  TH  ปิดท้ายด้วยการเลือกซื้อผลผลิตสดและผลิตภัณฑ์ในราคาหน้าสวน มะเขือเทศที่จำหน่ายเป็นผลผลิตจากรอบเก็บเกี่ยวของวันนั้น หากต้องการจำนวนมาก สามารถแจ้งล่วงหน้าเพื่อให้เราจัดเตรียมไว้ได้
+  EN  The day ends choosing fresh produce and products at farm-gate prices. The tomatoes on the table are that day's harvest, and larger orders can be prepared if you let us know in advance.
+
+[226]
+  TH  ดูเวลาทำการและแผนที่
+  EN  Opening hours and map
+
+[231]
+  TH  โปรแกรมเยี่ยมชมนี้อยู่ระหว่างการจัดเตรียม เวลาและรายละเอียดอาจเปลี่ยนแปลง กรุณาสอบถามก่อนวางแผนการเดินทาง
+  EN  This tour programme is still being prepared. Times and details may change, so please ask before planning your visit.
+
+[237]
+  TH  รางวัลและการรับรอง
+  EN  AWARDS AND CERTIFICATION
+
+[238]
+  TH  การรับรองและรางวัลที่ได้รับ
+  EN  Certifications and awards
+
+[239]
+  TH  รายละเอียดมาตรฐานที่ได้รับการรับรอง และรางวัลที่เกี่ยวข้อง สำหรับผู้ที่ต้องการตรวจสอบข้อมูลเพิ่มเติม
+  EN  Details of the standards we hold and the awards we have received, for anyone who would like to check further.
+
+[243]
+  TH  อย.
+  EN  Thai FDA
+
+[243]
+  TH  คณะกรรมการอาหารและยา
+  EN  Food and Drug Administration
+
+[244]
+  TH  มาตรฐานสินค้าเกษตร
+  EN  Agricultural product standard
+
+[245]
+  TH  หนึ่งตำบลหนึ่งผลิตภัณฑ์
+  EN  One Tambon One Product
+
+[246]
+  TH  ผู้ประกอบการดีเด่นระดับจังหวัด
+  EN  Provincial SME recognition
+
+[247]
+  TH  คำแนะนำจากลูกค้าที่กลับมาซื้อซ้ำ
+  EN  Recommended by returning customers
+
+[255]
+  TH  ผู้ประกอบการ SME ระดับภาค
+  EN  Regional SME selection
+
+[255]
+  TH  ได้รับคัดเลือกเข้ารับการพิจารณาในระดับภาค ณ จังหวัดพิษณุโลก นับเป็นครั้งแรกที่ผลิตภัณฑ์ของเราเข้าสู่การพิจารณานอกจังหวัด
+  EN  Selected for regional judging in Phitsanulok — the first time our products were considered beyond our own province.
+
+[259]
+  TH  ผลิตภัณฑ์ OTOP เด่นระดับจังหวัด
+  EN  Provincial Star OTOP Product
+
+[259]
+  TH  ONA Healthy Tomato Extract ได้รับคัดเลือกเป็น Provincial Star ของจังหวัดอุตรดิตถ์ จากผลิตภัณฑ์ที่ส่งเข้าประกวดทั้งจังหวัด
+  EN  ONA Healthy Tomato Extract was named Provincial Star for Uttaradit, among the products entered from across the province.
+
+[263]
+  TH  เหรียญเกียรติยศ SMEs Product Excellence
+  EN  SMEs Product Excellence medal
+
+[263]
+  TH  เข้ารับรางวัลในพิธีมอบ ณ ไอคอนสยาม กรุงเทพมหานคร เดือนพฤศจิกายน 2562
+  EN  Presented at the awards ceremony at ICONSIAM, Bangkok, in November 2019.
+
+[267]
+  TH  SME Recharge Market และกิจกรรมชุมชนระดับภาค
+  EN  SME Recharge Market and regional community programmes
+
+[267]
+  TH  ร่วมออกงานแสดงสินค้าและกิจกรรมชุมชนระดับภาคอย่างต่อเนื่อง ทั้งที่จังหวัดระยองและในพื้นที่อำเภอพิชัย
+  EN  We continue to take part in regional trade fairs and community events, in Rayong and around Phichai district.
+
+[285]
+  TH  เยือนสวน
+  EN  Visit the Farm
+
+[286]
+  TH  เปิดให้เยี่ยมชมทุกวัน
+  EN  Open to visitors every day
+
+[287]
+  TH  เปิดต้อนรับทุกวัน ทั้งผู้ที่แวะเลือกซื้อผลิตภัณฑ์ที่หน้าสวน และผู้ที่ต้องการนัดหมายเข้าชมกระบวนการผลิตตั้งแต่โรงเรือนจนถึงจุดบรรจุ
+  EN  Open every day, both for those stopping by the farm shop and for those who would like to arrange a walk through the process, from the greenhouses to the bottling area.
+
+[290]
+  TH  สอบถามทางโทรศัพท์
+  EN  Call us
+
+[295]
+  TH  ที่อยู่
+  EN  Address
+
+[295]
+  TH  222/1 หมู่ 7 ตำบลท่ามะเฟือง / อำเภอพิชัย จังหวัดอุตรดิตถ์ 53120
+  EN  222/1 Moo 7, Tha Mafueang / Phichai, Uttaradit 53120        <data-en-html>
+
+[296]
+  TH  เวลาทำการ
+  EN  Hours
+
+[296]
+  TH  เปิดทุกวัน 08:30–18:00 น.
+  EN  Open daily 08:30–18:00
+
+[297]
+  TH  โทรศัพท์
+  EN  Phone
+
+[298]
+  TH  อีเมล
+  EN  Email
+
+
+======================================================================
+  ท้ายหน้า
+  src/footer.html
+======================================================================
+
+[4]
+  TH  รับข่าวสารรอบเก็บเกี่ยวและรายการส่งเสริมการขายจากสวนโดยตรง
+  EN  Harvest dates and offers, sent to you directly from the farm
+
+[6]
+  TH  อีเมลของคุณ
+  EN  Your email        <data-en-placeholder>
+
+[7]
+  TH  สมัครรับข่าวสาร
+  EN  Subscribe
+
+[9]
+  TH  เราดูแลข้อมูลของคุณอย่างระมัดระวัง และสามารถยกเลิกรับข่าวสารได้ทุกเมื่อ
+  EN  We look after your details carefully, and you can unsubscribe at any time.
+
+[18]
+  TH  สวนมะเขือเทศปลอดสารพิษ ปลูก สกัด และบรรจุในพื้นที่เดียวกัน ที่อำเภอพิชัย จังหวัดอุตรดิตถ์
+  EN  A pesticide-free tomato farm that grows, presses and bottles on one site in Phichai, Uttaradit.
+
+[21]
+  TH  ผลิตภัณฑ์
+  EN  Products
+
+[23]
+  TH  กลุ่มสุขภาพ
+  EN  Wellness
+
+[24]
+  TH  กลุ่มความงาม
+  EN  Skincare
+
+[25]
+  TH  ชุดของขวัญ
+  EN  Gift sets
+
+[26]
+  TH  มะเขือเทศสด
+  EN  Fresh tomatoes
+
+[30]
+  TH  เกี่ยวกับเรา
+  EN  About
+
+[32]
+  TH  จากไร่สู่ขวด
+  EN  Field to Bottle
+
+[33]
+  TH  รางวัลและการรับรอง
+  EN  Awards and certification
+
+[34]
+  TH  เยือนสวน
+  EN  Visit the Farm
+
+[35]
+  TH  แนวทางการผลิต
+  EN  How we work
+
+[39]
+  TH  ติดตามเรา
+  EN  Follow
+
+[50]
+  TH  © 2569 ONA Healthy · สวนมะเขือเทศปลอดสารพิษ อำเภอพิชัย จังหวัดอุตรดิตถ์
+  EN  © 2026 ONA Healthy · Pesticide-free tomato farm, Phichai, Uttaradit
+
+[51]
+  TH  ราคาและรายละเอียดผลิตภัณฑ์อาจมีการเปลี่ยนแปลง กรุณาสอบถามข้อมูลล่าสุดก่อนสั่งซื้อ
+  EN  Prices and product details may change. Please ask us for current information before ordering.
+
+[55]
+  TH  สมัครรับข่าวสารเรียบร้อยแล้ว ขอบคุณค่ะ
+  EN  Thank you — you are subscribed.
